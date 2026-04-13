@@ -1,0 +1,18 @@
+/* .temp-border {
+    border: 1px solid red;
+} */
+
+nav {
+  background-color: #ffffff;
+  border-bottom: 1px solid #e0e0e0;
+  padding: 10px 0;
+}
+
+.navbar-brand {
+  font-weight: 500;
+  color: #000000;
+}
+
+.navbar-brand:hover {
+  color: #333333;
+}
