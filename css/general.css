@@ -1,0 +1,9 @@
+:root {
+  --primary-color: #f5c518;    /* yellow - think IMDB yellow */
+  --dark-color: #121212;       /* near black */
+  --text-light: #ffffff;
+  --text-dark: #121212;
+  --surface-color: #1e1e1e;    /* cards/surfaces */
+  --border-color: #2e2e2e;     /* subtle borders */
+}
+
