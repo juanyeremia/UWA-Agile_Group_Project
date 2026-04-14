@@ -1,0 +1,161 @@
+/* Hero Section --------------------------------------------------------------- */
+.hero-section {
+  width: 100%;
+  height: 500px;
+  background-color: #1a1a1a; /* placeholder until real image */
+  position: relative;
+  display: flex;
+  align-items: flex-end; /* anchors content to bottom */
+}
+
+.hero-content {
+  padding: 40px;
+  color: #ffffff;
+}
+
+.hero-title {
+  font-size: 2.5rem;
+  font-weight: 500;
+  margin: 10px 0;
+}
+
+.hero-subtitle {
+  font-size: 1rem;
+  margin: 20px 0;
+  color: #cccccc;
+}
+
+.hero-content .btn-primary {
+  background-color: var(--primary-color);
+  border: none;
+  color: var(--text-dark);
+}
+
+/* .temp-border {
+  border: 1px solid red;
+} */
+
+/* Movie Cards ------------------------------------------------------- */
+.movies-section {
+  padding: 40px 0;
+}
+
+.section-title {
+  color: #f5c518;
+  padding-bottom: 10px;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+  border-bottom: #f5c518 2px solid;
+}
+
+.movie-card {
+  background-color: var(--border-color);
+  border-radius: 15px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.movie-card:hover {
+  transform: scale(1.05);
+}
+
+.movie-poster-placeholder {
+  width: 100%;
+  aspect-ratio: 2/3;
+  background-color: #464646;
+  border-radius: 4px;
+}
+
+.movie-info {
+  padding: 8px 10px;
+}
+
+.movie-title {
+  color: #ffffff;
+  font-size: 0.9rem;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.movie-year {
+  color: #888888;
+  font-size: 0.8rem;
+}
+
+.movie-rating {
+  color: #f5c518;
+  font-size: 0.85rem;
+}
+
+.movie-reviews {
+  color: #888888;
+  font-size: 0.75rem;
+}
+
+.movie-card-link {        /* makes the hyperlink decoratino gone */
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+/* Reviews Section ------------------------------------------ */
+.reviews-section {
+  padding: 40px 0;
+}
+
+.reviews-list {
+
+}
+
+.review-item {
+  border-bottom: #2e2e2e 1px solid;
+  margin-bottom: 20px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 20px 0;
+  
+}
+
+.review-poster-placeholder {
+  /* width: 50px; */
+  min-width: 150px;
+  aspect-ratio: 2/3;
+  background-color: #2e2e2e;
+  border-radius: 6px;
+  /* margin-left: 10px; */
+}
+
+.review-content {
+  flex: 1;
+}
+
+.reviewer-name {
+  color: #f5c518;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.review-separator {
+  color: #444444;
+}
+
+.review-rating {
+  color: #f5c518;
+  font-size: 0.85rem;
+}
+
+.review-text {
+  color: #cccccc;
+  font-size: 0.9rem;
+  margin-bottom: 4px;
+}
+
+.review-date {
+  color: #666666;
+  font-size: 0.8rem;
+}
