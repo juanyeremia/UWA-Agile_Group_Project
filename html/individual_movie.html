@@ -1,14 +1,214 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/general.css" />
+    <link rel="stylesheet" href="../css/navbar.css" />
+    <link rel="stylesheet" href="../css/individual_movie.css" />
     <title>Individual Movie</title>
-</head>
+  </head>
 
-<body>
+  <body>
+    <!-- Navbar -->
+    <div id="navbar-placeholder"></div>
 
-</body>
+    <!-- Main content -->
+    <div class="container-lg mt-4">
+      <div class="row">
+        <!-- LEFT: Poster -->
+        <div class="col-md-4 text-center">
+          <img
+            src="https://img.league-funny.com/imgur/172482406314_o.png"
+            alt="ARCANE movie poster"
+            class="moviePoster rounded shadow img-fluid"
+          />
+        </div>
 
+        <!-- RIGHT: Movie Info -->
+        <div class="col-md-8">
+          <h1 class="mb-3">Movie Title</h1>
+
+          <p><strong>Release Date:</strong> 2024</p>
+          <p><strong>Director:</strong> Name</p>
+
+          <section class="mt-4">
+            <h3>Introduction</h3>
+            <p>
+              Description of the movie.Lorem Ipsum is simply dummy text of the
+              printing and typesetting industry. Lorem Ipsum has been the
+              industry's standard dummy text ever since the 1500s, when an
+              unknown printer took a galley of type and scrambled it to make a
+              type specimen book. It has survived not only five centuries, but
+              also the leap into electronic typesetting, remaining essentially
+              unchanged. It was popularised in the 1960s with the release of
+              Letraset sheets containing Lorem Ipsum passages, and more recently
+              with desktop publishing software like Aldus PageMaker including
+              versions of Lorem Ipsum.
+            </p>
+          </section>
+        </div>
+      </div>
+
+      <!-- Cast, Crew, Details, Gender, Release Navbar-->
+      <ul class="nav nav-pills mb-3 mt-4" id="pills-tab" role="tablist">
+        <!-- Cast Tab-->
+        <li class="nav-item" role="presentation">
+          <button
+            class="nav-link active"
+            id="pills-cast-tab"
+            data-bs-toggle="pill"
+            data-bs-target="#pills-cast"
+            type="button"
+            role="tab"
+            aria-selected="true"
+          >
+            Cast
+          </button>
+        </li>
+
+        <!-- Crew Tab-->
+        <li class="nav-item">
+          <button
+            class="nav-link"
+            id="pills-crew-tab"
+            data-bs-toggle="pill"
+            data-bs-target="#pills-crew"
+            type="button"
+            role="tab"
+            aria-selected="false"
+          >
+            Crew
+          </button>
+        </li>
+
+        <!-- Details Tab-->
+        <li class="nav-item">
+          <button
+            class="nav-link"
+            id="pills-details-tab"
+            data-bs-toggle="pill"
+            data-bs-target="#pills-details"
+            type="button"
+            role="tab"
+            aria-selected="false"
+          >
+            Details
+          </button>
+        </li>
+
+        <!-- Gender Tab-->
+        <li class="nav-item">
+          <button
+            class="nav-link"
+            id="pills-gender-tab"
+            data-bs-toggle="pill"
+            data-bs-target="#pills-gender"
+            type="button"
+            role="tab"
+            aria-selected="false"
+          >
+            Gender
+          </button>
+        </li>
+
+        <!-- Release Tab-->
+        <li class="nav-item">
+          <button
+            class="nav-link"
+            id="pills-release-tab"
+            data-bs-toggle="pill"
+            data-bs-target="#pills-release"
+            type="button"
+            role="tab"
+            aria-selected="false"
+          >
+            Release
+          </button>
+        </li>
+      </ul>
+
+      <!-- Tab Content -->
+      <div class="tab-content" id="pills-tabContent">
+        <!-- Cast Content -->
+        <div
+          class="tab-pane fade show active"
+          id="pills-cast"
+          role="tabpanel"
+          aria-labelledby="pills-cast-tab"
+          tabindex="0"
+        >
+          ...
+        </div>
+
+        <!-- Crew Content -->
+        <div
+          class="tab-pane fade"
+          id="pills-crew"
+          role="tabpanel"
+          aria-labelledby="pills-crew-tab"
+          tabindex="0"
+        >
+          ...
+        </div>
+
+        <!-- Details Content -->
+        <div
+          class="tab-pane fade"
+          id="pills-details"
+          role="tabpanel"
+          aria-labelledby="pills-details-tab"
+          tabindex="0"
+        >
+          ...
+        </div>
+
+        <!-- Gender Content -->
+        <div
+          class="tab-pane fade"
+          id="pills-gender"
+          role="tabpanel"
+          aria-labelledby="pills-gender-tab"
+          tabindex="0"
+        >
+          ...
+        </div>
+
+        <!-- Release Content -->
+        <div
+          class="tab-pane fade"
+          id="pills-release"
+          role="tabpanel"
+          aria-labelledby="pills-release-tab"
+          tabindex="0"
+        >
+          ...
+        </div>
+      </div>
+
+      <!-- Reviews Section-->
+      <div class="md-4 mt-4">
+        <h3>Reviews</h3>
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title" id="reviewerName">Name</h5>
+            <h6 class="card-subtitle mb-2 text-body-secondary" id="rating">
+              Rating
+            </h6>
+            <p class="card-text" id="reviews">
+              the context of the reviewing.......
+            </p>
+          </div>
+        </div>
+      </div>
+      <!-- Anothere -->
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/main.js"></script>
+  </body>
 </html>
