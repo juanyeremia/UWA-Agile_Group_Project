@@ -58,7 +58,7 @@
 }
 
 .movie-card:hover {
-  transform: scale(1.03);
+  transform: scale(1.05);
 }
 
 .movie-poster-placeholder {
@@ -94,4 +94,68 @@
 .movie-reviews {
   color: #888888;
   font-size: 0.75rem;
+}
+
+.movie-card-link {        /* makes the hyperlink decoratino gone */
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+/* Reviews Section ------------------------------------------ */
+.reviews-section {
+  padding: 40px 0;
+}
+
+.reviews-list {
+
+}
+
+.review-item {
+  border-bottom: #2e2e2e 1px solid;
+  margin-bottom: 20px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 20px 0;
+  
+}
+
+.review-poster-placeholder {
+  /* width: 50px; */
+  min-width: 150px;
+  aspect-ratio: 2/3;
+  background-color: #2e2e2e;
+  border-radius: 6px;
+  /* margin-left: 10px; */
+}
+
+.review-content {
+  flex: 1;
+}
+
+.reviewer-name {
+  color: #f5c518;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.review-separator {
+  color: #444444;
+}
+
+.review-rating {
+  color: #f5c518;
+  font-size: 0.85rem;
+}
+
+.review-text {
+  color: #cccccc;
+  font-size: 0.9rem;
+  margin-bottom: 4px;
+}
+
+.review-date {
+  color: #666666;
+  font-size: 0.8rem;
 }
