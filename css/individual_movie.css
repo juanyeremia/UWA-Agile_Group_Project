@@ -1,0 +1,20 @@
+.moviePoster {
+  width: 100%;
+  max-width: 300px;
+  height: 450px;
+  object-fit: cover;
+}
+
+.nav-pills .nav-link {
+  color: #ffffff;
+}
+
+.nav-pills .nav-link:hover {
+  background-color: #f5c518;
+  color: #121212;
+}
+
+.nav-pills .nav-link.active {
+  background-color: #f5c518;
+  color: #121212;
+}
