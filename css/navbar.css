@@ -3,16 +3,50 @@
 } */
 
 nav {
-  background-color: #ffffff;
-  border-bottom: 1px solid #e0e0e0;
-  padding: 10px 0;
+  background-color: #0f0f0f;
+  border-bottom: 1px solid #2e2e2e;
+  padding: 15px 0 !important;
 }
 
 .navbar-brand {
-  font-weight: 500;
-  color: #000000;
+  color: #f5c518;
+  font-weight: 600;
 }
 
 .navbar-brand:hover {
-  color: #333333;
+  color: #d4a900;
+}
+
+.navbar .form-control {
+  background-color: #1e1e1e;
+  border-color: #2e2e2e;
+  color: #ffffff;
+}
+
+.navbar .form-control::placeholder {
+  color: #888888;
+}
+
+.navbar .form-control:focus {       /* add yellow border when typing */
+  background-color: #1e1e1e;
+  border-color: #f5c518;
+  color: #ffffff;
+  box-shadow: none;
+}
+
+/* Responsivness */
+
+@media (max-width: 768px) {
+ .navbar form {
+    display: none !important;
+  }
+
+  .navbar-brand {
+    font-size: 1rem;
+  }
+
+  .navbar .btn {
+    font-size: 0.8rem;
+    padding: 4px 10px;
+  }
 }
