@@ -24,7 +24,7 @@
 .separator {
   border: none;
   height: 1px;
-  background: rgba(255, 255, 255, 0.2); /* светлая линия */
+  background: rgba(255, 255, 255, 0.2);
   margin: 15px 0;
 }
 .sign-up-left-text-center {
