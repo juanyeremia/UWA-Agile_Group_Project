@@ -18,10 +18,8 @@ Registered users can log in to write reviews, rate movies on a scale of 1 to 5, 
 - View user profiles to see all reviews from a specific user
 
 ### Design
-The interface follows a card-based layout, making it easy to browse movies 
-and reviews at a glance. The design is clean and minimal, inspired by 
-platforms like Letterboxd and IMDB, with a focus on readability and 
-ease of navigation.
+The interface follows a card-based layout, making it easy to browse movies and reviews at a glance. The design is clean and minimal, inspired by 
+platforms like Letterboxd and IMDB, with a focus on readability and ease of navigation.
 
 ### Software Used
 - Frontend: HTML, CSS, JavaScript, Bootstrap
@@ -30,7 +28,10 @@ ease of navigation.
 - External API: TMDB (The Movie Database)
 
 ## Group Members
-
+Juan Yovian - 24911605
+Thushamini Chathusika - 24562882
+Viktor Kim -  24712039
+Yu Ting Weng - 246222994
 
 ## How to use the application
 
