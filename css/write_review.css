@@ -1,4 +1,68 @@
 .write-review-container {
   max-width: 900px;
-  padding: 40px 0;
+  padding: 40px 40px;
+  align-items: flex-start;
+}
+
+.write-review-movie-details {
+  width: 200px;
+  min-width: 200px;
+} 
+
+.write-review-poster {
+  width: 100%;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+
+.write-review-movie-title {
+  color: var(--primary-color);
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.write-review-movie-year,
+.write-review-movie-genre,
+.write-review-movie-rating {
+  color: #cccccc;
+  font-size: 0.9rem;
+  margin-bottom: 4px;
+}
+
+.write-review-form {
+  flex: 1;     /* Take up remaining space */
+}
+
+.review-label {
+  color: var(--text-light);
+  font-size: 1rem;
+  font-weight: 600;
+  /* margin-bottom: 6px; */
+  margin-top: 16px;
+  display: block;
+}
+
+.write-review-form .form-control {
+  background-color: #222;
+  border-color: #222;
+  border-radius: 10px;
+  color: #ffffff;
+}
+
+.write-review-form .form-control::placeholder {
+  color: #666666;
+  font-style: italic;
+}
+
+.rating-input {
+  width: 90px;
+} 
+
+.write-review-form .form-check {
+  padding-left: 0;
+}
+
+.write-review-form .form-check-input {
+  margin-top: 0;
 }
