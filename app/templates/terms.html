@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/general.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/navbar.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/static_page.css') }}">
+    
+    <title>Terms and Conditions</title>
+
+</head>
+
+<body>
+    <!-- Navbar injection -->
+    {% include 'navbar.html' %}
+
+    <div class="container py-4">
+        <!-- Terms and Conditions Header -->
+        <div class="static-page-header">
+            <div class="row align-items-center g-4">
+                <div class="col-md-12 d-flex flex-column profile-actions">
+                    <h1>Terms and Conditions</h1>
+                    <p><strong>Last updated:</strong> May 5, 2026</p>
+
+                    <p>Welcome to our movie review platform. By using this website, you agree to follow these Terms and Conditions. If you do not agree with them, please do not use the platform.</p>
+
+                    <p><strong>Purpose of the Platform</strong></p>
+                    <p>This website allows users to browse movie information, read reviews, and share their own opinions about movies and TV shows. The platform is intended for personal, non-commercial use.</p>
+
+                    <p><strong>User Accounts</strong></p>
+                    <p>Some features of the website may require an account. When creating an account, you agree to provide accurate information and keep your login details secure. You are responsible for any activity that happens under your account.</p>
+
+                    <p><strong>Reviews and User Content</strong></p>
+                    <p>Users may post reviews, ratings, and other content. By submitting content, you confirm that it is your own work or that you have the right to share it. You also agree not to post anything harmful, abusive, offensive, misleading, or unlawful.</p>
+                    <p>We reserve the right to remove any content that violates these terms or is considered inappropriate.</p>
+
+                    <p><strong>Acceptable Use</strong></p>
+                    <p>By using this platform, you agree not to use the website for unlawful purposes, post offensive or false content, attempt to access accounts or data without permission, interfere with the normal operation of the website, or misuse the platform through bots, scripts, or automated tools.</p>
+
+                    <p><strong>External Data and Links</strong></p>
+                    <p>Some movie information on this website may come from third-party services such as movie databases or APIs. We do not guarantee that third-party content is always accurate, complete, or available.</p>
+
+                    <p><strong>Intellectual Property</strong></p>
+                    <p>The website layout, design, and original content belong to the project creators unless otherwise stated. Users keep ownership of the reviews and content they submit.</p>
+
+                    <p><strong>Account Suspension</strong></p>
+                    <p>We may remove content or suspend accounts if users violate these Terms and Conditions or use the platform in a way that harms the website or other users.</p>
+
+                    <p><strong>Disclaimer</strong></p>
+                    <p>This website is provided as an educational or project-based platform. We do not guarantee that the website will always be available, error-free, or fully secure.</p>
+
+                    <p><strong>Changes to These Terms</strong></p>
+                    <p>We may update these Terms and Conditions from time to time. Any updates will be posted on this page with a revised date.</p>
+
+                    <p><strong>Contact</strong></p>
+                    <p>If you have questions about these Terms and Conditions, please contact the project team through the available platform channels.</p>
+                </div>
+
+            </div>
+        </div>
+        <div class="footer-space">
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+
+
+</html>
