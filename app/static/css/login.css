@@ -1,4 +1,4 @@
-.log-in-header {
+.login-header {
     background: linear-gradient(135deg, #1c1c1c, #2a2a2a);
     border-radius: 20px;
     padding: 40px 30px;
@@ -10,17 +10,26 @@
     margin-right: auto;
 }
 
-.log-in-title-details {
+.login-title-details {
     color: #f5c542;
 }
 
-.log-in-left-text {
+.login-text {
   margin-bottom: 5px;
   margin-top: 10px;
 }
 
-.log-in-left-text-center {
+.login-text-center {
   text-align: center;
+}
+
+.form-control-login {
+    background-color: #2a2a2a;
+    border: 1px solid #444;
+    color: #f5c542;
+    border-radius: 8px;
+    padding: 10px 15px;
+    width: 100%;
 }
 
 .gold-btn {
