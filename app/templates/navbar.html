@@ -1,34 +1,38 @@
-<nav class="navbar navbar-expand-lg sticky-top">
+<nav class="temp-border navbar sticky-top">
+  <!-- Already contains flex -->
   <div class="container-lg">
     <!-- Brand -->
-    <a class="navbar-brand fw-bold" href="{{ url_for('home') }}"> 🎬 My App </a>
+    <a class="temp-border navbar-brand" href="{{ url_for('home') }}">
+      🎬 My App</a
+    >
 
     <!-- Search -->
-    <form
-      method="GET"
-      action="{{ url_for('home') }}"
-      class="d-flex flex-grow-1 mx-4"
-    >
+    <form action="" class="temp-border d-flex flex-grow-1 mx-4">
       <input
         type="search"
-        name="query"
-        class="form-control me-2"
+        class="temp-border form-control me-2"
         placeholder="Search movies/tv shows..."
       />
-      <button class="btn btn-outline-warning" type="submit">Search</button>
+      <button class="temp-border btn btn-outline-secondary" type="submit">
+        Search
+      </button>
     </form>
 
     <!-- Links -->
-    <div class="d-flex gap-2">
-      <a href="{{ url_for('login') }}" class="btn btn-outline-warning">
-        Log In
-      </a>
-
-      <a href="{{ url_for('sign_up') }}" class="btn btn-warning"> Sign Up </a>
-
-      <a href="{{ url_for('profile') }}" class="btn btn-outline-light">
-        My Profile
-      </a>
+    <div class="temp-border d-flex gap-2">
+      <a
+        href="{{ url_for('login') }}"
+        class="temp-border btn btn-outline-warning"
+        >Log In</a
+      >
+      <a href="{{ url_for('sign_up') }}" class="temp-border btn btn-warning"
+        >Sign Up</a
+      >
+      <a
+        href="./user_profile.html"
+        class="temp-border btn btn-dark align-items-center"
+        >My Profile</a
+      >
     </div>
   </div>
 </nav>
