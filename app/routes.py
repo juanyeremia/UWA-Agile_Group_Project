@@ -1,6 +1,7 @@
 from flask import render_template
 from app import app
 from app.forms import SignUpForm, LoginForm
+import os
 
 #=================================================
 # Define routes
@@ -15,6 +16,11 @@ def home():
 @app.route('/write_review/<int:movie_id>')
 def write_review(movie_id):
     return render_template('write_review.html')
+
+""" - The original one after the test
+@app.route('/movie/<int:movie_id>')
+def movie_detail(movie_id):
+    return render_template('individual_movie.html') """
 
 @app.route('/sign_up')
 def sign_up():
@@ -36,7 +42,14 @@ def privacy():
 def profile():
     return render_template('user_profile.html')
 
-# Individual movie page for testing 
+#=================================================
+# Get the TMDB_ACCESS_TOKEN
+#=================================================
+token = os.getenv("TMDB_ACCESS_TOKEN")
+
+#=================================================
+# Individual movie page for testing
+#=================================================
 @app.route('/movie/<int:movie_id>')
 def movie_detail(movie_id):
     movie = {
@@ -59,8 +72,3 @@ def movie_detail(movie_id):
     ]
 
     return render_template('individual_movie.html', movie=movie, reviews=reviews)
-
-""" - The original one after the test
-@app.route('/movie/<int:movie_id>')
-def movie_detail(movie_id):
-    return render_template('individual_movie.html') """
