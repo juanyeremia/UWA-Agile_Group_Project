@@ -3,60 +3,62 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="../css/general.css" />
-    <link rel="stylesheet" href="../css/navbar.css" />
-    <link rel="stylesheet" href="../css/individual_movie.css" />
-    <title>Individual Movie</title>
+
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/general.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/navbar.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/individual_movie.css') }}"
+    />
+
+    <title>{{ movie.title }} | Movie Details</title>
   </head>
 
   <body>
-    <!-- Navbar -->
-    <div id="navbar-placeholder"></div>
+    {% include "navbar.html" %}
 
-    <!-- Main content -->
-    <div class="container-lg mt-4">
-      <div class="row">
-        <!-- LEFT: Poster -->
+    <main class="container-lg mt-4">
+      <div class="row g-4">
         <div class="col-md-4 text-center">
           <img
-            src="https://img.league-funny.com/imgur/172482406314_o.png"
-            alt="ARCANE movie poster"
+            src="{{ movie.poster_url }}"
+            alt="{{ movie.title }} movie poster"
             class="moviePoster rounded shadow img-fluid"
           />
         </div>
 
-        <!-- RIGHT: Movie Info -->
         <div class="col-md-8">
-          <h1 class="mb-3">Movie Title</h1>
+          <h1 class="mb-3">{{ movie.title }}</h1>
 
-          <p><strong>Release Date:</strong> 2024</p>
-          <p><strong>Director:</strong> Name</p>
+          <p><strong>Release Date:</strong> {{ movie.release_date }}</p>
+          <p><strong>Director:</strong> {{ movie.director }}</p>
 
           <section class="mt-4">
-            <h3>Introduction</h3>
-            <p>
-              Description of the movie.Lorem Ipsum is simply dummy text of the
-              printing and typesetting industry. Lorem Ipsum has been the
-              industry's standard dummy text ever since the 1500s, when an
-              unknown printer took a galley of type and scrambled it to make a
-              type specimen book. It has survived not only five centuries, but
-              also the leap into electronic typesetting, remaining essentially
-              unchanged. It was popularised in the 1960s with the release of
-              Letraset sheets containing Lorem Ipsum passages, and more recently
-              with desktop publishing software like Aldus PageMaker including
-              versions of Lorem Ipsum.
-            </p>
+            <h2>Introduction</h2>
+            <p>{{ movie.description }}</p>
           </section>
+
+          <a
+            href="{{ url_for('write_review', movie_id=movie.id) }}"
+            class="btn custom-btn mt-3"
+          >
+            Write a Review
+          </a>
         </div>
       </div>
 
-      <!-- Cast, Crew, Details, Gender, Release Navbar-->
-      <ul class="nav nav-pills mb-3 mt-4" id="pills-tab" role="tablist">
-        <!-- Cast Tab-->
+      <ul class="nav nav-pills mb-3 mt-5" id="pills-tab" role="tablist">
         <li class="nav-item" role="presentation">
           <button
             class="nav-link active"
@@ -71,8 +73,7 @@
           </button>
         </li>
 
-        <!-- Crew Tab-->
-        <li class="nav-item">
+        <li class="nav-item" role="presentation">
           <button
             class="nav-link"
             id="pills-crew-tab"
@@ -86,8 +87,7 @@
           </button>
         </li>
 
-        <!-- Details Tab-->
-        <li class="nav-item">
+        <li class="nav-item" role="presentation">
           <button
             class="nav-link"
             id="pills-details-tab"
@@ -101,23 +101,21 @@
           </button>
         </li>
 
-        <!-- Gender Tab-->
-        <li class="nav-item">
+        <li class="nav-item" role="presentation">
           <button
             class="nav-link"
-            id="pills-gender-tab"
+            id="pills-genre-tab"
             data-bs-toggle="pill"
-            data-bs-target="#pills-gender"
+            data-bs-target="#pills-genre"
             type="button"
             role="tab"
             aria-selected="false"
           >
-            Gender
+            Genre
           </button>
         </li>
 
-        <!-- Release Tab-->
-        <li class="nav-item">
+        <li class="nav-item" role="presentation">
           <button
             class="nav-link"
             id="pills-release-tab"
@@ -132,9 +130,7 @@
         </li>
       </ul>
 
-      <!-- Tab Content -->
       <div class="tab-content" id="pills-tabContent">
-        <!-- Cast Content -->
         <div
           class="tab-pane fade show active"
           id="pills-cast"
@@ -142,10 +138,9 @@
           aria-labelledby="pills-cast-tab"
           tabindex="0"
         >
-          ...
+          <p>{{ movie.cast }}</p>
         </div>
 
-        <!-- Crew Content -->
         <div
           class="tab-pane fade"
           id="pills-crew"
@@ -153,10 +148,9 @@
           aria-labelledby="pills-crew-tab"
           tabindex="0"
         >
-          ...
+          <p>{{ movie.crew }}</p>
         </div>
 
-        <!-- Details Content -->
         <div
           class="tab-pane fade"
           id="pills-details"
@@ -164,21 +158,19 @@
           aria-labelledby="pills-details-tab"
           tabindex="0"
         >
-          ...
+          <p>{{ movie.details }}</p>
         </div>
 
-        <!-- Gender Content -->
         <div
           class="tab-pane fade"
-          id="pills-gender"
+          id="pills-genre"
           role="tabpanel"
-          aria-labelledby="pills-gender-tab"
+          aria-labelledby="pills-genre-tab"
           tabindex="0"
         >
-          ...
+          <p>{{ movie.genre }}</p>
         </div>
 
-        <!-- Release Content -->
         <div
           class="tab-pane fade"
           id="pills-release"
@@ -186,29 +178,30 @@
           aria-labelledby="pills-release-tab"
           tabindex="0"
         >
-          ...
+          <p>{{ movie.release_info }}</p>
         </div>
       </div>
 
-      <!-- Reviews Section-->
-      <div class="md-4 mt-4">
-        <h3>Reviews</h3>
-        <div class="card">
+      <section class="mt-5">
+        <h2>Reviews</h2>
+
+        {% if reviews %} {% for review in reviews %}
+        <div class="card mb-3">
           <div class="card-body">
-            <h5 class="card-title" id="reviewerName">Name</h5>
-            <h6 class="card-subtitle mb-2 text-body-secondary" id="rating">
-              Rating
+            <h5 class="card-title">{{ review.user.username }}</h5>
+            <h6 class="card-subtitle mb-2 text-body-secondary">
+              Rating: {{ review.rating }}/5
             </h6>
-            <p class="card-text" id="reviews">
-              the context of the reviewing.......
-            </p>
+            <p class="card-text">{{ review.content }}</p>
           </div>
         </div>
-      </div>
-      <!-- Anothere -->
-    </div>
+        {% endfor %} {% else %}
+        <p>No reviews yet. Be the first to review this movie.</p>
+        {% endif %}
+      </section>
+    </main>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="../js/main.js"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
   </body>
 </html>

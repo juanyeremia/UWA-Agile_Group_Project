@@ -1,22 +1,38 @@
+<nav class="temp-border navbar sticky-top">
+  <!-- Already contains flex -->
+  <div class="container-lg">
+    <!-- Brand -->
+    <a class="temp-border navbar-brand" href="{{ url_for('home') }}">
+      🎬 My App</a
+    >
 
-  <nav class="temp-border navbar sticky-top"> <!-- Already contains flex -->
-    <div class="container-lg">
+    <!-- Search -->
+    <form action="" class="temp-border d-flex flex-grow-1 mx-4">
+      <input
+        type="search"
+        class="temp-border form-control me-2"
+        placeholder="Search movies/tv shows..."
+      />
+      <button class="temp-border btn btn-outline-secondary" type="submit">
+        Search
+      </button>
+    </form>
 
-      <!-- Brand -->
-      <a class="temp-border navbar-brand" href="./home_page.html">My App</a>
-
-      <!-- Search -->
-      <form action="" class="temp-border d-flex flex-grow-1 mx-4">
-        <input type="search" class="temp-border form-control me-2" placeholder="Search movies/tv shows...">
-        <button class="temp-border btn btn-outline-secondary" type="submit">Search</button>
-      </form>
-
-      <!-- Links -->
-      <div class="temp-border d-flex gap-2">
-        <a href="{{ url_for('login') }}" class="temp-border btn btn-outline-warning">Log In</a>
-        <a href="{{ url_for('sign_up') }}" class="temp-border btn btn-warning">Sign Up</a>
-        <a href="./user_profile.html" class="temp-border btn btn-dark align-items-center">My Profile</a>
-      </div>
-      
+    <!-- Links -->
+    <div class="temp-border d-flex gap-2">
+      <a
+        href="{{ url_for('login') }}"
+        class="temp-border btn btn-outline-warning"
+        >Log In</a
+      >
+      <a href="{{ url_for('sign_up') }}" class="temp-border btn btn-warning"
+        >Sign Up</a
+      >
+      <a
+        href="./user_profile.html"
+        class="temp-border btn btn-dark align-items-center"
+        >My Profile</a
+      >
     </div>
-  </nav>
+  </div>
+</nav>

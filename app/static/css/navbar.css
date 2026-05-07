@@ -27,8 +27,8 @@ nav {
   color: #888888;
 }
 
-
-.navbar .form-control:focus {       /* add yellow border when typing */
+.navbar .form-control:focus {
+  /* add yellow border when typing */
   background-color: #1e1e1e;
   border-color: #f5c518;
   color: #ffffff;
@@ -38,7 +38,7 @@ nav {
 /* Responsivness */
 
 @media (max-width: 768px) {
- .navbar form {
+  .navbar form {
     display: none !important;
   }
 

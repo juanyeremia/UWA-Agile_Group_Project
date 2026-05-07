@@ -6,6 +6,10 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from config import Config
+import os
+from dotenv import load_dotenv
+
+load_dotenv() # Load the environment (for the TMDB token)
 
 app = Flask(__name__)
 app.config.from_object(Config)      # Load configuration from Config class
@@ -16,3 +20,7 @@ migrate = Migrate(app, db)   # Create Migrate object for migration commands
 
 # Import routes and models to register them with the app
 from app import routes, models
+
+
+
+
