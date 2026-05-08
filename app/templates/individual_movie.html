@@ -183,7 +183,11 @@
       </div>
 
       <section class="mt-5">
-        <h2>Reviews</h2>
+        <div class="d-flex justify-content-between align-items-center reviews-header">
+          <h2>Reviews</h2>
+          <a href="{{ url_for('write_review', movie_id=movie.id) }}" class="btn btn-warning">Write Review</a>
+        </div>
+        
 
         {% if reviews %} {% for review in reviews %}
         <div class="card mb-3">
