@@ -2,6 +2,8 @@ from flask import render_template
 from app import app
 from app.forms import SignUpForm, LoginForm
 import os
+import requests
+from flask import jsonify
 
 #=================================================
 # Define routes
@@ -72,3 +74,19 @@ def movie_detail(movie_id):
     ]
 
     return render_template('individual_movie.html', movie=movie, reviews=reviews)
+
+#=================================================
+# Get 'Now Playing' movies from TMDB API
+#=================================================
+@app.route('/api/movies/now_playing')
+def now_playing():
+   token = app.config['TMDB_ACCESS_TOKEN']
+   headers = {
+      'Authorization': f'Bearer {token}'
+   }
+   response = requests.get(
+      'https://api.themoviedb.org/3/movie/now_playing',
+      headers=headers
+   )
+   data = response.json()
+   return jsonify(data)
