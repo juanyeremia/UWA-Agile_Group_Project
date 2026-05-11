@@ -4,6 +4,9 @@ from app.forms import SignUpForm, LoginForm
 import os
 import requests
 from flask import jsonify
+from sqlalchemy import func
+from app.models import Review
+from app import db
 
 #=================================================
 # Define routes
@@ -80,13 +83,40 @@ def movie_detail(movie_id):
 #=================================================
 @app.route('/api/movies/now_playing')
 def now_playing():
-   token = app.config['TMDB_ACCESS_TOKEN']
-   headers = {
-      'Authorization': f'Bearer {token}'
-   }
-   response = requests.get(
-      'https://api.themoviedb.org/3/movie/now_playing',
-      headers=headers
-   )
-   data = response.json()
-   return jsonify(data)
+  token = app.config['TMDB_ACCESS_TOKEN']                    # Retrieve the TMDB access token from the Flask app's configuration
+  headers = {                                                                        # Set up the headers for the API request, including the Authorization header with the Bearer token
+    'Authorization': f'Bearer {token}'
+  }
+  response = requests.get(                                                   # Make a GET request to the TMDB API endpoint for 'Now Playing' movies, including the headers with the access token
+    'https://api.themoviedb.org/3/movie/now_playing',
+    headers=headers
+  )
+  data = response.json()                                                       # Parse the JSON response from the API into a Python dictionary
+  return jsonify(data)                                                            # Return the data as a JSON response to the client
+
+#=================================================
+# Get 'Highest Rated' movies from Internal Database (Placeholder)
+#=================================================
+@app.route('/api/movies/highest_rated')
+def highest_rated():
+    # Query the database to get the average rating and review count for each movie, grouped by movie_id, ordered by average rating in descending order, and limited to the top 6 results
+    results = db.session.query(                                            # Start a query on the database session
+        Review.movie_id,                                                                  # SELECT  the movie_id from the Review model
+        func.avg(Review.rating).label('average_rating'),                    # Calculate the average rating for each movie and label it as 'average_rating'
+        func.count(Review.id).label('review_count')                           # Count the number of reviews for each movie and label it as 'review_count'
+    ).group_by(Review.movie_id).\
+    order_by(func.avg(Review.rating).desc())\
+    .limit(6)\
+    .all()                                                                                # Execute the query and return all results
+   
+   # Process the query results to create a list of movies with their average rating and review count, rounding the average rating to 1 decimal place for better readability
+    movies = [
+        {
+            'movie_id':  r.movie_id,
+            'avg_rating': round(r.average_rating, 1),  # Round the average rating to 1 decimal places
+            'review_count': r.review_count
+       }
+       for r in results
+    ]
+
+    return jsonify(movies)                                                            # Return the list of movies as a JSON response to the client
