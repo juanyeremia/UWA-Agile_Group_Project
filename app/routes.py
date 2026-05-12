@@ -1,4 +1,4 @@
-from flask import render_template
+from flask import render_template, flash, redirect, url_for
 from app import app
 from app.forms import SignUpForm, LoginForm
 import os
@@ -7,6 +7,7 @@ from flask import jsonify
 from sqlalchemy import func
 from app.models import Review
 from app import db
+from app.models import User
 
 #=================================================
 # Define routes
@@ -27,13 +28,36 @@ def write_review(movie_id):
 def movie_detail(movie_id):
     return render_template('individual_movie.html') """
 
-@app.route('/sign_up')
+@app.route('/sign_up', methods=['GET', 'POST'])
 def sign_up():
-  return render_template('sign_up.html', form=SignUpForm())
+  form = SignUpForm()
+  if form.validate_on_submit():
+    user = User(username=form.username.data.strip(), 
+                email=form.email.data.strip().lower(), 
+                role='user'
+    )
+    user.set_password(form.password.data)  # Hash the password and set it for the user
+    db.session.add(user)
+    db.session.commit()
 
-@app.route('/login')
+    flash('Account created successfully! Please log in.', 'success')
+    return redirect(url_for('login'))
+  flash('Error creating account. Please check your input and try again.', 'danger')
+  return render_template('sign_up.html', form=form)
+
+@app.route('/login', methods=['GET', 'POST'])
 def login():
-  return render_template('login.html', form=LoginForm())
+  form = LoginForm()
+  if form.validate_on_submit():
+      email = form.email.data.strip().lower()
+      user = User.query.filter_by(email=email).first()
+      password = form.password.data
+      if user and user.check_password(password):
+          flash('Logged in successfully!', 'success')
+          return redirect(url_for('home'))
+      else:
+          flash('Invalid email or password. Please try again.', 'danger')
+  return render_template('login.html', form=form)
 
 @app.route('/terms')
 def terms():
