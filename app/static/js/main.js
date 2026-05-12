@@ -21,19 +21,35 @@ async function loadNowPlayingMovies() {
         movies = data.results;                                                                     // Immediately access the results array from the API response
         sessionStorage.setItem(CACHE_KEY, JSON.stringify(movies));        // Cache the movie data in sessionStorage
     }
+
+    const latest = movies.slice(0,6)                                        // Take first 6 movies
+
+    /* ==========================
+    Fetch ratings for the 6 movies in local db
+    ========================== */
+    const ids = latest.map(movie => movie.id).join(',')                                     // Loops through Movies and extracts the `id` from each then join them separated by comma
+    const ratingsResponse = await fetch(`/api/movies/ratings?ids=${ids}`);      // Fetch local ratings from db
+    const ratings = await ratingsResponse.json();
   
     /* ==========================
     Render first 6 latest movies
     ========================== */
     $('#latest-movies-container').html('');                                     // Create empty container for latest movies
 
-    movies.slice(0, 6).forEach(movie => {                                      // Loop through first 6 movies
+    latest.forEach(movie => {                                      // Loop through first 6 movies
         const year = movie.release_date ? movie.release_date.split('-')[0] : 'N/A';    // Extract release year or set to 'N/A' if not available
         const poster = movie.poster_path
             ? `${TMDB_IMAGE_BASE}${movie.poster_path}`                                                // Construct poster URL if available
             : '/static/images/placeholder.png';                                                        // Use placeholder if no poster
 
-        $('#latest-movies-container').append(`
+            // Check if this movie has ratings in local db
+            const localRating = ratinigs[movie.id];                                                                     // Look up rating by movie ID
+            const ratingHTML = localRating
+                ?  `<div class="movie-rating">${localRating.avg_rating} ★</div>                
+                    <div class="movie-reviews">${localRating.review_count} reviews</div>`       
+                : '';                                                                                                                           // Show nothing if no reviews in local db
+        
+            $('#latest-movies-container').append(`
             <div class="col">
                 <a href="/movie/${movie.id}" class="movie-card-link">
                     <div class="movie-card">
@@ -41,7 +57,7 @@ async function loadNowPlayingMovies() {
                         <div class="movie-info">
                             <div class="movie-title">${movie.title}</div>
                             <div class="movie-year">${year}</div>
-                            <div class="movie-rating">${movie.vote_average.toFixed(1)}</div>
+                            ${ratingHTML}
                         </div>
                     </div>
                 </a>
