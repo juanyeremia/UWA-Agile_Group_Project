@@ -1,6 +1,7 @@
 from app import db, login
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
+from datetime import datetime, timezone
 
 #=================================================
 # Define database models  
@@ -32,6 +33,7 @@ class Review(db.Model):
   user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
   author = db.relationship('User', back_populates='reviews')    # Many-to-one relationship with User
   movie = db.relationship('Movie', back_populates='reviews')  # 
+  created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc), nullable=False)
 
 class Movie(db.Model):
   id = db.Column(db.Integer, primary_key=True)  # This IS the TMDB movie_id

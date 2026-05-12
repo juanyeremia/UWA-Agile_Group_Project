@@ -205,3 +205,23 @@ def movie_detail_api(movie_id):
         headers=headers
     )
     return jsonify(response.json())                                                   # Parse the JSON response from the API and return it as a JSON response to the client
+
+#=================================================
+# Get most recent review from local DB
+#=================================================
+@app.route('api/reviews/recent')
+def recent_reviews():
+    # Query the 5 most recent reviews ordere by review ID descending
+    results = Review.query.order_by(Review.id.desc()).limit(5).all()
+
+    reviews = [
+        {
+            'id': r.id,
+            'movie_id': r.body,
+            'rating': r.rating,
+            'username': r.author.username           # connects Review and User throught the 'author' relationship
+        }
+        for r in results
+    ]
+
+    return jsonify(reviews)
