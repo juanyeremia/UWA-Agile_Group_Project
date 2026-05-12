@@ -4,6 +4,7 @@ from app.forms import SignUpForm, LoginForm
 import os
 import requests
 from flask import jsonify
+from flask_login import login_user, logout_user, current_user, login_required
 from sqlalchemy import func
 from app.models import Review
 from app import db
@@ -53,21 +54,18 @@ def login():
         email = form.email.data.strip().lower()
         user = User.query.filter_by(email=email).first()
         password = form.password.data
-        if user and user.check_password(password):
-            session['user_id'] = user.id  # Store the user's ID in the session to keep them logged in
-            session['username'] = user.username  # Optionally store the username in the session for easy access
-            session['role'] = user.role  # Store the user's role in the session for access control
-            flash('Logged in successfully!', 'success')
-            return redirect(url_for('home'))
-        else:
+        if user is None or not user.check_password(password):
             flash('Invalid email or password. Please try again.', 'danger')
+            return render_template('login.html', form=form)
+        else:
+            login_user(user, remember=form.remember_me.data)  # Log the user in using Flask-Login
+            return redirect(url_for('home'))
     return render_template('login.html', form=form)
 
 
 @app.route('/logout')
 def logout():
-    session.clear()  # Clear all session data to log the user out
-    flash('You have been logged out.', 'info')
+    logout_user()  # Log the user out using Flask-Login
     return redirect(url_for('home'))
 
 @app.route('/terms')
@@ -79,6 +77,7 @@ def privacy():
   return render_template('privacy.html')
 
 @app.route('/profile')
+@login_required
 def profile():
     return render_template('user_profile.html')
 

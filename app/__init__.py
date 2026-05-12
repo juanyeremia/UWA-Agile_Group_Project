@@ -5,6 +5,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from flask_login import LoginManager
 from config import Config
 import os
 from dotenv import load_dotenv
@@ -17,6 +18,8 @@ app.config.from_object(Config)      # Load configuration from Config class
 # Initialize database and migration objects
 db = SQLAlchemy(app)          # Create SQLAlchemy database object
 migrate = Migrate(app, db)   # Create Migrate object for migration commands
+login = LoginManager(app)       # Create LoginManager object for user session management
+login.login_view = 'login'     # Set the login view for @login_required
 
 # Import routes and models to register them with the app
 from app import routes, models
