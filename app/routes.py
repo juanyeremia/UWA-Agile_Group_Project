@@ -1,9 +1,8 @@
-from flask import render_template, flash, redirect, session, url_for
+from flask import render_template, flash, redirect, session, url_for, request, jsonify
 from app import app
 from app.forms import SignUpForm, LoginForm
 import os
 import requests
-from flask import jsonify
 from sqlalchemy import func
 from app.models import Review
 from app import db
@@ -130,6 +129,45 @@ def now_playing():
   return jsonify(data)                                                            # Return the data as a JSON response to the client
 
 #=================================================
+# Get average rating from Review for each movie ID 
+#=================================================
+@app.route('/api/movies/ratings')
+def movie_ratings():
+    # 1. Get movie IDs from query string ex: /api/movies/ratings?ids=1226863,550,27205
+    ids_param = request.args.get('ids','')                  # Reads the API calls and look 'ids' in the url
+    if not ids_param:                                                  # If no IDs provided, return empty dictionary
+        return jsonify({})
+
+    # 2. Convert the comma-separated string into a list of integers
+    movie_ids = [int(id) for id in ids_param.split(',')]        # turns '550,27205' into [ 550', '27205']
+
+    # 3. Query the Review table for average ratings for each movie_id
+    results = db.session.query(
+        Review.movie_id,
+        func.avg(Review.rating).label('avg_rating'),
+        func.count(Review.id).label('review_count')
+    ).filter(Review.movie_id.in_(movie_ids))\
+     .group_by(Review.movie_id)\
+     .all() 
+    
+    # 4. Build a dictionary of key-value pairs, with movie_id and rating data
+    ratings = {
+        r.movie_id: {
+            'avg_rating': round(r.avg_rating,1),
+            'review_count': r.review_count
+        }
+        for r in results
+        
+        # Example:
+        #   {
+        #      "550": {"avg_rating": 4.2, "review_count": 3},
+        #       "27205": {"avg_rating": 3.8, "review_count": 1}
+        #   }
+    }
+
+    return jsonify(ratings)
+
+#=================================================
 # Get 'Highest Rated' movies from Internal Database 
 #=================================================
 @app.route('/api/movies/highest_rated')
@@ -157,7 +195,7 @@ def highest_rated():
     return jsonify(movies)                                                            # Return the list of movies as a JSON response to the client
 
 #=================================================
-# Get individual movie details from TMDB API based
+# Get individual movie details from TMDB API based on movie ID (to populate other movie cards)
 #=================================================
 @app.route('/api/movies/<int:movie_id>')
 def movie_detail_api(movie_id):

@@ -20,7 +20,7 @@ class User(db.Model):
 
 class Review(db.Model):
   id = db.Column(db.Integer, primary_key=True)
-  movie_id = db.Column(db.Integer, db.ForeignKey('movie.id'), nullable=False)   # Assuming movie_id is an integer referencing a movie in an external database
+  movie_id = db.Column(db.Integer, db.ForeignKey('movie.id', name="fk_review_movie_id"), nullable=False)   # Assuming movie_id is an integer referencing a movie in an external database
   body = db.Column(db.Text, nullable=False)
   rating = db.Column(db.Integer, nullable=False)
   flagged = db.Column(db.Boolean, default=False)   # Flag to indicate if the review is flagged for moderation
@@ -28,6 +28,6 @@ class Review(db.Model):
   author = db.relationship('User', back_populates='reviews')    # Many-to-one relationship with User
   movie = db.relationship('Movie', back_populates='reviews')  # 
 
-  class Movie(db.Model):
-    id = db.Column(db.Integer, primary_key=True)  # This IS the TMDB movie_id
-    reviews = db.relationship('Review', back_populates='movie')
+class Movie(db.Model):
+  id = db.Column(db.Integer, primary_key=True)  # This IS the TMDB movie_id
+  reviews = db.relationship('Review', back_populates='movie')
