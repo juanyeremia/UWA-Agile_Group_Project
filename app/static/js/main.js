@@ -43,7 +43,7 @@ async function loadNowPlayingMovies() {
             : '/static/images/placeholder.png';                                                        // Use placeholder if no poster
 
             // Check if this movie has ratings in local db
-            const localRating = ratinigs[movie.id];                                                                     // Look up rating by movie ID
+            const localRating = ratings[movie.id];                                                                     // Look up rating by movie ID
             const ratingHTML = localRating
                 ?  `<div class="movie-rating">${localRating.avg_rating} ★</div>                
                     <div class="movie-reviews">${localRating.review_count} reviews</div>`       
@@ -87,7 +87,7 @@ async function loadHighestRatedMovies() {
     If no rated movies, display message
     ========================== */
     if (ratedMovies.length === 0) {
-        $('#highest-rated-movies-container').html('<p class="text-center">No rated movies yet.</p>');
+        $('#highest-rated-movies-container').html('<p>No rated movies yet.</p>');
         return;
     }
 
@@ -133,3 +133,68 @@ async function loadHighestRatedMovies() {
 }
 
 loadHighestRatedMovies();                                                                 // Load highest rated movies when the page loads
+
+/* ============================================
+Load and display recent reviews on home page
+============================================*/
+
+async function loadRecentReviews() {
+    /* ==========================
+    For recent reviews from local DB
+    ========================== */
+    const response = await fetch('/api/reviews/recent');
+    let reviews = await response.json();
+
+    $('#recent-reviews-container').html('');                        // Create empty container for recent reviews
+
+    /* ==========================
+    If no reviews, display message
+    ========================== */
+    if (reviews.length === 0) {
+         $('#recent-reviews-container').html('<p>No reviews have been submitted yet.</p>')
+        return;
+    }
+
+    /* ==========================
+    For each movie, check cache or call TMDB for movie details
+    ========================== */
+    for (const review of reviews) {
+        const cacheKey = `movie_detail_${review.movie_id}`;                 // Cache key for individual movie details
+        let movieData;
+
+        const cached = sessionStorage.getItem(cacheKey)
+        if (cached) {                                                                               // If movie details are cached, use them
+            movieData = JSON.parse(cached);
+        } else {                                                                                       // If not cached, fetch from TMDB API and cache it
+            const tmdbResponse = await fetch(`api/movies/${review.movie_id}`)       // Fetch movie details from TMDB
+            movieData = await tmdbResponse.json();
+            sessionStorage.setItem(cacheKey, JSON.stringify(movieData))                 // Cache the movie details in sessionStorage
+        }
+        
+        // Get movie poster data 
+        const poster = movieData.poster_path
+            ? `${TMDB_IMAGE_BASE}${movieData.poster_path}`
+            : ``;                                                                                           // If no image, leave empty
+
+             $('#recent-reviews-container').append(`
+                <div class="review-item">
+                    <img src="${poster}" class="review-poster" alt="${movieData.title}">
+                    <div class="review-content">
+                        <div class="review-header">
+                            <p class="reviewer-name">${review.username}</p>
+                            <p class="review-movie">${movieData.title}</p>
+                            <p class="review-rating">${review.rating}/5</p>
+                        </div>
+                        <p class="review-text">${review.body}</p>
+                    </div>
+                </div>    
+            `);
+    }
+}
+
+// Load functions in document
+$(document).ready(function() {
+    loadNowPlayingMovies();
+    loadHighestRatedMovies();
+    loadRecentReviews();
+});
