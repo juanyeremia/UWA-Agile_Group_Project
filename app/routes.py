@@ -209,7 +209,7 @@ def movie_detail_api(movie_id):
 #=================================================
 # Get most recent review from local DB
 #=================================================
-@app.route('api/reviews/recent')
+@app.route('/api/reviews/recent')
 def recent_reviews():
     # Query the 5 most recent reviews ordere by review ID descending
     results = Review.query.order_by(Review.id.desc()).limit(5).all()
