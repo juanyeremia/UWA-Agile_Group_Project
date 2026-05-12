@@ -24,26 +24,35 @@
             <div class="row align-items-start g-4">
                 <div class="col-md-6 d-flex flex-column profile-actions">
                     <h3 class="sign-up-title-details"> Sign Up</h3>
-                    <div class="sign-up-description">
-                        <p class="sign-up-left-text">Username:</p>
+                    <form method="POST" action="{{ url_for('sign_up') }}">
+                        {{ form.hidden_tag() }}    <!-- Include CSRF token for security -->
+                        <p class="sign-up-left-text">Username:</p>  <!-- Display validation errors for username field -->
                         {{ form.username(class="form-control-sign-up-input", placeholder="Enter username") }}
-                        </p>
-                        <p class="sign-up-left-text">Email:</p>
+                        {% for error in form.username.errors %}
+                            <div class="text-danger small mt-1">{{ error }}</div>
+                        {% endfor %}
+                        <p class="sign-up-left-text">Email:</p> <!-- Display validation errors for email field -->
                         {{ form.email(class="form-control-sign-up-input", placeholder="Enter email") }}
-                        </p>
-                        <p class="sign-up-left-text">Password:</p>
+                        {% for error in form.email.errors %}
+                            <div class="text-danger small mt-1">{{ error }}</div>
+                        {% endfor %}
+                        <p class="sign-up-left-text">Password:</p> <!-- Display validation errors for password field -->
                         {{ form.password(class="form-control-sign-up-input", placeholder="Enter password") }}
-                        </p>
-                        <p class="sign-up-left-text">Confirm Password:</p>
+                        {% for error in form.password.errors %}
+                            <div class="text-danger small mt-1">{{ error }}</div>
+                        {% endfor %}
+                        <p class="sign-up-left-text">Confirm Password:</p> <!-- Display validation errors for confirm_password field -->
                         {{ form.confirm_password(class="form-control-sign-up-input", placeholder="Confirm password") }}
-                        </p>
+                        {% for error in form.confirm_password.errors %}
+                            <div class="text-danger small mt-1">{{ error }}</div>
+                        {% endfor %}
                         <p class="sign-up-left-text"> 
                             By signing up, you agree to our <a href="{{ url_for('terms') }}">Terms of Service</a> and <a href="{{ url_for('privacy') }}">Privacy Policy</a>.
                         </p>
                         <div class="d-flex gap-3 mt-3">
                             {{ form.submit(class="outline-gold-btn flex-fill") }}
                         </div>
-                    </div>
+                    </form>
                     <hr class="separator">
                     <p class="sign-up-left-text-center">Or <a href="{{ url_for('login') }}">log in</a> if you already have an account.</p>
                 </div>
