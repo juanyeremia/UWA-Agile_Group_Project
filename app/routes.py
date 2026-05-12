@@ -44,6 +44,9 @@ def privacy():
 def profile():
     return render_template('user_profile.html')
 
+@app.route('/admin')
+def admin():
+    return render_template('admin_profile.html')
 #=================================================
 # Get the TMDB_ACCESS_TOKEN
 #=================================================
