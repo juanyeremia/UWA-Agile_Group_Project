@@ -1,4 +1,4 @@
-from flask import render_template, flash, redirect, url_for
+from flask import render_template, flash, redirect, session, url_for
 from app import app
 from app.forms import SignUpForm, LoginForm
 import os
@@ -30,34 +30,45 @@ def movie_detail(movie_id):
 
 @app.route('/sign_up', methods=['GET', 'POST'])
 def sign_up():
-  form = SignUpForm()
-  if form.validate_on_submit():
-    user = User(username=form.username.data.strip(), 
+    form = SignUpForm()
+    if form.validate_on_submit():
+        user = User(username=form.username.data.strip(), 
                 email=form.email.data.strip().lower(), 
                 role='user'
-    )
-    user.set_password(form.password.data)  # Hash the password and set it for the user
-    db.session.add(user)
-    db.session.commit()
+      )
+        user.set_password(form.password.data)  # Hash the password and set it for the user
+        db.session.add(user)
+        db.session.commit()
 
-    flash('Account created successfully! Please log in.', 'success')
-    return redirect(url_for('login'))
-  flash('Error creating account. Please check your input and try again.', 'danger')
-  return render_template('sign_up.html', form=form)
+        flash('Account created successfully! Please log in.', 'success')
+        return redirect(url_for('login'))
+    if form.is_submitted() and not form.validate():
+        flash('Error creating account. Please check your input and try again.', 'danger')
+    return render_template('sign_up.html', form=form)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-  form = LoginForm()
-  if form.validate_on_submit():
-      email = form.email.data.strip().lower()
-      user = User.query.filter_by(email=email).first()
-      password = form.password.data
-      if user and user.check_password(password):
-          flash('Logged in successfully!', 'success')
-          return redirect(url_for('home'))
-      else:
-          flash('Invalid email or password. Please try again.', 'danger')
-  return render_template('login.html', form=form)
+    form = LoginForm()
+    if form.validate_on_submit():
+        email = form.email.data.strip().lower()
+        user = User.query.filter_by(email=email).first()
+        password = form.password.data
+        if user and user.check_password(password):
+            session['user_id'] = user.id  # Store the user's ID in the session to keep them logged in
+            session['username'] = user.username  # Optionally store the username in the session for easy access
+            session['role'] = user.role  # Store the user's role in the session for access control
+            flash('Logged in successfully!', 'success')
+            return redirect(url_for('home'))
+        else:
+            flash('Invalid email or password. Please try again.', 'danger')
+    return render_template('login.html', form=form)
+
+
+@app.route('/logout')
+def logout():
+    session.clear()  # Clear all session data to log the user out
+    flash('You have been logged out.', 'info')
+    return redirect(url_for('home'))
 
 @app.route('/terms')
 def terms():
