@@ -42,7 +42,7 @@ def sign_up():
 
         flash('Account created successfully! Please log in.', 'success')
         return redirect(url_for('login'))
-    if form.is_submitted() and not form.validate():
+    elif form.is_submitted():
         flash('Error creating account. Please check your input and try again.', 'danger')
     return render_template('sign_up.html', form=form)
 

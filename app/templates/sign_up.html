@@ -24,28 +24,36 @@
             <div class="row align-items-start g-4">
                 <div class="col-md-6 d-flex flex-column profile-actions">
                     <h3 class="sign-up-title-details"> Sign Up</h3>
-                    <form method="POST" action="{{ url_for('sign_up') }}">
+                    <form id="signUpForm" method="POST" action="{{ url_for('sign_up') }}">
                         {{ form.hidden_tag() }}    <!-- Include CSRF token for security -->
                         <p class="sign-up-left-text">Username:</p>  <!-- Display validation errors for username field -->
-                        {{ form.username(class="form-control-sign-up-input", placeholder="Enter username") }}
-                        {% for error in form.username.errors %}
-                            <div class="text-danger small mt-1">{{ error }}</div>
-                        {% endfor %}
+                        {{ form.username(id="username", class="form-control-sign-up-input", placeholder="Enter username") }}
+                        <div id="usernameError" class="text-danger small mt-1">
+                            {% for error in form.username.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
                         <p class="sign-up-left-text">Email:</p> <!-- Display validation errors for email field -->
-                        {{ form.email(class="form-control-sign-up-input", placeholder="Enter email") }}
-                        {% for error in form.email.errors %}
-                            <div class="text-danger small mt-1">{{ error }}</div>
-                        {% endfor %}
+                        {{ form.email(id="email", class="form-control-sign-up-input", placeholder="Enter email") }}
+                        <div id="emailError" class="text-danger small mt-1">
+                            {% for error in form.email.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
                         <p class="sign-up-left-text">Password:</p> <!-- Display validation errors for password field -->
-                        {{ form.password(class="form-control-sign-up-input", placeholder="Enter password") }}
-                        {% for error in form.password.errors %}
-                            <div class="text-danger small mt-1">{{ error }}</div>
-                        {% endfor %}
+                        {{ form.password(id="password", class="form-control-sign-up-input", placeholder="Enter password") }}
+                        <div id="passwordError" class="text-danger small mt-1">
+                            {% for error in form.password.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
                         <p class="sign-up-left-text">Confirm Password:</p> <!-- Display validation errors for confirm_password field -->
-                        {{ form.confirm_password(class="form-control-sign-up-input", placeholder="Confirm password") }}
-                        {% for error in form.confirm_password.errors %}
-                            <div class="text-danger small mt-1">{{ error }}</div>
-                        {% endfor %}
+                        {{ form.confirm_password(id="confirm_password", class="form-control-sign-up-input", placeholder="Confirm password") }}
+                        <div id="confirmPasswordError" class="text-danger small mt-1">
+                            {% for error in form.confirm_password.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
                         <p class="sign-up-left-text"> 
                             By signing up, you agree to our <a href="{{ url_for('terms') }}">Terms of Service</a> and <a href="{{ url_for('privacy') }}">Privacy Policy</a>.
                         </p>
@@ -73,7 +81,7 @@
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/auth_validation.js') }}"></script>
 </body>
 
 
