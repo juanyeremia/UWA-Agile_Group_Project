@@ -119,7 +119,7 @@ def now_playing():
   return jsonify(data)                                                            # Return the data as a JSON response to the client
 
 #=================================================
-# Get 'Highest Rated' movies from Internal Database (Placeholder)
+# Get 'Highest Rated' movies from Internal Database 
 #=================================================
 @app.route('/api/movies/highest_rated')
 def highest_rated():
@@ -144,3 +144,16 @@ def highest_rated():
     ]
 
     return jsonify(movies)                                                            # Return the list of movies as a JSON response to the client
+
+#=================================================
+# Get individual movie details from TMDB API based
+#=================================================
+@app.route('/api/movies/<int:movie_id>')
+def movie_detail_api(movie_id):
+    token = app.config()['TMDB_ACCESS_TOKEN']                    # Retrieve the TMDB access token from the Flask app's configuration
+    headers = { 'Authorization': f'Bearer {token}'}                      # Set up the headers for the API request, including the Authorization header with the Bearer token
+    response = requests.get(                                                   # Make a GET request to the TMDB API endpoint for movie details, including the headers with the access token
+        f'https://api.themoviedb.org/3/movie/{movie_id}',
+        headers=headers
+    )
+    return jsonify(response.json())                                                   # Parse the JSON response from the API and return it as a JSON response to the client

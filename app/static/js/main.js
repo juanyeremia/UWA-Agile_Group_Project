@@ -86,7 +86,7 @@ async function loadHighestRatedMovies() {
         if (cached) {                                                                                          // If movie details are cached, use them
             movieData = JSON.parse(cached);
         } else {                                                                                                  // If not cached, fetch from TMDB API and cache it
-            const tmdbResponse = await fetch(`/api/movies/${rated.movie_id}`);
+            const tmdbResponse = await fetch(`/api/movies/${rated.movie_id}`);      // Fetch movie details from TMDB API (in routes.py, this will check cache first before calling TMDB)
             movieData = await tmdbResponse.json();
             sessionStorage.setItem(cacheKey, JSON.stringify(movieData));        // Cache the movie details in sessionStorage
         }
