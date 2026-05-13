@@ -1,0 +1,159 @@
+.admin-layout {
+    max-width: 1180px;
+    margin: 35px auto;
+    padding: 0 20px;
+}
+
+.admin-top-card,
+.stat-card,
+.admin-card {
+    background: #1f1f1f;
+    color: #f5f5f5;
+    border: 1px solid #333;
+    border-radius: 22px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+}
+
+.admin-top-card {
+    padding: 35px;
+}
+
+.admin-top-card h1 {
+    font-size: 2.4rem;
+    font-weight: 800;
+    color: #f5c518;
+    margin-bottom: 8px;
+}
+
+.admin-top-card p,
+.stat-card p,
+.review-row p,
+.user-box p,
+.activity-list li {
+    color: #cfcfcf;
+}
+
+.admin-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    margin: 22px 0;
+}
+
+.stat-card {
+    padding: 22px;
+}
+
+.stat-card h3 {
+    color: #f5c518;
+    font-weight: 800;
+    margin-bottom: 4px;
+}
+
+.admin-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 22px;
+}
+
+.admin-card {
+    padding: 25px;
+}
+
+.large-card {
+    grid-row: span 2;
+}
+
+.admin-card h2 {
+    color: #f5c518;
+    font-size: 1.4rem;
+    font-weight: 800;
+    margin-bottom: 18px;
+}
+
+.review-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    padding: 18px 0;
+    border-bottom: 1px solid #333;
+}
+
+.review-row:last-child {
+    border-bottom: none;
+}
+
+.review-row h5,
+.user-box h5 {
+    color: #ffffff;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.review-row span {
+    color: #999;
+    font-size: 0.9rem;
+}
+
+.delete-btn {
+    background: #ee595c;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 8px 14px;
+    font-weight: 600;
+}
+
+.clear-btn,
+.search-box button {
+    background: #f5c518;
+    color: #111;
+    border: none;
+    border-radius: 10px;
+    padding: 8px 14px;
+    font-weight: 700;
+}
+
+.search-box {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 18px;
+}
+
+.search-box input {
+    flex: 1;
+    background: #151515;
+    color: #fff;
+    border: 1px solid #444;
+    border-radius: 12px;
+    padding: 10px 12px;
+}
+
+.search-box input::placeholder {
+    color: #999;
+}
+
+.user-box {
+    background: #2a2a2a;
+    border-radius: 16px;
+    padding: 18px;
+}
+
+.activity-list {
+    padding-left: 18px;
+    margin-bottom: 0;
+}
+
+.activity-list li {
+    margin-bottom: 12px;
+}
+
+@media (max-width: 768px) {
+    .admin-stats,
+    .admin-grid {
+        grid-template-columns: 1fr;
+    }
+    .review-row {
+        flex-direction: column;
+    }
+}
