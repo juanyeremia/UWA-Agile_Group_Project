@@ -213,7 +213,7 @@ def highest_rated():
 #=================================================
 @app.route('/api/movies/<int:movie_id>')
 def movie_detail_api(movie_id):
-    token = app.config()['TMDB_ACCESS_TOKEN']                    # Retrieve the TMDB access token from the Flask app's configuration
+    token = app.config['TMDB_ACCESS_TOKEN']                    # Retrieve the TMDB access token from the Flask app's configuration
     headers = { 'Authorization': f'Bearer {token}'}                      # Set up the headers for the API request, including the Authorization header with the Bearer token
     response = requests.get(                                                   # Make a GET request to the TMDB API endpoint for movie details, including the headers with the access token
         f'https://api.themoviedb.org/3/movie/{movie_id}',
@@ -232,7 +232,7 @@ def recent_reviews():
     reviews = [
         {
             'id': r.id,
-            'movie_id': r.body,
+            'movie_id': r.movie_id,
             'rating': r.rating,
             'username': r.author.username           # connects Review and User throught the 'author' relationship
         }
@@ -248,8 +248,6 @@ def recent_reviews():
 @login_required
 def write_review(movie_id):
 
-
-    
     # Handle the form submission when the request method is POST
     if request.method == 'POST':
         body = request.form.get('body') # Get the review content from the form data
@@ -259,16 +257,23 @@ def write_review(movie_id):
         review = Review(
             movie_id=movie_id,
             body=body,
-            rating=rating,
+            rating=int(rating),
             user_id=current_user.id  # Associate the review with the currently logged-in user
         )
         db.session.add(review) # Add the new review to the database session
         db.session.commit() # Commit the session to save the review to the database
-
         return redirect(url_for('movie_detail', movie_id=movie_id)) # Redirect back to the movie detail page after submitting the review
     
-    # GET request: Just render the review submission form
-    return render_template('write_review.html', movie_id=movie_id) # Render the review submission form for GET requests
+    # GET request: Fetch movie data and just render the review submission form
+    token = app.config['TMDB_ACCESS_TOKEN']                    # Retrieve the TMDB access token from the Flask app's configuration
+    headers = {'Authorization':f'Bearer {token}'}                      # Set up the headers for the API request, including the Authorization header with the Bearer token
+    response = requests.get(                                                   # Make a GET request to the TMDB API endpoint for movie details, including the headers with the access token
+        f'https://api.themoviedb.org/3/movie/{movie_id}',
+        headers=headers
+    )
+    movie = response.json()
+
+    return render_template('write_review.html', movie_id=movie_id, movie=movie) # Render the review submission form for GET requests
 
 
 
