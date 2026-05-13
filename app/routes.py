@@ -78,6 +78,7 @@ def profile():
 @app.route('/admin')
 def admin():
     return render_template('admin_profile.html')
+
 #=================================================
 # Get the TMDB_ACCESS_TOKEN
 #=================================================
@@ -252,3 +253,38 @@ def write_review(movie_id):
     
     # GET request: Just render the review submission form
     return render_template('write_review.html', movie_id=movie_id) # Render the review submission form for GET requests
+
+
+
+
+#=================================================
+# Redirect to the search page
+#=================================================
+@app.route('/search')
+def search():
+    query = request.args.get('query')
+
+    movies = []
+
+    if query:
+        url = "https://api.themoviedb.org/3/search/movie"
+
+        headers = {
+            "Authorization": f"Bearer {os.getenv('TMDB_ACCESS_TOKEN')}"
+        }
+
+        params = {
+            "query": query
+        }
+
+        response = requests.get(url, headers=headers, params=params)
+
+        data = response.json()
+
+        movies = data.get("results", [])
+
+    return render_template(
+        'search.html',
+        movies=movies,
+        query=query
+    )
