@@ -12,7 +12,7 @@
 </head>
 
 <body>
-    {% include 'navbar.html' %}-m
+    {% include 'navbar.html' %}
     <div class="container py-4">
 
         <!-- Profile Header -->
@@ -23,8 +23,8 @@
                 </div>
 
                 <div class="col-md-6">
-                    <h1 class="profile-name">Emma Watson</h1>
-                    <p class="profile-username">@emma_reviews</p>
+                    <h1 class="profile-name">{{ user.username }}</h1>
+                    <p class="profile-username">@{{ user.username }}</p>
                     <p class="bio-text">
                         Movie lover, binge watcher, and review writer. I enjoy psychological thrillers, romance dramas, sci-fi films, and award-winning TV shows. Always searching for the next masterpiece to recommend.
                     </p>
@@ -41,7 +41,7 @@
         <div class="row mt-4 g-4">
             <div class="col-md-3">
                 <div class="stat-box">
-                    <div class="stat-number">128</div>
+                    <div class="stat-number">{{ review_count }}</div>
                     <div class="small-muted">Reviews Posted</div>
                 </div>
             </div>
