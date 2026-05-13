@@ -21,6 +21,12 @@ migrate = Migrate(app, db)   # Create Migrate object for migration commands
 login = LoginManager(app)       # Create LoginManager object for user session management
 login.login_view = 'login'     # Set the login view for @login_required
 
+# User loader function for Flask-Login
+@login.user_loader
+def load_user(user_id):
+    from app.models import User
+    return User.query.get(int(user_id))  # Load user by ID for session management
+
 # Import routes and models to register them with the app
 from app import routes, models
 
