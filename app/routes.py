@@ -128,6 +128,17 @@ def profile():
         review_count=len(user_reviews)
     )
 
+@app.route('/edit_profile', methods=['GET', 'POST'])
+@login_required
+def edit_profile():
+    if request.method == 'POST':
+        current_user.username = request.form.get('username')
+        current_user.email = request.form.get('email')
+        db.session.commit()
+        return redirect(url_for('profile'))
+
+    return render_template('edit_profile.html', user=current_user)
+
 @app.route('/admin')
 def admin():
     return render_template('admin_profile.html')

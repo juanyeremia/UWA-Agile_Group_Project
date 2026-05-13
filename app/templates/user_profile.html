@@ -2,278 +2,122 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-
     <link rel="stylesheet" href="{{ url_for('static', filename='css/general.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/navbar.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/user_profile.css') }}">
-
-    <title>User Profile</title>
 </head>
 
 <body>
 
     {% include 'navbar.html' %}
 
-    <div class="container py-4">
+    <div class="container profile-page">
 
-        <!-- Profile Header -->
-        <div class="profile-header">
+        <!-- Profile Card -->
+        <div class="simple-profile-card">
 
-            <div class="row align-items-center g-4">
-
-                <div class="col-md-3 text-center">
-                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=500&q=80" alt="User Profile" class="profile-avatar" />
-                </div>
-
-                <div class="col-md-6">
-
-                    <h1 class="profile-name">
-                        {{ user.username }}
-                    </h1>
-
-                    <p class="profile-username">
-                        @{{ user.username }}
-                    </p>
-
-                    <p class="bio-text">
-                        Movie lover, binge watcher, and review writer. I enjoy psychological thrillers, romance dramas, sci-fi films, and award-winning TV shows.
-                    </p>
-
-                </div>
-
-                <div class="col-md-3 d-flex flex-column gap-2 profile-actions">
-                    <button class="gold-btn">Edit Profile</button>
-                    <button class="outline-gold-btn">Share Profile</button>
-                </div>
-
-            </div>
-        </div>
-
-        <!-- Stats -->
-        <div class="row mt-4 g-4">
-
-            <div class="col-md-3">
-                <div class="stat-box">
-                    <div class="stat-number">
-                        {{ review_count }}
-                    </div>
-
-                    <div class="small-muted">
-                        Reviews Posted
-                    </div>
-                </div>
+            <div class="profile-left">
+                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=500&q=80" alt="Profile Image" class="profile-avatar">
             </div>
 
-            <div class="col-md-3">
-                <div class="stat-box">
-                    <div class="stat-number">
-                        {{ reviews|length }}
-                    </div>
+            <div class="profile-middle">
+                <h1>{{ user.username }}</h1>
+                <p class="username">@{{ user.username }}</p>
+                <p class="email">{{ user.email }}</p>
 
-                    <div class="small-muted">
-                        Movies Reviewed
-                    </div>
-                </div>
+                <p class="bio">
+                    Movie lover and review writer. This profile shows submitted movie reviews.
+                </p>
             </div>
 
-            <div class="col-md-3">
-                <div class="stat-box">
-                    <div class="stat-number">
-                        {{ user.role }}
-                    </div>
-
-                    <div class="small-muted">
-                        Account Role
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-3">
-                <div class="stat-box">
-                    <div class="stat-number">
-                        {{ reviews|selectattr('flagged')|list|length }}
-                    </div>
-
-                    <div class="small-muted">
-                        Flagged Reviews
-                    </div>
-                </div>
+            <div class="profile-right">
+                <a href="{{ url_for('edit_profile') }}" class="edit-btn">
+                    Edit Profile
+                </a>
             </div>
 
         </div>
 
-        <!-- About + Favourite Genres -->
-        <div class="row mt-4 g-4">
-
-            <div class="col-lg-6">
-
-                <div class="info-card">
-
-                    <h3 class="section-title">
-                        About User
-                    </h3>
-
-                    <p>
-                        This profile displays submitted reviews and user activity. Users can review movies and TV shows through the platform.
-                    </p>
-
-                    <p class="mb-1">
-                        <strong>Email:</strong> {{ user.email }}
-                    </p>
-
-                    <p class="mb-1">
-                        <strong>Role:</strong> {{ user.role }}
-                    </p>
-
-                    <p class="mb-0">
-                        <strong>Total Reviews:</strong> {{ review_count }}
-                    </p>
-
-                </div>
-
+        <!-- Small Stats -->
+        <div class="small-stats">
+            <div>
+                <h3>{{ review_count }}</h3>
+                <p>Reviews Posted</p>
             </div>
 
-            <div class="col-lg-6">
-
-                <div class="info-card">
-
-                    <h3 class="section-title">
-                        Favourite Genres
-                    </h3>
-
-                    <div>
-                        <span class="badge-genre">Thriller</span>
-                        <span class="badge-genre">Sci-Fi</span>
-                        <span class="badge-genre">Drama</span>
-                        <span class="badge-genre">Romance</span>
-                        <span class="badge-genre">Mystery</span>
-                        <span class="badge-genre">Crime</span>
-                    </div>
-
-                </div>
-
+            <div>
+                <h3>{{ user.role }}</h3>
+                <p>Account Role</p>
             </div>
-
         </div>
 
         <!-- Submitted Reviews -->
-        <div class="mt-5">
+        <div class="reviews-section">
 
-            <h2 class="section-title">
-                Submitted Reviews
-            </h2>
+            <h2>Submitted Reviews</h2>
 
-            <div class="row g-4">
+            {% if reviews %} {% for review in reviews %}
 
-                {% if reviews %} {% for review in reviews %}
+            <div class="simple-review-card">
+                <div>
+                    <h4>Movie ID: {{ review.movie_id }}</h4>
+                    <p>{{ review.body }}</p>
 
-                <div class="col-lg-4">
-
-                    <div class="review-card">
-
-                        <div class="review-title">
-                            Movie ID: {{ review.movie_id }}
-                        </div>
-
-                        <div class="review-meta">
-                            Submitted Review
-                        </div>
-
-                        <div class="rating-stars">
-                            {{ review.rating }}/5 ★
-                        </div>
-
-                        <p>
-                            {{ review.body }}
-                        </p>
-
-                        {% if review.flagged %}
-
-                        <p class="text-warning">
-                            Flagged: {{ review.flag_reason }}
-                        </p>
-
-                        {% endif %}
-
-                        <div class="small-muted">
-                            {{ review.created_at.strftime('%d %b %Y') }}
-                        </div>
-
-                    </div>
-
+                    <span class="rating">
+                            Rating: {{ review.rating }}/5 ★
+                        </span> {% if review.flagged %}
+                    <p class="flagged">
+                        Flagged: {{ review.flag_reason }}
+                    </p>
+                    {% endif %}
                 </div>
-
-                {% endfor %} {% else %}
-
-                <p class="small-muted">
-                    You have not submitted any reviews yet.
-                </p>
-
-                {% endif %}
-
             </div>
 
+            {% endfor %} {% else %}
+
+            <div class="empty-message">
+                You have not submitted any reviews yet.
+            </div>
+
+            {% endif %}
+
         </div>
+        <!-- Profile Highlights -->
+        <div class="profile-highlights">
+            <h2>Profile Highlights</h2>
 
-        <!-- Watchlist -->
-        <div class="mt-5">
+            <div class="highlight-grid">
 
-            <h2 class="section-title">
-                My Watchlist
-            </h2>
-
-            <div class="row g-4">
-
-                <div class="col-md-4">
-                    <div class="watchlist-card">
-                        <div class="watchlist-title">
-                            Dune: Part Two
-                        </div>
-
-                        <div class="watchlist-meta">
-                            Sci-Fi • Adventure
-                        </div>
-                    </div>
+                <div class="highlight-card">
+                    <div class="highlight-icon">🎬</div>
+                    <h4>Movie Explorer</h4>
+                    <p>Enjoys discovering new films and TV shows.</p>
                 </div>
 
-                <div class="col-md-4">
-                    <div class="watchlist-card">
-                        <div class="watchlist-title">
-                            Breaking Bad
-                        </div>
-
-                        <div class="watchlist-meta">
-                            Crime • Drama
-                        </div>
-                    </div>
+                <div class="highlight-card">
+                    <div class="highlight-icon">⭐</div>
+                    <h4>Review Writer</h4>
+                    <p>Shares opinions and ratings with the community.</p>
                 </div>
 
-                <div class="col-md-4">
-                    <div class="watchlist-card">
-                        <div class="watchlist-title">
-                            Interstellar
-                        </div>
-
-                        <div class="watchlist-meta">
-                            Sci-Fi • Drama
-                        </div>
-                    </div>
+                <div class="highlight-card">
+                    <div class="highlight-icon">🍿</div>
+                    <h4>Watchlist Ready</h4>
+                    <p>Keeps track of movies to watch later.</p>
                 </div>
 
             </div>
-
         </div>
 
-        <div class="footer-space"></div>
 
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 
 </body>
