@@ -225,3 +225,33 @@ def recent_reviews():
     ]
 
     return jsonify(reviews)
+
+#=================================================
+# Set up route for submitting a new review 
+#=================================================
+@app.route('/api/write_review/<int:movie_id>', methods=['GET', 'POST'])
+def write_review(movie_id):
+
+    # Ensure the user is logged in before allowing them to submit a review
+    if 'user_id' not in session:
+        return redirect(url_for('login'))  # Redirect to the login page if the user is not logged in
+    
+    # Handle the form submission when the request method is POST
+    if request.method == 'POST':
+        body = request.form.get('body') # Get the review content from the form data
+        rating = request.form.get('rating') # Get the review rating from the form data
+
+        # Write review to the database
+        review = Review(
+            movie_id=movie_id,
+            body=body,
+            rating=rating,
+            user_id=session['user_id']  # Associate the review with the currently logged-in 
+        )
+        db.session.add(review) # Add the new review to the database session
+        db.session.commit() # Commit the session to save the review to the database
+
+        return redirect(url_for('movie_detail', movie_id=movie_id)) # Redirect back to the movie detail page after submitting the review
+    
+    # GET request: Just render the review submission form
+    return render_template('write_review.html', movie_id=movie_id) # Render the review submission form for GET requests
