@@ -18,11 +18,6 @@ from app.models import User
 def home():
   return render_template('home_page.html')
 
-# Write review page route
-@app.route('/write_review/<int:movie_id>')
-def write_review(movie_id):
-    return render_template('write_review.html')
-
 """ - The original one after the test
 @app.route('/movie/<int:movie_id>')
 def movie_detail(movie_id):
@@ -232,7 +227,7 @@ def recent_reviews():
 #=================================================
 # Set up route for submitting a new review 
 #=================================================
-@app.route('/api/write_review/<int:movie_id>', methods=['GET', 'POST'])
+@app.route('/write_review/<int:movie_id>', methods=['GET', 'POST'])
 def write_review(movie_id):
 
     # Ensure the user is logged in before allowing them to submit a review
