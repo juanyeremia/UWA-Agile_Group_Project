@@ -146,7 +146,7 @@ if (passwordInput) {
         }  
     });
 }
-   
+
 if (confirmPasswordInput) {
     confirmPasswordInput.addEventListener('blur', function() {
         const password = passwordInput.value.trim();
@@ -178,4 +178,21 @@ if (signUpForm) {
             event.preventDefault(); 
         }
     });
+}
+
+const togglePasswordBtn = document.getElementById('toggle-password');
+
+if (togglePasswordBtn && passwordInput) {
+    const showPassword = function(event) {
+        event.preventDefault();
+        passwordInput.type = 'text';
+    };
+    const hidePassword = function(event) {
+        event.preventDefault();
+        passwordInput.type = 'password';
+    };
+
+    togglePasswordBtn.addEventListener('mousedown', showPassword);
+    togglePasswordBtn.addEventListener('mouseup', hidePassword);
+    togglePasswordBtn.addEventListener('mouseleave', hidePassword);
 }

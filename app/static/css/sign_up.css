@@ -32,7 +32,49 @@
     display: block;
 }
 
+.password-group {
+    display: flex;
+    align-items: stretch;
+    width: 100%;
+}
 
+.password-group .password-input {
+    flex: 1;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-right: none;
+}
+
+.password-group .password-input:focus {
+    background-color: #2b2b2b;
+    color: #ffffff;
+    box-shadow: none;
+    outline: none;
+}
+
+.password-toggle-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 48px;
+    padding: 0 12px;
+    background-color: #2b2b2b;
+    color: #d4af37;
+    border: 1px solid #495057;
+    border-left: none;
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+    cursor: pointer;
+}
+
+.password-toggle-btn:focus,
+.password-toggle-btn:active,
+.password-toggle-btn:focus-visible {
+    background-color: #d4af37;
+    color: #2b2b2b;
+    box-shadow: none;
+    outline: none;
+}
 
 .sign-up-left-text {
   margin-bottom: 5px;
