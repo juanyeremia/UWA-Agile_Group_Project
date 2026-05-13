@@ -30,10 +30,12 @@ class Review(db.Model):
   body = db.Column(db.Text, nullable=False)
   rating = db.Column(db.Integer, nullable=False)
   flagged = db.Column(db.Boolean, default=False)   # Flag to indicate if the review is flagged for moderation
+  flag_reason = db.Column(db.String(255))  
   user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+  created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc), nullable=False)
   author = db.relationship('User', back_populates='reviews')    # Many-to-one relationship with User
   movie = db.relationship('Movie', back_populates='reviews')  # 
-  created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc), nullable=False)
+  
 
 class Movie(db.Model):
   id = db.Column(db.Integer, primary_key=True)  # This IS the TMDB movie_id
