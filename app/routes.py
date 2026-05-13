@@ -18,10 +18,52 @@ from app.models import User
 def home():
   return render_template('home_page.html')
 
-""" - The original one after the test
+#=================================================
+# Individul movie page route & movie details
+#=================================================
 @app.route('/movie/<int:movie_id>')
 def movie_detail(movie_id):
-    return render_template('individual_movie.html') """
+
+    url = f"https://api.themoviedb.org/3/movie/{movie_id}"
+
+    headers = {
+        "Authorization": f"Bearer {os.getenv('TMDB_ACCESS_TOKEN')}"
+    }
+
+    response = requests.get(url, headers=headers)
+
+    data = response.json()
+
+    movie = {
+        "id": data.get("id"),
+        "title": data.get("title"),
+        "poster_url": f"https://image.tmdb.org/t/p/w500{data.get('poster_path')}",
+        "release_date": data.get("release_date"),
+        "description": data.get("overview"),
+        "rating": data.get("vote_average"),
+        "genres": data.get("genres")
+    }
+
+    reviews = [
+        {
+            "user": {"username": "Tammy"},
+            "rating": 5,
+            "content": "Amazing!"
+        },
+        {
+            "user": {"username": "Alex"},
+            "rating": 4,
+            "content": "Pretty good!"
+        }
+    ]
+
+    return render_template(
+        'individual_movie.html',
+        movie=movie,
+        reviews=reviews
+    )
+
+
 
 @app.route('/sign_up', methods=['GET', 'POST'])
 def sign_up():
@@ -83,32 +125,6 @@ def admin():
 # Get the TMDB_ACCESS_TOKEN
 #=================================================
 token = os.getenv("TMDB_ACCESS_TOKEN")
-
-#=================================================
-# Individual movie page for testing
-#=================================================
-@app.route('/movie/<int:movie_id>')
-def movie_detail(movie_id):
-    movie = {
-        "id": movie_id,
-        "title": "Arcane",
-        "poster_url": "https://img.league-funny.com/imgur/172482406314_o.png",
-        "release_date": "2024",
-        "director": "Riot Games",
-        "description": "This is a sample movie description.",
-        "cast": "Hailee Steinfeld, Ella Purnell",
-        "crew": "Created by Christian Linke and Alex Yee",
-        "details": "Animated series based on League of Legends.",
-        "genre": "Animation, Action, Adventure",
-        "release_info": "Released on Netflix"
-    }
-
-    reviews = [
-        {"user": {"username": "Tammy"}, "rating": 5, "content": "Amazing!"},
-        {"user": {"username": "Alex"}, "rating": 4, "content": "Pretty good!"}
-    ]
-
-    return render_template('individual_movie.html', movie=movie, reviews=reviews)
 
 #=================================================
 # Get 'Now Playing' movies from TMDB API

@@ -30,35 +30,36 @@
 
       <p class="mb-4">You searched for: <strong>{{ query }}</strong></p>
 
-      <div class="row">
+      <div class="row row-cols-2 row-cols-md-3 row-cols-lg-5 g-4">
         {% for movie in movies %}
+        <div class="col">
+          <a
+            href="{{ url_for('movie_detail', movie_id=movie.id) }}"
+            class="text-decoration-none text-white"
+          >
+            <div class="card h-100 bg-dark text-white movie-card">
+              {% if movie.poster_path %}
+              <img
+                src="https://image.tmdb.org/t/p/w500{{ movie.poster_path }}"
+                class="card-img-top"
+                alt="{{ movie.title }} poster"
+              />
+              {% else %}
+              <div class="no-poster">No Image</div>
+              {% endif %}
 
-        <div class="col-md-3 mb-4">
-          <div class="card h-100 shadow-sm">
-            {% if movie.poster_path %}
-            <img
-              src="https://image.tmdb.org/t/p/w500{{ movie.poster_path }}"
-              class="card-img-top"
-              alt="{{ movie.title }}"
-            />
-            {% else %}
-            <img
-              src="https://via.placeholder.com/500x750?text=No+Image"
-              class="card-img-top"
-              alt="No Image"
-            />
-            {% endif %}
+              <div class="card-body">
+                <h5 class="card-title">{{ movie.title }}</h5>
 
-            <div class="card-body">
-              <h5 class="card-title">{{ movie.title }}</h5>
-
-              <p class="card-text">⭐ {{ movie.vote_average }}</p>
-
-              <p class="card-text">{{ movie.release_date }}</p>
+                <p class="card-text mb-1">
+                  🗓️ {{ movie.release_date[:4] if movie.release_date else
+                  "Unknown" }}
+                </p>
+                <p class="card-text">⭐ {{ movie.vote_average }}</p>
+              </div>
             </div>
-          </div>
+          </a>
         </div>
-
         {% endfor %}
       </div>
     </div>
