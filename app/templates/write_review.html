@@ -19,13 +19,19 @@
     <main class="container-lg write-review-container d-flex gap-4">
         <!-- Movie Details -->
         <div class="write-review-movie-details">
-        <img src="https://placehold.co/200x300" alt="" class="write-review-poster">
-        <div class="write-review-movie-info">
-            <h2 class="write-review-movie-title">Movie Title</h2>
-            <p class="write-review-movie-year">2023</p>
-            <p class="write-review-movie-genre">Action, Adventure</p>
-            <p class="write-review-movie-rating">⭐ 8.5/10</p>
-        </div>
+            <img src="https://image.tmdb.org/t/p/w500{{ movie.poster_path }}" 
+                alt="{{ movie.title }}"
+                class="write-review-poster">
+            <div class="write-review-movie-info">
+                <h2 class="write-review-movie-title">{{ movie.title }}</h2>
+                <p class="write-review-movie-year">{{ movie.release_date[:4]  }}</p>
+                <p class="write-review-movie-genre">
+                    {% for genre in movie.genres %}
+                        {{ genre.name }}{% if not loop.last %}, {% endif %}
+                    {% endfor %}
+                </p>
+                <p class="write-review-movie-rating">⭐ {{ movie.vote_average | round(1) }}/10</p>
+            </div>
         </div>
 
         <!-- Review Form -->
