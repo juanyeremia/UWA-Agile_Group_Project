@@ -234,6 +234,7 @@ def recent_reviews():
             'id': r.id,
             'movie_id': r.movie_id,
             'rating': r.rating,
+            'body': r.body,
             'username': r.author.username           # connects Review and User throught the 'author' relationship
         }
         for r in results
@@ -274,9 +275,6 @@ def write_review(movie_id):
     movie = response.json()
 
     return render_template('write_review.html', movie_id=movie_id, movie=movie) # Render the review submission form for GET requests
-
-
-
 
 #=================================================
 # Redirect to the search page
