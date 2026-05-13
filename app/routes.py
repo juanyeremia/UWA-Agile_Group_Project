@@ -115,7 +115,11 @@ def privacy():
 @app.route('/profile')
 @login_required
 def profile():
-    user_reviews = Review.query.filter_by(user_id=current_user.id).order_by(Review.created_at.desc()).all()
+
+    user_reviews = Review.query.filter_by(
+        user_id=current_user.id
+    ).order_by(Review.id.desc()
+    ).all()
 
     return render_template(
         'user_profile.html',

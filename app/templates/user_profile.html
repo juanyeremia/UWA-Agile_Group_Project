@@ -4,84 +4,147 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
     <link rel="stylesheet" href="{{ url_for('static', filename='css/general.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/navbar.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/user_profile.css') }}">
+
     <title>User Profile</title>
 </head>
 
 <body>
+
     {% include 'navbar.html' %}
+
     <div class="container py-4">
 
         <!-- Profile Header -->
         <div class="profile-header">
+
             <div class="row align-items-center g-4">
+
                 <div class="col-md-3 text-center">
                     <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=500&q=80" alt="User Profile" class="profile-avatar" />
                 </div>
 
                 <div class="col-md-6">
-                    <h1 class="profile-name">{{ user.username }}</h1>
-                    <p class="profile-username">@{{ user.username }}</p>
-                    <p class="bio-text">
-                        Movie lover, binge watcher, and review writer. I enjoy psychological thrillers, romance dramas, sci-fi films, and award-winning TV shows. Always searching for the next masterpiece to recommend.
+
+                    <h1 class="profile-name">
+                        {{ user.username }}
+                    </h1>
+
+                    <p class="profile-username">
+                        @{{ user.username }}
                     </p>
+
+                    <p class="bio-text">
+                        Movie lover, binge watcher, and review writer. I enjoy psychological thrillers, romance dramas, sci-fi films, and award-winning TV shows.
+                    </p>
+
                 </div>
 
                 <div class="col-md-3 d-flex flex-column gap-2 profile-actions">
                     <button class="gold-btn">Edit Profile</button>
                     <button class="outline-gold-btn">Share Profile</button>
                 </div>
+
             </div>
         </div>
 
         <!-- Stats -->
         <div class="row mt-4 g-4">
+
             <div class="col-md-3">
                 <div class="stat-box">
-                    <div class="stat-number">{{ review_count }}</div>
-                    <div class="small-muted">Reviews Posted</div>
+                    <div class="stat-number">
+                        {{ review_count }}
+                    </div>
+
+                    <div class="small-muted">
+                        Reviews Posted
+                    </div>
                 </div>
             </div>
+
             <div class="col-md-3">
                 <div class="stat-box">
-                    <div class="stat-number">312</div>
-                    <div class="small-muted">Movies Watched</div>
+                    <div class="stat-number">
+                        {{ reviews|length }}
+                    </div>
+
+                    <div class="small-muted">
+                        Movies Reviewed
+                    </div>
                 </div>
             </div>
+
             <div class="col-md-3">
                 <div class="stat-box">
-                    <div class="stat-number">86</div>
-                    <div class="small-muted">TV Shows Watched</div>
+                    <div class="stat-number">
+                        {{ user.role }}
+                    </div>
+
+                    <div class="small-muted">
+                        Account Role
+                    </div>
                 </div>
             </div>
+
             <div class="col-md-3">
                 <div class="stat-box">
-                    <div class="stat-number">1.4k</div>
-                    <div class="small-muted">Followers</div>
+                    <div class="stat-number">
+                        {{ reviews|selectattr('flagged')|list|length }}
+                    </div>
+
+                    <div class="small-muted">
+                        Flagged Reviews
+                    </div>
                 </div>
             </div>
+
         </div>
 
-        <!-- About + Favorite Genres -->
+        <!-- About + Favourite Genres -->
         <div class="row mt-4 g-4">
+
             <div class="col-lg-6">
+
                 <div class="info-card">
-                    <h3 class="section-title">About User</h3>
+
+                    <h3 class="section-title">
+                        About User
+                    </h3>
+
                     <p>
-                        I love reviewing both classic and trending movies and TV series. My profile helps others discover hidden gems, read honest opinions, and build their own watchlist.
+                        This profile displays submitted reviews and user activity. Users can review movies and TV shows through the platform.
                     </p>
-                    <p class="mb-1"><strong>Location:</strong> Perth, Australia</p>
-                    <p class="mb-1"><strong>Joined:</strong> March 2026</p>
-                    <p class="mb-0"><strong>Favourite Director:</strong> Christopher Nolan</p>
+
+                    <p class="mb-1">
+                        <strong>Email:</strong> {{ user.email }}
+                    </p>
+
+                    <p class="mb-1">
+                        <strong>Role:</strong> {{ user.role }}
+                    </p>
+
+                    <p class="mb-0">
+                        <strong>Total Reviews:</strong> {{ review_count }}
+                    </p>
+
                 </div>
+
             </div>
 
             <div class="col-lg-6">
+
                 <div class="info-card">
-                    <h3 class="section-title">Favourite Genres</h3>
+
+                    <h3 class="section-title">
+                        Favourite Genres
+                    </h3>
+
                     <div>
                         <span class="badge-genre">Thriller</span>
                         <span class="badge-genre">Sci-Fi</span>
@@ -90,82 +153,129 @@
                         <span class="badge-genre">Mystery</span>
                         <span class="badge-genre">Crime</span>
                     </div>
+
                 </div>
+
             </div>
+
         </div>
 
-        <!-- Recent Reviews -->
+        <!-- Submitted Reviews -->
         <div class="mt-5">
-            <h2 class="section-title">Recent Reviews</h2>
+
+            <h2 class="section-title">
+                Submitted Reviews
+            </h2>
+
             <div class="row g-4">
-                <div class="col-lg-4">
-                    <div class="review-card">
-                        <img src="https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?auto=format&fit=crop&w=800&q=80" alt="Movie Poster" class="movie-poster" />
-                        <div class="review-title">Oppenheimer</div>
-                        <div class="review-meta">Movie • 2023</div>
-                        <div class="rating-stars">★★★★★</div>
-                        <p>
-                            A visually powerful and emotionally intense film. Brilliant performances, outstanding direction, and an unforgettable cinematic experience.
-                        </p>
-                    </div>
-                </div>
+
+                {% if reviews %} {% for review in reviews %}
 
                 <div class="col-lg-4">
+
                     <div class="review-card">
-                        <img src="https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=800&q=80" alt="Movie Poster" class="movie-poster" />
-                        <div class="review-title">Stranger Things</div>
-                        <div class="review-meta">TV Show • 4 Seasons</div>
-                        <div class="rating-stars">★★★★☆</div>
+
+                        <div class="review-title">
+                            Movie ID: {{ review.movie_id }}
+                        </div>
+
+                        <div class="review-meta">
+                            Submitted Review
+                        </div>
+
+                        <div class="rating-stars">
+                            {{ review.rating }}/5 ★
+                        </div>
+
                         <p>
-                            A nostalgic and exciting series with strong character development, great mystery, and a perfect mix of horror and friendship.
+                            {{ review.body }}
                         </p>
+
+                        {% if review.flagged %}
+
+                        <p class="text-warning">
+                            Flagged: {{ review.flag_reason }}
+                        </p>
+
+                        {% endif %}
+
+                        <div class="small-muted">
+                            {{ review.created_at.strftime('%d %b %Y') }}
+                        </div>
+
                     </div>
+
                 </div>
 
-                <div class="col-lg-4">
-                    <div class="review-card">
-                        <img src="https://images.unsplash.com/photo-1440404653325-ab127d49abc1?auto=format&fit=crop&w=800&q=80" alt="Movie Poster" class="movie-poster" />
-                        <div class="review-title">The Batman</div>
-                        <div class="review-meta">Movie • 2022</div>
-                        <div class="rating-stars">★★★★☆</div>
-                        <p>
-                            Dark, stylish, and gripping. The atmosphere and detective story were excellent, making it feel different from other superhero films.
-                        </p>
-                    </div>
-                </div>
+                {% endfor %} {% else %}
+
+                <p class="small-muted">
+                    You have not submitted any reviews yet.
+                </p>
+
+                {% endif %}
+
             </div>
+
         </div>
 
         <!-- Watchlist -->
         <div class="mt-5">
-            <h2 class="section-title">My Watchlist</h2>
+
+            <h2 class="section-title">
+                My Watchlist
+            </h2>
+
             <div class="row g-4">
+
                 <div class="col-md-4">
                     <div class="watchlist-card">
-                        <div class="watchlist-title">Dune: Part Two</div>
-                        <div class="watchlist-meta">Sci-Fi • Adventure</div>
+                        <div class="watchlist-title">
+                            Dune: Part Two
+                        </div>
+
+                        <div class="watchlist-meta">
+                            Sci-Fi • Adventure
+                        </div>
                     </div>
                 </div>
+
                 <div class="col-md-4">
                     <div class="watchlist-card">
-                        <div class="watchlist-title">Breaking Bad</div>
-                        <div class="watchlist-meta">Crime • Drama</div>
+                        <div class="watchlist-title">
+                            Breaking Bad
+                        </div>
+
+                        <div class="watchlist-meta">
+                            Crime • Drama
+                        </div>
                     </div>
                 </div>
+
                 <div class="col-md-4">
                     <div class="watchlist-card">
-                        <div class="watchlist-title">Interstellar</div>
-                        <div class="watchlist-meta">Sci-Fi • Drama</div>
+                        <div class="watchlist-title">
+                            Interstellar
+                        </div>
+
+                        <div class="watchlist-meta">
+                            Sci-Fi • Drama
+                        </div>
                     </div>
                 </div>
+
             </div>
+
         </div>
 
         <div class="footer-space"></div>
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
-</body>
 
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+</body>
 
 </html>
