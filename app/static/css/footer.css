@@ -1,0 +1,110 @@
+.footer-modern {
+  background: rgba(20, 20, 20, 0.9);
+  backdrop-filter: blur(8px);
+  border-top: 1px solid #222;
+  padding: 10px 0;
+  font-size: 0.85rem;
+  margin-top: 50px;
+}
+
+/* Brand */
+
+.footer-brand {
+  color: #f5c518;
+  font-weight: 600;
+}
+
+.footer-brand span {
+  color: #777;
+  margin-left: 6px;
+}
+
+/* Grid Div */
+.parent {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(5, 1fr);
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+}
+
+.div1 {
+  grid-area: 1 / 1 / 2 / 2;
+}
+.div2 {
+  grid-area: 1 / 2 / 2 / 4;
+}
+.div3 {
+  grid-area: 1 / 4 / 2 / 6;
+}
+
+/* Footer Logo */
+.footer-brand img {
+  width: 60px;
+  height: auto;
+  margin-bottom: 6px;
+}
+
+/* Footer description */
+.footer-description p {
+  color: #aaa;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Footer links */
+.footer-links {
+  display: flex;
+  justify-content: flex-end;
+  gap: 20px;
+}
+
+/* Cool underline animation */
+
+.footer-links a::after {
+  content: "";
+  position: absolute;
+  width: 0%;
+  height: 2px;
+  background: #f5c518;
+  left: 0;
+  bottom: -4px;
+  transition: 0.3s;
+}
+
+.footer-links a:hover {
+  color: #fff;
+}
+
+.footer-links a:hover::after {
+  width: 100%;
+}
+
+.footer-links a {
+  position: relative;
+  text-decoration: none;
+  color: #aaa;
+  margin-left: 20px;
+  transition: 0.3s;
+}
+
+/* Media responsiveness */
+@media (max-width: 768px) {
+  .parent {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    gap: 20px;
+  }
+
+  .div1,
+  .div2,
+  .div3 {
+    grid-area: auto;
+    text-align: center;
+  }
+
+  .footer-links {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+}
