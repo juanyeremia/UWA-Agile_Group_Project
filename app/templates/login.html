@@ -33,7 +33,14 @@
                             {% endfor %}
                         </div>
                         <p class="login-text">Password:</p> <!-- Display validation errors for password field -->
-                        {{ form.password(id="password", class="form-control-login-input", placeholder="Enter password") }}
+
+                        <div class="password-group">
+                            {{ form.password(id="password", class="form-control-login-input password-input", placeholder="Enter password") }}
+                            <button class="password-toggle-btn" type="button" id="toggle-password" aria-label="Toggle password visibility">
+                                <span>👁</span>
+                            </button>
+                        </div>
+
                         <div id="passwordError" class="text-danger small mt-1">
                             {% for error in form.password.errors %}
                                 {{ error }}
