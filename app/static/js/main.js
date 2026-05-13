@@ -67,8 +67,6 @@ async function loadNowPlayingMovies() {
     });
 }
 
-loadNowPlayingMovies();                                                                 // Load movies when the page loads
-
 /* ============================================
 Load and display highest rated mvoies on the homepage
 ============================================*/
@@ -132,8 +130,6 @@ async function loadHighestRatedMovies() {
         `);
     }
 }
-
-loadHighestRatedMovies();                                                                 // Load highest rated movies when the page loads
 
 /* ============================================
 Load and display recent reviews on home page

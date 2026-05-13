@@ -63,12 +63,13 @@
   
 }
 
-.review-poster-placeholder {
+.review-poster {
   /* width: 50px; */
-  min-width: 150px;
+  width: 150px;
   aspect-ratio: 2/3;
   background-color: #2e2e2e;
   border-radius: 6px;
+  object-fit: cover;;
   /* margin-left: 10px; */
 }
 
