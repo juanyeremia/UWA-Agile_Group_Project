@@ -45,9 +45,10 @@ async function loadNowPlayingMovies() {
             // Check if this movie has ratings in local db
             const localRating = ratings[movie.id];                                                                     // Look up rating by movie ID
             const ratingHTML = localRating
-                ?  `<div class="movie-rating">${localRating.avg_rating} ★</div>                
-                    <div class="movie-reviews">${localRating.review_count} reviews</div>`       
-                : '';                                                                                                                           // Show nothing if no reviews in local db
+                ?  `<div class="movie-rating">${localRating.avg_rating} ★</div>
+                    <div class="movie-reviews">${localRating.review_count} reviews</div>`
+                :   `<div class="movie-rating">0 ★</div>
+                    <div class="movie-reviews">No reviews</div>`;                                                                                                                        // Show nothing if no reviews in local db
         
             $('#latest-movies-container').append(`
             <div class="col">
@@ -65,8 +66,6 @@ async function loadNowPlayingMovies() {
         `);                                                                                              // Append movie card HTML to container
     });
 }
-
-loadNowPlayingMovies();                                                                 // Load movies when the page loads
 
 /* ============================================
 Load and display highest rated mvoies on the homepage
@@ -131,8 +130,6 @@ async function loadHighestRatedMovies() {
         `);
     }
 }
-
-loadHighestRatedMovies();                                                                 // Load highest rated movies when the page loads
 
 /* ============================================
 Load and display recent reviews on home page

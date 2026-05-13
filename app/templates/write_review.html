@@ -38,40 +38,21 @@
 
     <!-- Write Review Content -->
     <main class="container-lg write-review-container d-flex gap-4">
-      <!-- Movie Details -->
-      <div class="write-review-movie-details">
-        <img
-          src="https://placehold.co/200x300"
-          alt=""
-          class="write-review-poster"
-        />
-        <div class="write-review-movie-info">
-          <h2 class="write-review-movie-title">Movie Title</h2>
-          <p class="write-review-movie-year">2023</p>
-          <p class="write-review-movie-genre">Action, Adventure</p>
-          <p class="write-review-movie-rating">⭐ 8.5/10</p>
-        </div>
-      </div>
-
-      <!-- Review Form -->
-      <form
-        action="{{ url_for('write_review', movie_id=movie_id) }}"
-        method="POST"
-        class="write-review-form d-flex flex-column gap-3"
-      >
-        <!-- Rating -->
-        <label for="rating" class="review-label">Rating</label>
-        <div class="d-flex align-items-center gap-2">
-          <input
-            type="number"
-            name="rating"
-            min="1"
-            max="5"
-            placeholder="1 - 5"
-            required="required"
-            class="form-control rating-input"
-          />
-          <span>⭐</span>
+        <!-- Movie Details -->
+        <div class="write-review-movie-details">
+            <img src="https://image.tmdb.org/t/p/w500{{ movie.poster_path }}" 
+                alt="{{ movie.title }}"
+                class="write-review-poster">
+            <div class="write-review-movie-info">
+                <h2 class="write-review-movie-title">{{ movie.title }}</h2>
+                <p class="write-review-movie-year">{{ movie.release_date[:4]  }}</p>
+                <p class="write-review-movie-genre">
+                    {% for genre in movie.genres %}
+                        {{ genre.name }}{% if not loop.last %}, {% endif %}
+                    {% endfor %}
+                </p>
+                <p class="write-review-movie-rating">⭐ {{ movie.vote_average | round(1) }}/10</p>
+            </div>
         </div>
 
         <!-- Review Content -->
