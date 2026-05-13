@@ -2,64 +2,93 @@
   background: rgba(20, 20, 20, 0.9);
   backdrop-filter: blur(8px);
   border-top: 1px solid #222;
-  padding: 10px 0;
-  font-size: 0.85rem;
+  padding: 25px 0 16px;
   margin-top: 50px;
+}
+
+/* First row */
+
+.footer-top {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 50px;
+  align-items: start;
 }
 
 /* Brand */
 
 .footer-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
   color: #f5c518;
-  font-weight: 600;
 }
 
-.footer-brand span {
-  color: #777;
-  margin-left: 6px;
-}
-
-/* Grid Div */
-.parent {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  grid-template-rows: repeat(5, 1fr);
-  grid-column-gap: 0px;
-  grid-row-gap: 0px;
-}
-
-.div1 {
-  grid-area: 1 / 1 / 2 / 2;
-}
-.div2 {
-  grid-area: 1 / 2 / 2 / 4;
-}
-.div3 {
-  grid-area: 1 / 4 / 2 / 6;
-}
-
-/* Footer Logo */
 .footer-brand img {
-  width: 60px;
+  width: 120px;
   height: auto;
-  margin-bottom: 6px;
+
+  display: block;
+  margin-bottom: 14px;
 }
 
-/* Footer description */
+.footer-brand h3 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+/* Description */
+
+.footer-description {
+  max-width: 700px;
+}
+
 .footer-description p {
   color: #aaa;
   line-height: 1.6;
   margin: 0;
 }
 
-/* Footer links */
-.footer-links {
-  display: flex;
-  justify-content: flex-end;
-  gap: 20px;
+/* Divider */
+
+.footer-divider {
+  border: none;
+  border-top: 2px solid #333;
+
+  opacity: 1;
+  margin: 24px 0 16px;
 }
 
-/* Cool underline animation */
+/* Second Row */
+.footer-bottom {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+}
+
+.footer-bottom p {
+  color: #888;
+  margin: 0;
+}
+
+/* Links */
+
+.footer-links {
+  display: flex;
+  justify-content: space-around;
+  gap: 30px;
+}
+
+.footer-links a {
+  position: relative;
+  text-decoration: none;
+  color: #aaa;
+  transition: 0.3s;
+}
+
+/* Underline animation */
 
 .footer-links a::after {
   content: "";
@@ -80,31 +109,23 @@
   width: 100%;
 }
 
-.footer-links a {
-  position: relative;
-  text-decoration: none;
-  color: #aaa;
-  margin-left: 20px;
-  transition: 0.3s;
-}
-
-/* Media responsiveness */
+/* Media Responsive */
 @media (max-width: 768px) {
-  .parent {
+  .footer-top,
+  .footer-bottom {
     grid-template-columns: 1fr;
-    grid-template-rows: auto;
-    gap: 20px;
+    gap: 16px;
+    text-align: center;
   }
 
-  .div1,
-  .div2,
-  .div3 {
-    grid-area: auto;
-    text-align: center;
+  .footer-brand img {
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .footer-links {
     justify-content: center;
+    gap: 24px;
     flex-wrap: wrap;
   }
 }
