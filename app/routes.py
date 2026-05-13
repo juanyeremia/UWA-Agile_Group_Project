@@ -228,11 +228,10 @@ def recent_reviews():
 # Set up route for submitting a new review 
 #=================================================
 @app.route('/write_review/<int:movie_id>', methods=['GET', 'POST'])
+@login_required
 def write_review(movie_id):
 
-    # Ensure the user is logged in before allowing them to submit a review
-    if 'user_id' not in session:
-        return redirect(url_for('login'))  # Redirect to the login page if the user is not logged in
+
     
     # Handle the form submission when the request method is POST
     if request.method == 'POST':
@@ -244,7 +243,7 @@ def write_review(movie_id):
             movie_id=movie_id,
             body=body,
             rating=rating,
-            user_id=session['user_id']  # Associate the review with the currently logged-in 
+            user_id=current_user.id  # Associate the review with the currently logged-in user
         )
         db.session.add(review) # Add the new review to the database session
         db.session.commit() # Commit the session to save the review to the database
