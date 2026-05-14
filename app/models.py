@@ -13,6 +13,9 @@ class User(UserMixin, db.Model):
   password_hash = db.Column(db.String(200), nullable=False)
   role = db.Column(db.String(20), nullable=False, default='user')   # Role can be 'user' or 'admin'
   reviews = db.relationship('Review', back_populates='author')    # One-to-many relationship with Review
+
+  bio = db.Column(db.Text, default='')
+  profile_image = db.Column(db.String(200), default='default_profile.jpg')
   def set_password(self, password): # Hash the password and store it in the database
     self.password_hash = generate_password_hash(password) 
 

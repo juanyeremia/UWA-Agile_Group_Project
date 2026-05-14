@@ -1,156 +1,226 @@
-.profile-header {
-    background: linear-gradient(135deg, #1c1c1c, #2a2a2a);
-    border-radius: 20px;
-    padding: 40px 30px;
-    margin-top: 40px;
+.profile-page {
+    padding-top: 50px;
+    padding-bottom: 60px;
+}
+
+.simple-profile-card {
+    background: #202020;
+    border: 1px solid #333;
+    border-radius: 22px;
+    padding: 35px;
+    display: flex;
+    align-items: center;
+    gap: 30px;
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
 }
 
 .profile-avatar {
-    width: 130px;
-    height: 130px;
+    width: 120px;
+    height: 120px;
     border-radius: 50%;
     object-fit: cover;
-    border: 4px solid #f5c542;
-    box-shadow: 0 4px 15px rgba(245, 197, 66, 0.35);
+    border: 4px solid #f5c518;
 }
 
-.profile-name {
-    font-size: 2rem;
+.profile-middle {
+    flex: 1;
+}
+
+.profile-middle h1 {
+    color: #fff;
     font-weight: 700;
-    margin-bottom: 8px;
+    margin-bottom: 5px;
 }
 
-.profile-username {
-    color: #c9c9c9;
-    margin-bottom: 12px;
+.username {
+    color: #f5c518;
+    margin-bottom: 5px;
 }
 
-.bio-text {
-    color: #dddddd;
-    max-width: 700px;
+.email {
+    color: #bbb;
+    margin-bottom: 15px;
 }
 
-.gold-btn {
-    background-color: #f5c542;
-    border: none;
+.bio {
+    color: #ddd;
+    margin-bottom: 0;
+}
+
+.edit-btn {
+    background: #f5c518;
     color: #111;
-    font-weight: 600;
-    border-radius: 30px;
-    padding: 10px 22px;
+    padding: 12px 28px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 700;
 }
 
-.gold-btn:hover {
-    background-color: #ddb233;
-    color: #111;
-}
-
-.outline-gold-btn {
-    border: 2px solid #f5c542;
-    color: #f5c542;
-    border-radius: 30px;
-    padding: 8px 20px;
-    font-weight: 600;
-    background: transparent;
-}
-
-.outline-gold-btn:hover {
-    background-color: #f5c542;
+.edit-btn:hover {
+    background: #e0b313;
     color: #111;
 }
 
-.info-card,
-.review-card,
-.watchlist-card {
-    background: #222;
+.small-stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+    margin-top: 25px;
+}
+
+.small-stats div {
+    background: #202020;
     border: 1px solid #333;
     border-radius: 18px;
-    padding: 22px;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
-    height: 100%;
+    padding: 25px;
+    text-align: center;
 }
 
-.section-title {
-    color: #f5c542;
+.small-stats h3 {
+    color: #f5c518;
+    font-weight: 800;
+    margin-bottom: 5px;
+}
+
+.small-stats p {
+    color: #bbb;
+    margin-bottom: 0;
+}
+
+.reviews-section {
+    margin-top: 45px;
+}
+
+.reviews-section h2 {
+    color: #f5c518;
     font-weight: 700;
     margin-bottom: 20px;
 }
 
-.stat-box {
-    background: #2a2a2a;
-    border-radius: 16px;
-    padding: 20px;
-    text-align: center;
-    border: 1px solid #383838;
+.simple-review-card {
+    background: #202020;
+    border: 1px solid #333;
+    border-radius: 18px;
+    padding: 22px;
+    margin-bottom: 18px;
 }
 
-.stat-number {
-    font-size: 1.8rem;
+.simple-review-card h4 {
+    color: #fff;
     font-weight: 700;
-    color: #f5c542;
+}
+
+.simple-review-card p {
+    color: #ddd;
+}
+
+.rating {
+    color: #f5c518;
+    font-weight: 700;
+}
+
+.flagged {
+    color: #ffcc00;
+    margin-top: 10px;
+}
+
+.empty-message {
+    background: #202020;
+    border: 1px solid #333;
+    border-radius: 18px;
+    padding: 25px;
+    color: #bbb;
+}
+
+.bottom-profile-card {
+    margin-top: 40px;
+    background: #202020;
+    border: 1px solid #333;
+    border-radius: 20px;
+    padding: 25px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    text-align: center;
+    gap: 20px;
+}
+
+.bottom-item h4 {
+    color: #f5c518;
+    font-size: 28px;
+    font-weight: 800;
     margin-bottom: 5px;
 }
 
-.badge-genre {
-    background-color: #f5c542;
-    color: #111;
-    font-weight: 600;
-    padding: 8px 14px;
-    border-radius: 20px;
-    margin: 5px;
-    display: inline-block;
-}
-
-.movie-poster {
-    width: 100%;
-    height: 240px;
-    object-fit: cover;
-    border-radius: 14px;
-    margin-bottom: 15px;
-}
-
-.review-title {
-    font-weight: 700;
-    font-size: 1.1rem;
-    margin-bottom: 8px;
-}
-
-.review-meta {
-    color: #bdbdbd;
-    font-size: 0.95rem;
-    margin-bottom: 10px;
-}
-
-.rating-stars {
-    color: #f5c542;
-    font-size: 1rem;
-    margin-bottom: 10px;
-}
-
-.small-muted {
-    color: #bdbdbd;
-    font-size: 0.95rem;
-}
-
-.watchlist-title {
-    font-weight: 700;
-    margin-bottom: 8px;
-}
-
-.watchlist-meta {
-    color: #cfcfcf;
-    font-size: 0.95rem;
-}
-
-.footer-space {
-    height: 40px;
+.bottom-item p {
+    color: #bbb;
+    margin: 0;
 }
 
 @media (max-width: 768px) {
-    .profile-header {
+    .bottom-profile-card {
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 768px) {
+    .simple-profile-card {
+        flex-direction: column;
         text-align: center;
     }
-    .profile-actions {
-        justify-content: center !important;
+    .small-stats {
+        grid-template-columns: 1fr;
+    }
+}
+
+.profile-highlights {
+    margin-top: 45px;
+}
+
+.profile-highlights h2 {
+    color: #f5c518;
+    font-weight: 800;
+    margin-bottom: 22px;
+}
+
+.highlight-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+}
+
+.highlight-card {
+    background: linear-gradient(145deg, #222, #181818);
+    border: 1px solid #333;
+    border-radius: 22px;
+    padding: 28px;
+    transition: 0.3s;
+}
+
+.highlight-card:hover {
+    transform: translateY(-6px);
+    border-color: #f5c518;
+    box-shadow: 0 10px 25px rgba(245, 197, 24, 0.12);
+}
+
+.highlight-icon {
+    font-size: 32px;
+    margin-bottom: 15px;
+}
+
+.highlight-card h4 {
+    color: #fff;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.highlight-card p {
+    color: #bbb;
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    .highlight-grid {
+        grid-template-columns: 1fr;
     }
 }

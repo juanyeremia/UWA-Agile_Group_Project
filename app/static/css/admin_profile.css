@@ -157,3 +157,42 @@
         flex-direction: column;
     }
 }
+
+.admin-buttons {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.delete-btn {
+    background: linear-gradient(135deg, #ff5f6d, #ff2e63);
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-weight: 600;
+    transition: 0.3s;
+    box-shadow: 0 4px 12px rgba(255, 46, 99, 0.3);
+}
+
+.delete-btn:hover {
+    transform: translateY(-2px);
+    background: linear-gradient(135deg, #ff2e63, #ff1744);
+}
+
+.unflag-btn {
+    background: #f5c518;
+    ;
+    color: black;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-weight: 600;
+    transition: 0.3s;
+    box-shadow: 0 4px 12px rgba(245, 197, 24, 0.3);
+}
+
+.unflag-btn:hover {
+    transform: translateY(-2px);
+    background: linear-gradient(135deg, #ffd84d, #ffe680);
+}
