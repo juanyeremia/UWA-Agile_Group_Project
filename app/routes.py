@@ -397,17 +397,16 @@ def recent_reviews():
    # Query the 5 most recent reviews ordere by review ID descending
    results = Review.query.order_by(Review.id.desc()).limit(5).all()
 
-
-   reviews = [
-       {
-           'id': r.id,
-           'movie_id': r.movie_id,
-           'rating': r.rating,
-           'username': r.author.username           # connects Review and User throught the 'author' relationship
-       }
-       for r in results
-   ]
-
+    reviews = [
+        {
+            'id': r.id,
+            'movie_id': r.movie_id,
+            'rating': r.rating,
+            'body': r.body,
+            'username': r.author.username           # connects Review and User throught the 'author' relationship
+        }
+        for r in results
+    ]
 
    return jsonify(reviews)
 
@@ -448,9 +447,6 @@ def write_review(movie_id):
 
 
    return render_template('write_review.html', movie_id=movie_id, movie=movie) # Render the review submission form for GET requests
-
-
-
 
 
 
