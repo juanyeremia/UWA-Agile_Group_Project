@@ -1,0 +1,131 @@
+.footer-modern {
+  background: rgba(20, 20, 20, 0.9);
+  backdrop-filter: blur(8px);
+  border-top: 1px solid #222;
+  padding: 25px 0 16px;
+  margin-top: 50px;
+}
+
+/* First row */
+
+.footer-top {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 50px;
+  align-items: start;
+}
+
+/* Brand */
+
+.footer-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  color: #f5c518;
+}
+
+.footer-brand img {
+  width: 120px;
+  height: auto;
+
+  display: block;
+  margin-bottom: 14px;
+}
+
+.footer-brand h3 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+/* Description */
+
+.footer-description {
+  max-width: 700px;
+}
+
+.footer-description p {
+  color: #aaa;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Divider */
+
+.footer-divider {
+  border: none;
+  border-top: 2px solid #333;
+
+  opacity: 1;
+  margin: 24px 0 16px;
+}
+
+/* Second Row */
+.footer-bottom {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+}
+
+.footer-bottom p {
+  color: #888;
+  margin: 0;
+}
+
+/* Links */
+
+.footer-links {
+  display: flex;
+  justify-content: space-around;
+  gap: 30px;
+}
+
+.footer-links a {
+  position: relative;
+  text-decoration: none;
+  color: #aaa;
+  transition: 0.3s;
+}
+
+/* Underline animation */
+
+.footer-links a::after {
+  content: "";
+  position: absolute;
+  width: 0%;
+  height: 2px;
+  background: #f5c518;
+  left: 0;
+  bottom: -4px;
+  transition: 0.3s;
+}
+
+.footer-links a:hover {
+  color: #fff;
+}
+
+.footer-links a:hover::after {
+  width: 100%;
+}
+
+/* Media Responsive */
+@media (max-width: 768px) {
+  .footer-top,
+  .footer-bottom {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    text-align: center;
+  }
+
+  .footer-brand img {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .footer-links {
+    justify-content: center;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+}

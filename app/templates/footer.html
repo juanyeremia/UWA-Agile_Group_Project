@@ -1,0 +1,42 @@
+<footer class="footer-modern">
+  <div class="container-lg">
+    <!-- First Row -->
+    <div class="footer-top">
+      <!-- Brand -->
+      <div class="footer-brand">
+        <img
+          src="{{ url_for('static', filename='images/MoviePulse_logo.png') }}"
+          alt="MoviePulse logo"
+        />
+
+        <h3>MoviePulse</h3>
+      </div>
+
+      <!-- Brand description -->
+      <div class="footer-description">
+        <p>
+          MoviePulse is where cinema meets emotion. A place where every
+          heartbeat echoes through unforgettable scenes, timeless stories, and
+          late-night movie obsessions. From breathtaking masterpieces to hidden
+          gems, MoviePulse lets users discover, rate, and connect through the
+          films that leave a lasting pulse in their veins. Because movies are
+          not just something we watch — they become part of us.
+        </p>
+      </div>
+    </div>
+
+    <!-- Divider -->
+    <hr class="footer-divider" />
+
+    <!-- Second Row Links -->
+    <div class="footer-bottom">
+      <p>©2026 MoviePulse All rights reserved</p>
+
+      <div class="footer-links">
+        <a href="{{ url_for('home') }}">Home</a>
+        <a href="{{ url_for('privacy') }}">Privacy</a>
+        <a href="{{ url_for('terms') }}">Terms</a>
+      </div>
+    </div>
+  </div>
+</footer>
