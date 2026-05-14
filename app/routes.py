@@ -157,8 +157,29 @@ def edit_profile():
     return render_template('edit_profile.html', user=current_user)
 
 @app.route('/admin')
+@login_required
 def admin():
-    return render_template('admin_profile.html')
+
+    flagged_reviews = Review.query.filter_by(
+        flagged=True
+    ).all()
+
+    total_users = User.query.count()
+
+    recent_actions = [
+        "Deleted a flagged review",
+        "Checked reported content",
+        "Searched user account",
+        "Removed inactive user"
+    ]
+
+    return render_template(
+        'admin_profile.html',
+        flagged_reviews=flagged_reviews,
+        flagged_count=len(flagged_reviews),
+        total_users=total_users,
+        recent_actions=recent_actions
+    )
 
 #=================================================
 # Get the TMDB_ACCESS_TOKEN
