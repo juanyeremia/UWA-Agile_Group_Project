@@ -84,8 +84,8 @@
               <p class="sign-up-left-text">Confirm Password:</p>
               <!-- Display validation errors for confirm_password field -->
               {{ form.confirm_password(id="confirm_password",
-              class="form-control-sign-up-input", placeholder="Confirm
-              password") }}
+              class="form-control-sign-up-input", 
+              placeholder="Confirm password") }}
               <div id="confirmPasswordError" class="text-danger small mt-1">
                 {% for error in form.confirm_password.errors %} {{ error }} {%
                 endfor %}
