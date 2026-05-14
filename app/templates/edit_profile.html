@@ -1,3 +1,7 @@
+<!-- ========================================= -->
+<!-- edit_profile.html -->
+<!-- ========================================= -->
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -22,19 +26,13 @@
             padding: 40px;
             border-radius: 24px;
             border: 1px solid #2d2d2d;
-            box-shadow: 0 0 30px rgba(255, 196, 0, 0.08);
         }
         
-        .edit-title {
+        .title {
             color: #f5c518;
-            font-size: 42px;
+            font-size: 40px;
             font-weight: bold;
             margin-bottom: 30px;
-        }
-        
-        .form-label {
-            margin-bottom: 8px;
-            font-weight: 600;
         }
         
         .form-control {
@@ -52,6 +50,19 @@
             box-shadow: none;
         }
         
+        .profile-preview {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .profile-preview img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #f5c518;
+        }
+        
         .save-btn {
             background: #f5c518;
             color: black;
@@ -59,11 +70,6 @@
             padding: 12px 28px;
             border-radius: 50px;
             font-weight: bold;
-            transition: 0.3s;
-        }
-        
-        .save-btn:hover {
-            background: #ffd84d;
         }
         
         .cancel-btn {
@@ -73,27 +79,9 @@
             border-radius: 50px;
             text-decoration: none;
             margin-left: 12px;
-            transition: 0.3s;
-        }
-        
-        .cancel-btn:hover {
-            background: #f5c518;
-            color: black;
-        }
-        
-        .profile-preview {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        
-        .profile-preview img {
-            width: 110px;
-            height: 110px;
-            border-radius: 50%;
-            border: 4px solid #f5c518;
-            object-fit: cover;
         }
     </style>
+
 </head>
 
 <body>
@@ -101,29 +89,55 @@
     <div class="edit-container">
 
         <div class="profile-preview">
-            <img src="https://i.pravatar.cc/300" alt="profile">
+
+            <img src="{{ url_for('static', filename='profile_images/' + user.profile_image) }}" alt="profile">
+
         </div>
 
-        <h1 class="edit-title">Edit Profile</h1>
+        <h1 class="title">
+            Edit Profile
+        </h1>
 
-        <form method="POST">
+        <form method="POST" enctype="multipart/form-data">
 
             <div class="mb-4">
-                <label class="form-label">Username</label>
 
-                <input type="text" class="form-control" name="username" value="{{ user.username }}">
+                <label class="mb-2">
+                    Username
+                </label>
+
+                <input type="text" name="username" value="{{ user.username }}" class="form-control">
+
             </div>
 
             <div class="mb-4">
-                <label class="form-label">Email</label>
 
-                <input type="email" class="form-control" name="email" value="{{ user.email }}">
+                <label class="mb-2">
+                    Email
+                </label>
+
+                <input type="email" name="email" value="{{ user.email }}" class="form-control">
+
             </div>
 
             <div class="mb-4">
-                <label class="form-label">Bio</label>
 
-                <textarea class="form-control" rows="4" name="bio" placeholder="Tell something about yourself..."></textarea>
+                <label class="mb-2">
+                    Bio
+                </label>
+
+                <textarea name="bio" rows="4" class="form-control">{{ user.bio }}</textarea>
+
+            </div>
+
+            <div class="mb-4">
+
+                <label class="mb-2">
+                    Upload Profile Image
+                </label>
+
+                <input type="file" name="profile_image" class="form-control">
+
             </div>
 
             <button type="submit" class="save-btn">
