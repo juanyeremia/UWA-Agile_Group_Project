@@ -8,6 +8,8 @@ from sqlalchemy import func
 from app.models import Review
 from app import db
 from app.models import User
+from werkzeug.utils import secure_filename
+import os
 
 #=================================================
 # Define routes
@@ -131,10 +133,25 @@ def profile():
 @app.route('/edit_profile', methods=['GET', 'POST'])
 @login_required
 def edit_profile():
+
     if request.method == 'POST':
         current_user.username = request.form.get('username')
         current_user.email = request.form.get('email')
+        current_user.bio = request.form.get('bio')
+
+        image = request.files.get('profile_image')
+
+        if image and image.filename != '':
+            filename = secure_filename(image.filename)
+
+            upload_folder = os.path.join(app.root_path, 'static/profile_images')
+            os.makedirs(upload_folder, exist_ok=True)
+
+            image.save(os.path.join(upload_folder, filename))
+            current_user.profile_image = filename
+
         db.session.commit()
+
         return redirect(url_for('profile'))
 
     return render_template('edit_profile.html', user=current_user)
