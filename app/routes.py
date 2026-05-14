@@ -394,8 +394,8 @@ def movie_detail_api(movie_id):
 #=================================================
 @app.route('/api/reviews/recent')
 def recent_reviews():
-   # Query the 5 most recent reviews ordere by review ID descending
-   results = Review.query.order_by(Review.id.desc()).limit(5).all()
+    # Query the 5 most recent reviews ordere by review ID descending
+    results = Review.query.order_by(Review.id.desc()).limit(5).all()
 
     reviews = [
         {
@@ -408,7 +408,7 @@ def recent_reviews():
         for r in results
     ]
 
-   return jsonify(reviews)
+    return jsonify(reviews)
 
 
 #=================================================
