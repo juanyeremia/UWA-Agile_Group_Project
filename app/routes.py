@@ -1,6 +1,7 @@
 from email.mime import image
 
 from flask import render_template, flash, redirect, session, url_for, request, jsonify
+from flask_login import login_required, current_user
 from app import app
 from app.forms import SignUpForm, LoginForm
 import os
@@ -185,91 +186,102 @@ def edit_profile():
 
     return render_template('edit_profile.html', user=current_user)
 
-
+def admin_required():
+    return current_user.is_authenticated and current_user.role == 'admin'
 @app.route('/admin')
 @login_required
 def admin():
 
+    if not admin_required():
+        flash("You do not have permission to access the admin page.", "danger")
+        return redirect(url_for('profile'))
 
-   flagged_reviews = Review.query.filter_by(
-       flagged=True
-   ).all()
+    flagged_reviews = Review.query.filter_by(flagged=True).all()
+    total_users = User.query.count()
 
+    recent_actions = [
+        "Deleted a flagged review",
+        "Checked reported content",
+        "Searched user account",
+        "Removed inactive user"
+    ]
 
-   total_users = User.query.count()
-
-
-   recent_actions = [
-       "Deleted a flagged review",
-       "Checked reported content",
-       "Searched user account",
-       "Removed inactive user"
-   ]
-
-
-   return render_template(
-       'admin_profile.html',
-       flagged_reviews=flagged_reviews,
-       flagged_count=len(flagged_reviews),
-       total_users=total_users,
-       recent_actions=recent_actions
-   )
+    return render_template(
+        'admin_profile.html',
+        flagged_reviews=flagged_reviews,
+        flagged_count=len(flagged_reviews),
+        total_users=total_users,
+        recent_actions=recent_actions
+    )
 
 
 @app.route('/delete_review/<int:review_id>', methods=['POST'])
 @login_required
 def delete_review(review_id):
-   review = Review.query.get_or_404(review_id)
-   db.session.delete(review)
-   db.session.commit()
-   return jsonify({"success": True})
 
+    if not admin_required():
+        return jsonify({"success": False, "message": "Admin access required"}), 403
 
+    review = Review.query.get_or_404(review_id)
+    db.session.delete(review)
+    db.session.commit()
+
+    return jsonify({"success": True})
 
 
 @app.route('/unflag_review/<int:review_id>', methods=['POST'])
 @login_required
 def unflag_review(review_id):
-   review = Review.query.get_or_404(review_id)
-   review.flagged = False
-   review.flag_reason = None
-   db.session.commit()
-   return jsonify({"success": True})
 
+    if not admin_required():
+        return jsonify({"success": False, "message": "Admin access required"}), 403
 
+    review = Review.query.get_or_404(review_id)
+    review.flagged = False
+    review.flag_reason = None
+    db.session.commit()
+
+    return jsonify({"success": True})
 
 
 @app.route('/search_user')
 @login_required
 def search_user():
-   query = request.args.get('query', '')
 
+    if not admin_required():
+        return jsonify({"success": False, "message": "Admin access required"}), 403
 
-   users = User.query.filter(
-       User.username.contains(query)
-   ).all()
+    query = request.args.get('query', '')
 
+    users = User.query.filter(
+        (User.username.contains(query)) |
+        (User.email.contains(query))
+    ).all()
 
-   return jsonify([
-       {
-           "id": user.id,
-           "username": user.username,
-           "email": user.email
-       }
-       for user in users
-   ])
-
-
+    return jsonify([
+        {
+            "id": user.id,
+            "username": user.username,
+            "email": user.email
+        }
+        for user in users
+    ])
 
 
 @app.route('/delete_user/<int:user_id>', methods=['POST'])
 @login_required
 def delete_user(user_id):
 
+    if not admin_required():
+        return jsonify({"success": False, "message": "Admin access required"}), 403
+
     user = User.query.get_or_404(user_id)
 
     if user.id == current_user.id:
-        return jsonify({"success": False, "message": "You cannot delete your own account."})
+        return jsonify({
+            "success": False,
+            "message": "You cannot delete your own account."
+        }), 400
 
     Review.query.filter_by(user_id=user.id).delete()
 
