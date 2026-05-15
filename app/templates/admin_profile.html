@@ -1,52 +1,30 @@
 <!doctype html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Admin Profile</title>
 
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-    />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/general.css') }}"
-    />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/navbar.css') }}"
-    />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/admin_profile.css') }}"
-    />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/footer.css') }}"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      href="{{ url_for('static', filename='images/favicon.png') }}"
-    />
-  </head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/general.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/navbar.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_profile.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/footer.css') }}" />
+</head>
 
-  <body>
+<body>
+
     {% include 'navbar.html' %}
 
     <div class="admin-layout">
-      <!-- Header -->
-      <div class="admin-top-card">
-        <div>
-          <h1>Admin Panel</h1>
-          <p>Manage flagged reviews, users, and recent activity.</p>
+
+        <div class="admin-top-card">
+            <h1>Admin Panel</h1>
+            <p>Manage flagged reviews, users, and recent activity.</p>
         </div>
-      </div>
 
-        <!-- Small stats -->
         <div class="admin-stats">
-
             <div class="stat-card">
                 <h3>{{ flagged_count }}</h3>
                 <p>Flagged Reviews</p>
@@ -61,223 +39,122 @@
                 <h3>{{ recent_actions|length }}</h3>
                 <p>Recent Actions</p>
             </div>
+        </div>
 
-        </div>
-        <div class="stat-card">
-          <h3>248</h3>
-          <p>Total Users</p>
-        </div>
-        <div class="stat-card">
-          <h3>8</h3>
-          <p>Recent Actions</p>
-        </div>
-      </div>
-
-        <!-- Main content -->
         <div class="admin-grid">
 
-            <!-- Flagged Reviews -->
             <div class="admin-card large-card">
-
                 <h2>Flagged Reviews</h2>
 
                 {% if flagged_reviews %} {% for review in flagged_reviews %}
 
                 <div class="review-row" id="review-{{ review.id }}">
-
                     <div>
-
-                        <h5>
-                            Movie ID: {{ review.movie_id }}
-                        </h5>
-
-                        <p>
-                            {{ review.body }}
-                        </p>
-
-                        <span>
-                                @{{ review.author.username }}
-                            </span> {% if review.flag_reason %}
-
+                        <h5>Movie ID: {{ review.movie_id }}</h5>
+                        <p>{{ review.body }}</p>
+                        <span>@{{ review.author.username }}</span> {% if review.flag_reason %}
                         <p class="text-warning mt-2">
                             Reason: {{ review.flag_reason }}
                         </p>
-
                         {% endif %}
-
                     </div>
 
                     <div class="admin-buttons">
-
                         <button class="delete-btn" onclick="deleteReview({{ review.id }})">
-        🗑 Delete
-    </button>
+                            🗑 Delete
+                        </button>
 
                         <button class="unflag-btn" onclick="unflagReview({{ review.id }})">
-        ✓ Unflag
-    </button>
-
+                            ✓ Unflag
+                        </button>
                     </div>
-
                 </div>
 
                 {% endfor %} {% else %}
-
-                <p class="text-light">
-                    No flagged reviews found.
-                </p>
-
+                <p class="text-light">No flagged reviews found.</p>
                 {% endif %}
-
             </div>
-            <div>
-              <button class="delete-btn">Delete</button>
-              <button class="clear-btn">Unflag</button>
-            </div>
-          </div>
 
-            <!-- User Search -->
-            <div class="admin-card">
+            <div class="side-column">
 
-                <h2>User Management</h2>
+                <div class="admin-card">
+                    <h2>User Management</h2>
 
-                <div class="search-box">
+                    <div class="search-box">
+                        <input type="text" id="searchInput" placeholder="Search user">
+                        <button onclick="searchUser()">Search</button>
+                    </div>
 
-                    <input type="text" id="searchInput" placeholder="Search user">
-
-                    <button onclick="searchUser()">
-                        Search
-                    </button>
-
+                    <div id="searchResults"></div>
                 </div>
 
-                <div id="searchResults"></div>
+                <div class="admin-card">
+                    <h2>Recent Activity</h2>
+
+                    <ul class="activity-list">
+                        {% for action in recent_actions %}
+                        <li>{{ action }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
 
             </div>
 
-            <!-- Recent Activity -->
-            <div class="admin-card">
-
-                <h2>Recent Activity</h2>
-
-                <ul class="activity-list">
-
-                    {% for action in recent_actions %}
-
-                    <li>{{ action }}</li>
-
-                    {% endfor %}
-
-                </ul>
-
-            </div>
-
-          <ul class="activity-list">
-            <li>Deleted a flagged review</li>
-            <li>Unflagged a review</li>
-            <li>Searched user account</li>
-            <li>Removed inactive user</li>
-          </ul>
         </div>
-      </div>
+
     </div>
 
-    <!-- Footer injection -->
     {% include "footer.html" %}
-
-    </div>
 
     <script>
         function deleteReview(reviewId) {
-
             fetch(`/delete_review/${reviewId}`, {
-                method: 'POST'
-            })
-
-            .then(response => response.json())
-
-            .then(data => {
-
-                if (data.success) {
-
-                    document
-                        .getElementById(`review-${reviewId}`)
-                        .remove();
-
-                }
-
-            });
-
+                    method: 'POST'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById(`review-${reviewId}`).remove();
+                    }
+                });
         }
-
 
         function unflagReview(reviewId) {
-
             fetch(`/unflag_review/${reviewId}`, {
-                method: 'POST'
-            })
-
-            .then(response => response.json())
-
-            .then(data => {
-
-                if (data.success) {
-
-                    document
-                        .getElementById(`review-${reviewId}`)
-                        .remove();
-
-                }
-
-            });
-
+                    method: 'POST'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById(`review-${reviewId}`).remove();
+                    }
+                });
         }
-
 
         function searchUser() {
-
-            const query =
-                document.getElementById('searchInput').value;
+            const query = document.getElementById('searchInput').value;
 
             fetch(`/search_user?query=${query}`)
+                .then(response => response.json())
+                .then(users => {
+                    let html = '';
 
-            .then(response => response.json())
+                    users.forEach(user => {
+                        html += `
+                    <div class="user-box">
+                        <h5>${user.username}</h5>
+                        <p>${user.email}</p>
 
-            .then(users => {
+                        <button class="delete-btn" onclick="deleteUser(${user.id})">
+                            Delete User
+                        </button>
+                    </div>
+                `;
+                    });
 
-                let html = '';
-
-                users.forEach(user => {
-
-                    html += `
-
-                        <div class="user-box">
-
-                            <h5>${user.username}</h5>
-
-                            <p>${user.email}</p>
-
-                            <button
-                                class="delete-btn"
-                                onclick="deleteUser(${user.id})"
-                            >
-                                Delete User
-                            </button>
-
-                        </div>
-
-                    `;
-
+                    document.getElementById('searchResults').innerHTML = html;
                 });
-
-                document
-                    .getElementById('searchResults')
-                    .innerHTML = html;
-
-            });
-
         }
-
 
         function deleteUser(userId) {
             if (!confirm("Delete this user?")) {
@@ -296,16 +173,13 @@
                     } else {
                         alert(data.message || "Could not delete user");
                     }
-                })
-                .catch(error => {
-                    console.log(error);
-                    alert("Delete button error");
                 });
         }
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
-  </body>
+
+</body>
+
 </html>

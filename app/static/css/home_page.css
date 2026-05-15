@@ -1,16 +1,33 @@
 /* Hero Section --------------------------------------------------------------- */
 .hero-section {
   width: 100%;
-  height: 500px;
+  height: 600px;
   background-color: #1a1a1a; /* placeholder until real image */
   position: relative;
   display: flex;
   align-items: flex-end; /* anchors content to bottom */
+  border-bottom-left-radius:10px;
+  border-bottom-right-radius:10px;
+  background-size: cover;
+  background-position: center;
+  position: relative ;
+}
+
+/* Dark overlay so text is readable */
+.hero-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
+  pointer-events: none;
+  border-radius:10px;
 }
 
 .hero-content {
   padding: 40px;
   color: #ffffff;
+  position: relative;
+  z-index: 1;
 }
 
 .hero-title {

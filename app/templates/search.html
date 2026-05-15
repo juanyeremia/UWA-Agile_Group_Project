@@ -15,6 +15,10 @@
     />
     <link
       rel="stylesheet"
+      href="{{ url_for('static', filename='css/movie_card.css') }}"
+    />
+    <link
+      rel="stylesheet"
       href="{{ url_for('static', filename='css/navbar.css') }}"
     />
     <link
@@ -26,6 +30,7 @@
       type="image/png"
       href="{{ url_for('static', filename='images/favicon.png') }}"
     />
+
     <title>Search</title>
   </head>
 
@@ -39,32 +44,36 @@
 
       <p class="mb-4">You searched for: <strong>{{ query }}</strong></p>
 
-      <div class="row row-cols-2 row-cols-md-3 row-cols-lg-5 g-4">
+      <div class="row row-cols-2 row-cols-md-3 row-cols-lg-6 g-4">
         {% for movie in movies %}
         <div class="col">
           <a
             href="{{ url_for('main.movie_detail', movie_id=movie.id) }}"
             class="text-decoration-none text-white"
           >
-            <div class="card h-100 bg-dark text-white movie-card">
+            <div class="movie-card">
               {% if movie.poster_path %}
               <img
                 src="https://image.tmdb.org/t/p/w500{{ movie.poster_path }}"
-                class="card-img-top"
-                alt="{{ movie.title }} poster"
+                class="movie-poster"
+                alt="{{ movie.title }}"
               />
               {% else %}
-              <div class="no-poster">No Image</div>
+              <img
+                src="{{ url_for('static', filename='images/placeholder.png') }}"
+                class="movie-poster"
+                alt="{{ movie.title }}"
+              />
               {% endif %}
-
-              <div class="card-body">
-                <h5 class="card-title">{{ movie.title }}</h5>
-
-                <p class="card-text mb-1">
-                  🗓️ {{ movie.release_date[:4] if movie.release_date else
-                  "Unknown" }}
-                </p>
-                <p class="card-text">⭐ {{ movie.vote_average }}</p>
+              <div class="movie-info">
+                <div class="movie-title">{{ movie.title }}</div>
+                <div class="movie-year">
+                  {{ movie.release_date[:4] if movie.release_date else 'N/A' }}
+                </div>
+                <div class="movie-rating">{{ movie.local_avg_rating }} ★</div>
+                <div class="movie-reviews">
+                  {{ movie.local_review_count }} reviews
+                </div>
               </div>
             </div>
           </a>

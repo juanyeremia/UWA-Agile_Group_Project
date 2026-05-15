@@ -9,6 +9,7 @@ from app import db
 from app.models import User
 from werkzeug.utils import secure_filename
 from app.blueprints import main
+import uuid
 
 
 
@@ -159,122 +160,129 @@ def profile():
 @login_required
 def edit_profile():
 
+    if request.method == 'POST':
 
-   if request.method == 'POST':
-       current_user.username = request.form.get('username')
-       current_user.email = request.form.get('email')
-       current_user.bio = request.form.get('bio')
+        image = request.files.get('profile_image')
 
+        if image and image.filename != '':
 
-       image = request.files.get('profile_image')
+            original_filename = secure_filename(image.filename)
 
+            file_extension = os.path.splitext(original_filename)[1]
 
-       if image and image.filename != '':
-           filename = secure_filename(image.filename)
+            unique_filename = f"{uuid.uuid4().hex}{file_extension}"
 
+            upload_folder = os.path.join(current_app.root_path, 'static/profile_images')
+            os.makedirs(upload_folder, exist_ok=True)
 
-           upload_folder = os.path.join(current_app.root_path, 'static/profile_images')
-           os.makedirs(upload_folder, exist_ok=True)
+            image.save(os.path.join(upload_folder, unique_filename))
 
+            current_user.profile_image = unique_filename
 
-           image.save(os.path.join(upload_folder, filename))
-           current_user.profile_image = filename
+        db.session.commit()
 
+        return redirect(url_for('main.profile'))
 
-       db.session.commit()
+    return render_template('edit_profile.html', user=current_user)
 
-
-       return redirect(url_for('main.profile'))
-
-
-   return render_template('edit_profile.html', user=current_user)
-
+def admin_required():
+    return current_user.is_authenticated and current_user.role == 'admin'
 
 @main.route('/admin')
 @login_required
 def admin():
 
+    if not admin_required():
+        flash("You do not have permission to access the admin page.", "danger")
+        return redirect(url_for('main.profile'))
 
-   flagged_reviews = Review.query.filter_by(
-       flagged=True
-   ).all()
+    flagged_reviews = Review.query.filter_by(flagged=True).all()
+    total_users = User.query.count()
 
+    recent_actions = [
+        "Deleted a flagged review",
+        "Checked reported content",
+        "Searched user account",
+        "Removed inactive user"
+    ]
 
-   total_users = User.query.count()
-
-
-   recent_actions = [
-       "Deleted a flagged review",
-       "Checked reported content",
-       "Searched user account",
-       "Removed inactive user"
-   ]
-
-
-   return render_template(
-       'admin_profile.html',
-       flagged_reviews=flagged_reviews,
-       flagged_count=len(flagged_reviews),
-       total_users=total_users,
-       recent_actions=recent_actions
-   )
+    return render_template(
+        'admin_profile.html',
+        flagged_reviews=flagged_reviews,
+        flagged_count=len(flagged_reviews),
+        total_users=total_users,
+        recent_actions=recent_actions
+    )
 
 
 
 @main.route('/delete_review/<int:review_id>', methods=['POST'])
 @login_required
 def delete_review(review_id):
-   review = Review.query.get_or_404(review_id)
-   db.session.delete(review)
-   db.session.commit()
-   return jsonify({"success": True})
 
+    if not admin_required():
+        return jsonify({"success": False, "message": "Admin access required"}), 403
 
+    review = Review.query.get_or_404(review_id)
+    db.session.delete(review)
+    db.session.commit()
+
+    return jsonify({"success": True})
 
 
 @main.route('/unflag_review/<int:review_id>', methods=['POST'])
 @login_required
 def unflag_review(review_id):
-   review = Review.query.get_or_404(review_id)
-   review.flagged = False
-   review.flag_reason = None
-   db.session.commit()
-   return jsonify({"success": True})
 
+    if not admin_required():
+        return jsonify({"success": False, "message": "Admin access required"}), 403
 
+    review = Review.query.get_or_404(review_id)
+    review.flagged = False
+    review.flag_reason = None
+    db.session.commit()
+
+    return jsonify({"success": True})
 
 
 @main.route('/search_user')
 @login_required
 def search_user():
-   query = request.args.get('query', '')
 
+    if not admin_required():
+        return jsonify({"success": False, "message": "Admin access required"}), 403
 
-   users = User.query.filter(
-       User.username.contains(query)
-   ).all()
+    query = request.args.get('query', '')
 
+    users = User.query.filter(
+        (User.username.contains(query)) |
+        (User.email.contains(query))
+    ).all()
 
-   return jsonify([
-       {
-           "id": user.id,
-           "username": user.username,
-           "email": user.email
-       }
-       for user in users
-   ])
-
-
+    return jsonify([
+        {
+            "id": user.id,
+            "username": user.username,
+            "email": user.email
+        }
+        for user in users
+    ])
 
 
 @main.route('/delete_user/<int:user_id>', methods=['POST'])
 @login_required
 def delete_user(user_id):
 
+    if not admin_required():
+        return jsonify({"success": False, "message": "Admin access required"}), 403
+
     user = User.query.get_or_404(user_id)
 
     if user.id == current_user.id:
-        return jsonify({"success": False, "message": "You cannot delete your own account."})
+        return jsonify({
+            "success": False,
+            "message": "You cannot delete your own account."
+        }), 400
 
     Review.query.filter_by(user_id=user.id).delete()
 
@@ -482,12 +490,39 @@ def search():
 
 
        response = requests.get(url, headers=headers, params=params)
-
-
        data = response.json()
 
-
        movies = data.get("results", [])
+
+       movie_ids =[movie["id"] for movie in movies]
+
+       if movie_ids:
+          rating_results =db.session.query(
+             Review.movie_id,
+             func.avg(Review.rating).label('avg_rating'),
+             func.count(Review.id).label('review_count')
+          ).filter(
+             Review.movie_id.in_(movie_ids)
+          ).group_by(
+             Review.movie_id
+          ).all()
+
+          ratings = {
+             r.movie_id:{
+                "avg_rating": round(r.avg_rating, 1),
+                "review_count": r.review_count
+             }
+             for r in rating_results
+          }
+
+          for movie in movies:
+             local_rating = ratings.get(movie["id"], {
+                "avg_rating": 0,
+                "review_count": "No"
+             })
+
+             movie["local_avg_rating"] = local_rating["avg_rating"]
+             movie["local_review_count"] = local_rating["review_count"]
 
 
    return render_template(
