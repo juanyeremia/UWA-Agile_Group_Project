@@ -478,12 +478,39 @@ def search():
 
 
        response = requests.get(url, headers=headers, params=params)
-
-
        data = response.json()
 
-
        movies = data.get("results", [])
+
+       movie_ids =[movie["id"] for movie in movies]
+
+       if movie_ids:
+          rating_results =db.session.query(
+             Review.movie_id,
+             func.avg(Review.rating).label('avg_rating'),
+             func.count(Review.id).label('review_count')
+          ).filter(
+             Review.movie_id.in_(movie_ids)
+          ).group_by(
+             Review.movie_id
+          ).all()
+
+          ratings = {
+             r.movie_id:{
+                "avg_rating": round(r.avg_rating, 1),
+                "review_count": r.review_count
+             }
+             for r in rating_results
+          }
+
+          for movie in movies:
+             local_rating = ratings.get(movie["id"], {
+                "avg_rating": 0,
+                "review_count": "No"
+             })
+
+             movie["local_avg_rating"] = local_rating["avg_rating"]
+             movie["local_review_count"] = local_rating["review_count"]
 
 
    return render_template(
