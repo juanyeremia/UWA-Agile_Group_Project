@@ -196,3 +196,40 @@
     transform: translateY(-2px);
     background: linear-gradient(135deg, #ffd84d, #ffe680);
 }
+
+.admin-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 28px;
+    align-items: start;
+}
+
+.side-column {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+}
+
+.review-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 24px 0;
+    border-bottom: 1px solid #333;
+}
+
+.review-row:last-child {
+    border-bottom: none;
+}
+
+.admin-buttons {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+}
+
+@media (max-width: 900px) {
+    .admin-grid {
+        grid-template-columns: 1fr;
+    }
+}

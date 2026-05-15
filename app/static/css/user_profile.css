@@ -224,3 +224,49 @@
         grid-template-columns: 1fr;
     }
 }
+
+.simple-review-card {
+    background: linear-gradient(145deg, #202020, #181818);
+    border: 1px solid #2f2f2f;
+    border-radius: 20px;
+    padding: 24px;
+    margin-bottom: 20px;
+    transition: 0.3s;
+}
+
+.simple-review-card:hover {
+    transform: translateY(-3px);
+    border-color: #f5c518;
+}
+
+.review-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    align-items: flex-start;
+}
+
+.review-text {
+    color: #d6d6d6;
+    margin-top: 10px;
+    line-height: 1.6;
+}
+
+.rating-badge {
+    background: #f5c518;
+    color: #111;
+    padding: 10px 16px;
+    border-radius: 30px;
+    font-weight: bold;
+    min-width: 90px;
+    text-align: center;
+}
+
+.review-flag {
+    margin-top: 18px;
+    background: rgba(255, 204, 0, 0.12);
+    color: #ffcc00;
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-size: 14px;
+}

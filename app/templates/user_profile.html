@@ -7,27 +7,11 @@
     <title>User Profile</title>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/general.css') }}"
-    />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/navbar.css') }}"
-    />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/user_profile.css') }}"
-    />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/footer.css') }}"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      href="{{ url_for('static', filename='images/favicon.png') }}"
-    />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/general.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/navbar.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/user_profile.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/footer.css') }}" />
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}" />
 </head>
 
 <body>
@@ -89,8 +73,9 @@
             </div>
 
         </div>
-      </div>
 
+
+        <!-- Submitted Reviews -->
         <!-- Submitted Reviews -->
         <div class="reviews-section">
 
@@ -100,27 +85,33 @@
 
             <div class="simple-review-card">
 
-                <div>
+                <div class="review-top">
 
-                    <h4>
-                        Movie ID: {{ review.movie_id }}
-                    </h4>
+                    <div>
 
-                    <p>
-                        {{ review.body }}
-                    </p>
+                        <h4>
+                            🎬 Movie ID: {{ review.movie_id }}
+                        </h4>
 
-                    <span class="rating">
-                            Rating: {{ review.rating }}/5 ★
-                        </span> {% if review.flagged %}
+                        <p class="review-text">
+                            {{ review.body }}
+                        </p>
 
-                    <p class="flagged">
-                        Flagged: {{ review.flag_reason }}
-                    </p>
+                    </div>
 
-                    {% endif %}
+                    <div class="rating-badge">
+                        {{ review.rating }}/5 ★
+                    </div>
 
                 </div>
+
+                {% if review.flagged %}
+
+                <div class="review-flag">
+                    ⚠ Flagged: {{ review.flag_reason }}
+                </div>
+
+                {% endif %}
 
             </div>
 
@@ -133,7 +124,7 @@
             {% endif %}
 
         </div>
-      </div>
+
 
         <!-- Profile Highlights -->
         <div class="profile-highlights">
@@ -161,15 +152,14 @@
                 </div>
 
             </div>
-
         </div>
-      </div>
-
+    </div>
     <!-- Footer injection -->
     {% include "footer.html" %}
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
-  </body>
+</body>
+
 </html>
