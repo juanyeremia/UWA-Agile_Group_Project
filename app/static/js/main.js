@@ -22,6 +22,13 @@ async function loadNowPlayingMovies() {
         sessionStorage.setItem(CACHE_KEY, JSON.stringify(movies));        // Cache the movie data in sessionStorage
     }
 
+    // Set hero backdrop image from a random featured movie
+    const featured = movies[Math.floor(Math.random() * movies.length)];                     // Randomly select a featured movie from the now playing list
+    if (featured.backdrop_path) {                                                                                  // If the featured movie has a backdrop image, set it as the hero background
+        const heroUrl = `https://image.tmdb.org/t/p/original${featured.backdrop_path}`;
+        $('.hero-section').css('background-image', `url(${heroUrl})`);
+    }
+
     const latest = movies.slice(0,6)                                        // Take first 6 movies
 
     /* ==========================
