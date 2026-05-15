@@ -1,3 +1,5 @@
+from email.mime import image
+
 from flask import render_template, flash, redirect, session, url_for, request, jsonify
 from app import app
 from app.forms import SignUpForm, LoginForm
@@ -9,6 +11,7 @@ from app.models import Review
 from app import db
 from app.models import User
 from werkzeug.utils import secure_filename
+import uuid
 
 
 #=================================================
@@ -156,35 +159,31 @@ def profile():
 @login_required
 def edit_profile():
 
+    if request.method == 'POST':
 
-   if request.method == 'POST':
-       current_user.username = request.form.get('username')
-       current_user.email = request.form.get('email')
-       current_user.bio = request.form.get('bio')
+        image = request.files.get('profile_image')
 
+        if image and image.filename != '':
 
-       image = request.files.get('profile_image')
+            original_filename = secure_filename(image.filename)
 
+            file_extension = os.path.splitext(original_filename)[1]
 
-       if image and image.filename != '':
-           filename = secure_filename(image.filename)
+            unique_filename = f"{uuid.uuid4().hex}{file_extension}"
 
+            upload_folder = os.path.join(app.root_path, 'static/profile_images')
 
-           upload_folder = os.path.join(app.root_path, 'static/profile_images')
-           os.makedirs(upload_folder, exist_ok=True)
+            os.makedirs(upload_folder, exist_ok=True)
 
+            image.save(os.path.join(upload_folder, unique_filename))
 
-           image.save(os.path.join(upload_folder, filename))
-           current_user.profile_image = filename
+            current_user.profile_image = unique_filename
 
+        db.session.commit()
 
-       db.session.commit()
+        return redirect(url_for('profile'))
 
-
-       return redirect(url_for('profile'))
-
-
-   return render_template('edit_profile.html', user=current_user)
+    return render_template('edit_profile.html', user=current_user)
 
 
 @app.route('/admin')
