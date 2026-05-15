@@ -56,7 +56,7 @@
         </div>
 
          <!-- Review Form -->
-        <form action="{{ url_for('write_review', movie_id=movie_id) }}" method="POST" class="write-review-form d-flex flex-column gap-3">
+        <form action="{{ url_for('main.write_review', movie_id=movie_id) }}" method="POST" class="write-review-form d-flex flex-column gap-3">
 
             <!-- Rating -->
             <label for="rating" class="review-label">Rating</label>
@@ -79,7 +79,7 @@
             <div class="d-flex gap-3 mt-4">
             <button type="submit" class="btn btn-primary">Submit Review</button>
             <a
-                href="{{ url_for('movie_detail', movie_id=movie_id) }}"
+                href="{{ url_for('main.movie_detail', movie_id=movie_id) }}"
                 class="btn btn-secondary"
                 >Cancel</a
             >

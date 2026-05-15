@@ -60,7 +60,7 @@
           </section>
 
           <a
-            href="{{ url_for('write_review', movie_id=movie.id) }}"
+            href="{{ url_for('main.write_review', movie_id=movie.id) }}"
             class="btn custom-btn mt-3"
           >
             Write a Review
@@ -198,7 +198,7 @@
         >
           <h2>Reviews</h2>
           <a
-            href="{{ url_for('write_review', movie_id=movie.id) }}"
+            href="{{ url_for('main.write_review', movie_id=movie.id) }}"
             class="btn btn-warning"
             >Write Review</a
           >

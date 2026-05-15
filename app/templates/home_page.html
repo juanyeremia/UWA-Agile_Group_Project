@@ -47,7 +47,7 @@
           Read reviews, share your opinions, and discover what to watch next.
         </p>
         {% if not current_user.is_authenticated %}
-          <a href="{{ url_for('sign_up') }}" class="btn btn-primary"
+          <a href="{{ url_for('main.sign_up') }}" class="btn btn-primary"
             >Sign Up - It's free!</a>
         {% endif %}
       </div>
