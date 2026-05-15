@@ -76,6 +76,7 @@
 
 
         <!-- Submitted Reviews -->
+        <!-- Submitted Reviews -->
         <div class="reviews-section">
 
             <h2>Submitted Reviews</h2>
@@ -84,27 +85,33 @@
 
             <div class="simple-review-card">
 
-                <div>
+                <div class="review-top">
 
-                    <h4>
-                        Movie ID: {{ review.movie_id }}
-                    </h4>
+                    <div>
 
-                    <p>
-                        {{ review.body }}
-                    </p>
+                        <h4>
+                            🎬 Movie ID: {{ review.movie_id }}
+                        </h4>
 
-                    <span class="rating">
-                            Rating: {{ review.rating }}/5 ★
-                        </span> {% if review.flagged %}
+                        <p class="review-text">
+                            {{ review.body }}
+                        </p>
 
-                    <p class="flagged">
-                        Flagged: {{ review.flag_reason }}
-                    </p>
+                    </div>
 
-                    {% endif %}
+                    <div class="rating-badge">
+                        {{ review.rating }}/5 ★
+                    </div>
 
                 </div>
+
+                {% if review.flagged %}
+
+                <div class="review-flag">
+                    ⚠ Flagged: {{ review.flag_reason }}
+                </div>
+
+                {% endif %}
 
             </div>
 
