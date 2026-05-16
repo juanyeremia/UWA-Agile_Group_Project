@@ -35,4 +35,8 @@ class AuthTestCase(unittest.TestCase):
         user = db.session.get(User,1)  # Get the test user
         self.assertNotEqual(user.password_hash, 'initialpassword') # Ensure the password is not stored as plaintext
 
-    
+    # Ensure that the default role is 'user'
+    def test_default_role_is_user(self):
+        user = db.session.get(User,1)  # Get the test user
+        self.assertEqual(user.role, 'user')  # Check that the default role is 'user'
+
