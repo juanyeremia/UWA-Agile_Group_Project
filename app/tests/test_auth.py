@@ -40,3 +40,7 @@ class AuthTestCase(unittest.TestCase):
         user = db.session.get(User,1)  # Get the test user
         self.assertEqual(user.role, 'user')  # Check that the default role is 'user'
 
+    # Ensure that the password check fails for an incorrect password
+    def test_wrong_password_check(self):
+        user = db.session.get(User,1)  # Get the test user
+        self.assertFalse(user.check_password('wrongpassword'))  # Check that the wrong password does not work
