@@ -1,3 +1,5 @@
+from wsgiref import headers
+
 from flask import render_template, flash, redirect, session, url_for, request, jsonify, Blueprint, current_app
 from app.forms import SignUpForm, LoginForm
 import os
@@ -44,13 +46,29 @@ def movie_detail(movie_id):
 
    data = response.json()
 
+   credits_url = f"https://api.themoviedb.org/3/movie/{movie_id}/credits"
+   
+   credits_response = requests.get(
+   credits_url,
+   headers=headers
+   )
+
+   credits_data = credits_response.json()
+
+   director = "Unknown"
+
+   for person in credits_data.get("crew", []):
+        if person.get("job") == "Director":
+            director = person.get("name")
+            break
+
    rating_result = db.session.query(
       func.avg(Review.rating).label("avg_rating"),
       func.count(Review.id).label("review_count")
     ).filter(
         Review.movie_id == movie_id
     ).first()
-   
+
    if rating_result and rating_result.review_count > 0:
         local_avg_rating = round(rating_result.avg_rating, 1)
         local_review_count = rating_result.review_count
@@ -69,7 +87,8 @@ def movie_detail(movie_id):
        "description": data.get("overview"),
        "rating": local_avg_rating,
        "review_count": local_review_count,
-       "genres": data.get("genres")
+       "genres": data.get("genres"),
+       "director": director
    }
 
 
