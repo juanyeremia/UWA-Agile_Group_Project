@@ -29,3 +29,10 @@ class AuthTestCase(unittest.TestCase):
         user.set_password('testpassword')  # Set a password for the user
         self.assertFalse(user.check_password('wrongpassword'))  # Check that the wrong password does
         self.assertTrue(user.check_password('testpassword'))  # Check that the correct password works
+
+    # Ensure that the password is not stored as plaintext in the database
+    def test_password_not_stored_as_plaintext(self):
+        user = db.session.get(User,1)  # Get the test user
+        self.assertNotEqual(user.password_hash, 'initialpassword') # Ensure the password is not stored as plaintext
+
+    
