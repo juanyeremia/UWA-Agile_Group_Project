@@ -44,6 +44,22 @@ def movie_detail(movie_id):
 
    data = response.json()
 
+   rating_result = db.session.query(
+      func.avg(Review.rating).label("avg_rating"),
+      func.count(Review.id).label("review_count")
+    ).filter(
+        Review.movie_id == movie_id
+    ).first()
+   
+   if rating_result and rating_result.review_count > 0:
+        local_avg_rating = round(rating_result.avg_rating, 1)
+        local_review_count = rating_result.review_count
+
+   else:
+        local_avg_rating = 0
+        local_review_count = 0
+
+
 
    movie = {
        "id": data.get("id"),
@@ -51,7 +67,8 @@ def movie_detail(movie_id):
        "poster_url": f"https://image.tmdb.org/t/p/w500{data.get('poster_path')}",
        "release_date": data.get("release_date"),
        "description": data.get("overview"),
-       "rating": data.get("vote_average"),
+       "rating": local_avg_rating,
+       "review_count": local_review_count,
        "genres": data.get("genres")
    }
 
