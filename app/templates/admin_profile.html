@@ -137,10 +137,10 @@
             fetch(`/search_user?query=${query}`)
                 .then(response => response.json())
                 .then(users => {
-                    let html = '';
+                        let html = '';
 
-                    users.forEach(user => {
-                        html += `
+                        users.forEach(user => {
+                                    html += `
                     <div class="user-box">
                         <h5>${user.username}</h5>
                         <p>${user.email}</p>
@@ -149,9 +149,20 @@
                         <button class="delete-btn" onclick="deleteUser(${user.id})">
                             Delete User
                         </button>
+                        ${user.role === 'admin'
+
+                        ? `
+
+                       <button class="delete-btn" onclick="removeAdmin(${user.id})">
+                            Remove Admin
+                        </button>
+                        `
+
+                        : `
                         <button class="unflag-btn" onclick="makeAdmin(${user.id})">
                             Make Admin
                         </button>
+                        `}
                     </div>
                 `;
                     });
@@ -181,28 +192,82 @@
         }
 
         function makeAdmin(userId) {
+
             if (!confirm("Make this user an admin?")) {
                 return;
             }
 
             fetch("/make_admin/" + userId, {
-                    method: "POST"
-                })
-                .then(response => response.json())
-                .then(data => {
-                    console.log(data);
+                method: "POST"
+            })
 
-                    if (data.success) {
-                        alert("User is now admin");
-                        searchUser();
-                    } else {
-                        alert(data.message || "Could not update user role");
-                    }
-                })
-                .catch(error => {
-                    console.log(error);
-                    alert("Error updating user role");
-                });
+            .then(response => response.json())
+
+            .then(data => {
+
+                console.log(data);
+
+                if (data.success) {
+
+                    alert("User is now admin");
+
+                    searchUser();
+
+                } else {
+
+                    alert(data.message || "Could not update user role");
+
+                }
+
+            })
+
+            .catch(error => {
+
+                console.log(error);
+
+                alert("Error updating user role");
+
+            });
+
+        }
+
+
+        function removeAdmin(userId) {
+
+            if (!confirm("Remove admin access from this user?")) {
+                return;
+            }
+
+            fetch("/remove_admin/" + userId, {
+                method: "POST"
+            })
+
+            .then(response => response.json())
+
+            .then(data => {
+
+                if (data.success) {
+
+                    alert("Admin role removed");
+
+                    searchUser();
+
+                } else {
+
+                    alert(data.message);
+
+                }
+
+            })
+
+            .catch(error => {
+
+                console.log(error);
+
+                alert("Error removing admin role");
+
+            });
+
         }
     </script>
 
