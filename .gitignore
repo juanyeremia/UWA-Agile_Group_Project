@@ -209,3 +209,6 @@ __marimo__/
 # DS_Store
 .DS_Store
 
+# All except default profile image
+app/static/profile_images/*
+!app/static/profile_images/default_profile.jpg
