@@ -551,7 +551,7 @@ def search():
        data = response.json()
 
        movies = data.get("results", [])
-       movies = movies[:10]
+       movies = movies[:12]
 
        movie_ids =[movie["id"] for movie in movies]
 
@@ -597,7 +597,9 @@ def search():
 @main.route('/api/search')
 def api_search():
     query = request.args.get('query', '')
-    page = request.args.get('page', 1, type=int)
+    offset = request.args.get('offset', 0, type=int)
+
+    limit = 12
 
     if not query:
         return jsonify({
@@ -605,21 +607,39 @@ def api_search():
             "has_more": False
         })
 
-    url = "https://api.themoviedb.org/3/search/movie"
-
     headers = {
         "Authorization": f"Bearer {os.getenv('TMDB_ACCESS_TOKEN')}"
     }
 
+    tmbd_page = (offset // 20) + 1
+    start_index = offset % 20
+
+    collected_movies = []
+
     params = {
         "query": query,
-        "page": page
+        "page": tmbd_page
     }
 
-    response = requests.get(url, headers=headers, params=params)
-    data = response.json()
+    while len(collected_movies) < limit:
 
-    movies = data.get("results", [])
+        response = requests.get("https://api.themoviedb.org/3/search/movie", headers=headers, params=params)
+        data = response.json()
+
+        page_movies = data.get("results", [])
+
+        if not page_movies:
+            break
+
+        collected_movies.extend(page_movies[start_index:])
+
+        start_index = 0
+        tmbd_page += 1
+
+        if tmbd_page > data.get("total_pages", 1):
+            break
+
+    movies = collected_movies[:limit]
 
     movie_ids = [movie["id"] for movie in movies]
 
@@ -655,6 +675,6 @@ def api_search():
 
     return jsonify({
         "movies": movies,
-        "has_more": page < data.get("total_pages", 1)
+        "has_more": len(movies) == limit
     })
 

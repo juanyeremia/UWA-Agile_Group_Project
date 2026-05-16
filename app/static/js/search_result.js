@@ -4,9 +4,9 @@ const movieResults = document.getElementById("movie-results");
 if (loadMoreBtn) {
   loadMoreBtn.addEventListener("click", function () {
     const query = loadMoreBtn.dataset.query;
-    const page = Number(loadMoreBtn.dataset.page);
+    const offset = Number(loadMoreBtn.dataset.offset);
 
-    fetch(`/api/search?query=${encodeURIComponent(query)}&page=${page}`)
+    fetch(`/api/search?query=${encodeURIComponent(query)}&offset=${offset}`)
       .then(function (response) {
         return response.json();
       })
@@ -43,7 +43,7 @@ if (loadMoreBtn) {
           movieResults.insertAdjacentHTML("beforeend", movieCard);
         });
 
-        loadMoreBtn.dataset.page = page + 1;
+        loadMoreBtn.dataset.offset = offset + 12;
 
         if (!data.has_more) {
           loadMoreBtn.style.display = "none";
