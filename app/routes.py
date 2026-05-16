@@ -161,23 +161,21 @@ def profile():
 def edit_profile():
 
     if request.method == 'POST':
+        current_user.username = request.form.get('username')
+        current_user.email = request.form.get('email')
+        current_user.bio = request.form.get('bio')
 
         image = request.files.get('profile_image')
 
         if image and image.filename != '':
-
             original_filename = secure_filename(image.filename)
-
             file_extension = os.path.splitext(original_filename)[1]
-
             unique_filename = f"{uuid.uuid4().hex}{file_extension}"
 
             upload_folder = os.path.join(app.root_path, 'static/profile_images')
-
             os.makedirs(upload_folder, exist_ok=True)
 
             image.save(os.path.join(upload_folder, unique_filename))
-
             current_user.profile_image = unique_filename
 
         db.session.commit()
