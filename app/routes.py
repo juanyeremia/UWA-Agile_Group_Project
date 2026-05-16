@@ -6,7 +6,6 @@ from flask_login import login_user, logout_user, current_user, login_required
 from sqlalchemy import func
 from app.models import Review
 from app import db
-from app import app, db
 from app.models import User
 from werkzeug.utils import secure_filename
 from app.blueprints import main
@@ -292,11 +291,11 @@ def delete_user(user_id):
 
     return jsonify({"success": True})
 
-@app.route('/make_admin/<int:user_id>', methods=['POST'])
+@main.route('/make_admin/<int:user_id>', methods=['POST'])
 @login_required
 def make_admin(user_id):
 
-    if current_user.role != 'admin':
+    if not admin_required():
         return jsonify({
             "success": False,
             "message": "Admin access required"
@@ -309,7 +308,35 @@ def make_admin(user_id):
     db.session.commit()
 
     return jsonify({
-        "success": True
+        "success": True,
+        "message": "User is now admin"
+    })
+
+@main.route('/remove_admin/<int:user_id>', methods=['POST'])
+@login_required
+def remove_admin(user_id):
+
+    if not admin_required():
+        return jsonify({
+            "success": False,
+            "message": "Admin access required"
+        }), 403
+
+    user = User.query.get_or_404(user_id)
+
+    if user.id == current_user.id:
+        return jsonify({
+            "success": False,
+            "message": "You cannot remove your own admin role"
+        }), 400
+
+    user.role = 'user'
+
+    db.session.commit()
+
+    return jsonify({
+        "success": True,
+        "message": "Admin role removed"
     })
 
 #=================================================

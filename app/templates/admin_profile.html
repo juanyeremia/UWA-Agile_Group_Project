@@ -185,17 +185,23 @@
                 return;
             }
 
-            fetch(`/make_admin/${userId}`, {
-                    method: 'POST'
+            fetch("/make_admin/" + userId, {
+                    method: "POST"
                 })
                 .then(response => response.json())
                 .then(data => {
+                    console.log(data);
+
                     if (data.success) {
                         alert("User is now admin");
                         searchUser();
                     } else {
                         alert(data.message || "Could not update user role");
                     }
+                })
+                .catch(error => {
+                    console.log(error);
+                    alert("Error updating user role");
                 });
         }
     </script>
