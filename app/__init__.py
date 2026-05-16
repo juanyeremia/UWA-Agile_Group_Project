@@ -19,7 +19,20 @@ app.config.from_object(Config)      # Load configuration from Config class
 db = SQLAlchemy(app)          # Create SQLAlchemy database object
 migrate = Migrate(app, db)   # Create Migrate object for migration commands
 login = LoginManager(app)       # Create LoginManager object for user session management
-login.login_view = 'login'     # Set the login view for @login_required
+login.login_view = 'main.login'     # Set the login view for @login_required
+
+def create_app(config_class=Config):
+    app = Flask(__name__)
+    app.config.from_object(config_class)
+
+    db.init_app(app)
+    migrate.init_app(app, db)
+    login.init_app(app)
+    
+    from app.routes import main
+    app.register_blueprint(main)
+
+    return app
 
 # Import routes and models to register them with the app
 from app import routes, models

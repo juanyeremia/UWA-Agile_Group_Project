@@ -45,7 +45,7 @@
             <form
               id="signUpForm"
               method="POST"
-              action="{{ url_for('sign_up') }}"
+              action="{{ url_for('main.sign_up') }}"
             >
               {{ form.hidden_tag() }}
               <!-- Include CSRF token for security -->
@@ -92,8 +92,8 @@
               </div>
               <p class="sign-up-left-text">
                 By signing up, you agree to our
-                <a href="{{ url_for('terms') }}">Terms of Service</a> and
-                <a href="{{ url_for('privacy') }}">Privacy Policy</a>.
+                <a href="{{ url_for('main.terms') }}">Terms of Service</a> and
+                <a href="{{ url_for('main.privacy') }}">Privacy Policy</a>.
               </p>
               <div class="d-flex gap-3 mt-3">
                 {{ form.submit(class="outline-gold-btn flex-fill") }}
@@ -101,7 +101,7 @@
             </form>
             <hr class="separator" />
             <p class="sign-up-left-text-center">
-              Or <a href="{{ url_for('login') }}">log in</a> if you already have
+              Or <a href="{{ url_for('main.login') }}">log in</a> if you already have
               an account.
             </p>
           </div>

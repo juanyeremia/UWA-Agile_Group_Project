@@ -48,8 +48,8 @@
         {% for movie in movies %}
         <div class="col">
           <a
-            href="{{ url_for('movie_detail', movie_id=movie.id) }}"
-            class="movie-card-link"
+            href="{{ url_for('main.movie_detail', movie_id=movie.id) }}"
+            class="text-decoration-none text-white"
           >
             <div class="movie-card">
               {% if movie.poster_path %}

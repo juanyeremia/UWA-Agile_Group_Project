@@ -41,7 +41,7 @@
         <div class="row align-items-center g-4">
           <div class="col-md-12 d-flex flex-column profile-actions">
             <h3 class="login-title-details">Log In</h3>
-            <form id="loginForm" method="POST" action="{{ url_for('login') }}">
+            <form id="loginForm" method="POST" action="{{ url_for('main.login') }}">
               {{ form.hidden_tag() }}
               <!-- Include CSRF token for security -->
               <p class="login-text">Email:</p>
@@ -78,7 +78,7 @@
             <hr class="separator" />
             <p class="login-text-center">
               Don't have an account?
-              <a href="{{ url_for('sign_up') }}">Sign up</a>
+              <a href="{{ url_for('main.sign_up') }}">Sign up</a>
             </p>
           </div>
         </div>

@@ -1,8 +1,4 @@
-from email.mime import image
-
-from flask import render_template, flash, redirect, session, url_for, request, jsonify
-from flask_login import login_required, current_user
-from app import app
+from flask import render_template, flash, redirect, session, url_for, request, jsonify, Blueprint, current_app
 from app.forms import SignUpForm, LoginForm
 import os
 import requests
@@ -12,7 +8,9 @@ from app.models import Review
 from app import db
 from app.models import User
 from werkzeug.utils import secure_filename
+from app.blueprints import main
 import uuid
+
 
 
 #=================================================
@@ -21,7 +19,7 @@ import uuid
 
 
 # Home page route
-@app.route('/')
+@main.route('/')
 def home():
  return render_template('home_page.html')
 
@@ -29,7 +27,7 @@ def home():
 #=================================================
 # Individul movie page route & movie details
 #=================================================
-@app.route('/movie/<int:movie_id>')
+@main.route('/movie/<int:movie_id>')
 def movie_detail(movie_id):
 
 
@@ -83,7 +81,7 @@ def movie_detail(movie_id):
 
 
 
-@app.route('/sign_up', methods=['GET', 'POST'])
+@main.route('/sign_up', methods=['GET', 'POST'])
 def sign_up():
    form = SignUpForm()
    if form.validate_on_submit():
@@ -97,13 +95,13 @@ def sign_up():
 
 
        flash('Account created successfully! Please log in.', 'success')
-       return redirect(url_for('login'))
+       return redirect(url_for('main.login'))
    elif form.is_submitted():
        flash('Error creating account. Please check your input and try again.', 'danger')
    return render_template('sign_up.html', form=form)
 
 
-@app.route('/login', methods=['GET', 'POST'])
+@main.route('/login', methods=['GET', 'POST'])
 def login():
    form = LoginForm()
    if form.validate_on_submit():
@@ -115,29 +113,29 @@ def login():
            return render_template('login.html', form=form)
        else:
            login_user(user, remember=form.remember_me.data)  # Log the user in using Flask-Login
-           return redirect(url_for('home'))
+           return redirect(url_for('main.home'))
    return render_template('login.html', form=form)
 
 
 
 
-@app.route('/logout')
+@main.route('/logout')
 def logout():
    logout_user()  # Log the user out using Flask-Login
-   return redirect(url_for('home'))
+   return redirect(url_for('main.home'))
 
 
-@app.route('/terms')
+@main.route('/terms')
 def terms():
  return render_template('terms.html')
 
 
-@app.route('/privacy')
+@main.route('/privacy')
 def privacy():
  return render_template('privacy.html')
 
 
-@app.route('/profile')
+@main.route('/profile')
 @login_required
 def profile():
 
@@ -156,7 +154,9 @@ def profile():
    )
 
 
-@app.route('/edit_profile', methods=['GET', 'POST'])
+
+
+@main.route('/edit_profile', methods=['GET', 'POST'])
 @login_required
 def edit_profile():
 
@@ -172,7 +172,7 @@ def edit_profile():
             file_extension = os.path.splitext(original_filename)[1]
             unique_filename = f"{uuid.uuid4().hex}{file_extension}"
 
-            upload_folder = os.path.join(app.root_path, 'static/profile_images')
+            upload_folder = os.path.join(current_app.root_path, 'static/profile_images')
             os.makedirs(upload_folder, exist_ok=True)
 
             image.save(os.path.join(upload_folder, unique_filename))
@@ -180,19 +180,20 @@ def edit_profile():
 
         db.session.commit()
 
-        return redirect(url_for('profile'))
+        return redirect(url_for('main.profile'))
 
     return render_template('edit_profile.html', user=current_user)
 
 def admin_required():
     return current_user.is_authenticated and current_user.role == 'admin'
-@app.route('/admin')
+
+@main.route('/admin')
 @login_required
 def admin():
 
     if not admin_required():
         flash("You do not have permission to access the admin page.", "danger")
-        return redirect(url_for('profile'))
+        return redirect(url_for('main.profile'))
 
     flagged_reviews = Review.query.filter_by(flagged=True).all()
     total_users = User.query.count()
@@ -213,7 +214,8 @@ def admin():
     )
 
 
-@app.route('/delete_review/<int:review_id>', methods=['POST'])
+
+@main.route('/delete_review/<int:review_id>', methods=['POST'])
 @login_required
 def delete_review(review_id):
 
@@ -227,7 +229,7 @@ def delete_review(review_id):
     return jsonify({"success": True})
 
 
-@app.route('/unflag_review/<int:review_id>', methods=['POST'])
+@main.route('/unflag_review/<int:review_id>', methods=['POST'])
 @login_required
 def unflag_review(review_id):
 
@@ -242,7 +244,7 @@ def unflag_review(review_id):
     return jsonify({"success": True})
 
 
-@app.route('/search_user')
+@main.route('/search_user')
 @login_required
 def search_user():
 
@@ -266,7 +268,7 @@ def search_user():
     ])
 
 
-@app.route('/delete_user/<int:user_id>', methods=['POST'])
+@main.route('/delete_user/<int:user_id>', methods=['POST'])
 @login_required
 def delete_user(user_id):
 
@@ -298,9 +300,9 @@ token = os.getenv("TMDB_ACCESS_TOKEN")
 #=================================================
 # Get 'Now Playing' movies from TMDB API
 #=================================================
-@app.route('/api/movies/now_playing')
+@main.route('/api/movies/now_playing')
 def now_playing():
- token = app.config['TMDB_ACCESS_TOKEN']                    # Retrieve the TMDB access token from the Flask app's configuration
+ token = current_app.config['TMDB_ACCESS_TOKEN']                    # Retrieve the TMDB access token from the Flask app's configuration
  headers = {                                                                        # Set up the headers for the API request, including the Authorization header with the Bearer token
    'Authorization': f'Bearer {token}'
  }
@@ -315,7 +317,7 @@ def now_playing():
 #=================================================
 # Get average rating from Review for each movie ID
 #=================================================
-@app.route('/api/movies/ratings')
+@main.route('/api/movies/ratings')
 def movie_ratings():
    # 1. Get movie IDs from query string ex: /api/movies/ratings?ids=1226863,550,27205
    ids_param = request.args.get('ids','')                  # Reads the API calls and look 'ids' in the url
@@ -358,7 +360,7 @@ def movie_ratings():
 #=================================================
 # Get 'Highest Rated' movies from Internal Database
 #=================================================
-@app.route('/api/movies/highest_rated')
+@main.route('/api/movies/highest_rated')
 def highest_rated():
    # Query the database to get the average rating and review count for each movie, grouped by movie_id, ordered by average rating in descending order, and limited to the top 6 results
    results = db.session.query(                                            # Start a query on the database session
@@ -387,9 +389,9 @@ def highest_rated():
 #=================================================
 # Get individual movie details from TMDB API based on movie ID (to populate other movie cards)
 #=================================================
-@app.route('/api/movies/<int:movie_id>')
+@main.route('/api/movies/<int:movie_id>')
 def movie_detail_api(movie_id):
-   token = app.config['TMDB_ACCESS_TOKEN']                    # Retrieve the TMDB access token from the Flask app's configuration
+   token = current_app.config['TMDB_ACCESS_TOKEN']                    # Retrieve the TMDB access token from the Flask app's configuration
    headers = { 'Authorization': f'Bearer {token}'}                      # Set up the headers for the API request, including the Authorization header with the Bearer token
    response = requests.get(                                                   # Make a GET request to the TMDB API endpoint for movie details, including the headers with the access token
        f'https://api.themoviedb.org/3/movie/{movie_id}',
@@ -401,7 +403,7 @@ def movie_detail_api(movie_id):
 #=================================================
 # Get most recent review from local DB
 #=================================================
-@app.route('/api/reviews/recent')
+@main.route('/api/reviews/recent')
 def recent_reviews():
     # Query the 5 most recent reviews ordere by review ID descending
     results = Review.query.order_by(Review.id.desc()).limit(5).all()
@@ -423,7 +425,7 @@ def recent_reviews():
 #=================================================
 # Set up route for submitting a new review
 #=================================================
-@app.route('/write_review/<int:movie_id>', methods=['GET', 'POST'])
+@main.route('/write_review/<int:movie_id>', methods=['GET', 'POST'])
 @login_required
 def write_review(movie_id):
 
@@ -443,10 +445,10 @@ def write_review(movie_id):
        )
        db.session.add(review) # Add the new review to the database session
        db.session.commit() # Commit the session to save the review to the database
-       return redirect(url_for('movie_detail', movie_id=movie_id)) # Redirect back to the movie detail page after submitting the review
+       return redirect(url_for('main.movie_detail', movie_id=movie_id)) # Redirect back to the movie detail page after submitting the review
   
    # GET request: Fetch movie data and just render the review submission form
-   token = app.config['TMDB_ACCESS_TOKEN']                    # Retrieve the TMDB access token from the Flask app's configuration
+   token = current_app.config['TMDB_ACCESS_TOKEN']                    # Retrieve the TMDB access token from the Flask app's configuration
    headers = {'Authorization':f'Bearer {token}'}                      # Set up the headers for the API request, including the Authorization header with the Bearer token
    response = requests.get(                                                   # Make a GET request to the TMDB API endpoint for movie details, including the headers with the access token
        f'https://api.themoviedb.org/3/movie/{movie_id}',
@@ -464,7 +466,7 @@ def write_review(movie_id):
 #=================================================
 # Redirect to the search page
 #=================================================
-@app.route('/search')
+@main.route('/search')
 def search():
    query = request.args.get('query')
 
@@ -527,3 +529,4 @@ def search():
        movies=movies,
        query=query
    )
+
