@@ -92,18 +92,12 @@ def movie_detail(movie_id):
    }
 
 
-   reviews = [
-       {
-           "user": {"username": "Tammy"},
-           "rating": 5,
-           "content": "Amazing!"
-       },
-       {
-           "user": {"username": "Alex"},
-           "rating": 4,
-           "content": "Pretty good!"
-       }
-   ]
+   reviews = Review.query.filter_by(
+       movie_id=movie_id
+   ).order_by(
+       Review.id.desc()
+   ).limit(5).all()
+
 
 
    return render_template(
@@ -112,8 +106,37 @@ def movie_detail(movie_id):
        reviews=reviews
    )
 
+#=================================================
+# Individul movie page showing the reviews
+#=================================================
+@main.route('/api/movie/<int:movie_id>/reviews')
+def api_movie_reviews(movie_id):
+    page = request.args.get('page', 1, type=int)
+    per_page = 5
 
+    reviews = Review.query.filter_by(
+        movie_id=movie_id
+    ).order_by(
+        Review.id.desc()
+    ).offset(
+        (page - 1) * per_page
+    ).limit(
+        per_page
+    ).all()
 
+    total_reviews = Review.query.filter_by(movie_id=movie_id).count()
+
+    return jsonify({
+        "reviews": [
+            {
+                "username": review.author.username,
+                "rating": review.rating,
+                "body": review.body
+            }
+            for review in reviews
+        ],
+        "has_more": page * per_page < total_reviews
+    })
 
 
 
