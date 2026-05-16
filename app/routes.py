@@ -262,7 +262,8 @@ def search_user():
         {
             "id": user.id,
             "username": user.username,
-            "email": user.email
+            "email": user.email,
+            "role": user.role
         }
         for user in users
     ])
@@ -290,6 +291,53 @@ def delete_user(user_id):
 
     return jsonify({"success": True})
 
+@main.route('/make_admin/<int:user_id>', methods=['POST'])
+@login_required
+def make_admin(user_id):
+
+    if not admin_required():
+        return jsonify({
+            "success": False,
+            "message": "Admin access required"
+        }), 403
+
+    user = User.query.get_or_404(user_id)
+
+    user.role = 'admin'
+
+    db.session.commit()
+
+    return jsonify({
+        "success": True,
+        "message": "User is now admin"
+    })
+
+@main.route('/remove_admin/<int:user_id>', methods=['POST'])
+@login_required
+def remove_admin(user_id):
+
+    if not admin_required():
+        return jsonify({
+            "success": False,
+            "message": "Admin access required"
+        }), 403
+
+    user = User.query.get_or_404(user_id)
+
+    if user.id == current_user.id:
+        return jsonify({
+            "success": False,
+            "message": "You cannot remove your own admin role"
+        }), 400
+
+    user.role = 'user'
+
+    db.session.commit()
+
+    return jsonify({
+        "success": True,
+        "message": "Admin role removed"
+    })
 
 #=================================================
 # Get the TMDB_ACCESS_TOKEN
