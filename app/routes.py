@@ -6,6 +6,7 @@ from flask_login import login_user, logout_user, current_user, login_required
 from sqlalchemy import func
 from app.models import Review
 from app import db
+from app import app, db
 from app.models import User
 from werkzeug.utils import secure_filename
 from app.blueprints import main
