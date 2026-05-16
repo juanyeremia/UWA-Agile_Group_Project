@@ -38,6 +38,7 @@ class RouteTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json, [])  # Should return an empty list when there are no reviews
 
+    # Test that the recent reviews endpoint returns the correct data when there are reviews in the database
     def test_recent_reviews_returns_data(self):
         # add a review to the database
         review = Review(movie_id=550, body='Great film', rating=5, user_id=1)
@@ -50,4 +51,9 @@ class RouteTestCase(unittest.TestCase):
         self.assertEqual(len(response.json), 1)
         self.assertEqual(response.json[0]['movie_id'], 550)
         self.assertEqual(response.json[0]['body'], 'Great film')
-        
+    
+    # Test that the highest rated movies endpoint returns an empty list when there are no movies in the database
+    def test_highest_rated_empty(self):
+        response = self.client.get('/api/movies/highest_rated')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json, [])
