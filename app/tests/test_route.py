@@ -57,3 +57,16 @@ class RouteTestCase(unittest.TestCase):
         response = self.client.get('/api/movies/highest_rated')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json, [])
+
+    # Test that the highest rated movies endpoint returns the correct data when there are movies in the database
+    def test_highest_rated_returns_data(self):
+        # add a review to the database
+        review = Review(movie_id=550, body='Great', rating=5, user_id=1)
+        db.session.add(review)
+        db.session.commit()
+
+        # test that the highest rated movies endpoint returns the movie we just added
+        response = self.client.get('/api/movies/highest_rated')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json[0]['movie_id'], 550)
+        self.assertEqual(response.json[0]['avg_rating'], 5.0)
