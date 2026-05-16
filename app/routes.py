@@ -290,6 +290,25 @@ def delete_user(user_id):
 
     return jsonify({"success": True})
 
+@app.route('/make_admin/<int:user_id>', methods=['POST'])
+@login_required
+def make_admin(user_id):
+
+    if current_user.role != 'admin':
+        return jsonify({
+            "success": False,
+            "message": "Admin access required"
+        }), 403
+
+    user = User.query.get_or_404(user_id)
+
+    user.role = 'admin'
+
+    db.session.commit()
+
+    return jsonify({
+        "success": True
+    })
 
 #=================================================
 # Get the TMDB_ACCESS_TOKEN
