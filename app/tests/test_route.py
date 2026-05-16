@@ -1,7 +1,7 @@
 import unittest
 from app import create_app, db
 from config import TestConfig
-from app.models import User
+from app.models import User, Review
 
 # This test case focuses on testing the route functionality of the application.
 class RouteTestCase(unittest.TestCase):
@@ -31,3 +31,9 @@ class RouteTestCase(unittest.TestCase):
     def test_profile_redirects_when_not_logged_in(self):
         response = self.client.get('/profile')
         self.assertEqual(response.status_code, 302)  # Should redirect to login page
+    
+    # Test that the recent reviews endpoint returns an empty list when there are no reviews in the database
+    def test_recent_reviews_empty(self):
+        response = self.client.get('/api/reviews/recent')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json, [])  # Should return an empty list when there are no reviews
