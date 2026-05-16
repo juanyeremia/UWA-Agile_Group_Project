@@ -144,9 +144,13 @@
                     <div class="user-box">
                         <h5>${user.username}</h5>
                         <p>${user.email}</p>
+                        <p>Role: ${user.role}</p>
 
                         <button class="delete-btn" onclick="deleteUser(${user.id})">
                             Delete User
+                        </button>
+                        <button class="unflag-btn" onclick="makeAdmin(${user.id})">
+                            Make Admin
                         </button>
                     </div>
                 `;
@@ -172,6 +176,25 @@
                         document.getElementById('searchInput').value = '';
                     } else {
                         alert(data.message || "Could not delete user");
+                    }
+                });
+        }
+
+        function makeAdmin(userId) {
+            if (!confirm("Make this user an admin?")) {
+                return;
+            }
+
+            fetch(`/make_admin/${userId}`, {
+                    method: 'POST'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert("User is now admin");
+                        searchUser();
+                    } else {
+                        alert(data.message || "Could not update user role");
                     }
                 });
         }
