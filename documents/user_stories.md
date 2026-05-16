@@ -22,7 +22,7 @@ The main stakeholders for this weeb app will be:
 - As a registered user, I want to be able to log out so that my account stays secure
 - As a registered user, I want a favourites list so that I can save my favourite movies
 - As a registered user, I want to create customised movie lists so that I can share the movies I have selected with others
-- As a registered user, I want to reset my password or recover my account so that I can log in to my account
+
 
 ### **Admin**
 
