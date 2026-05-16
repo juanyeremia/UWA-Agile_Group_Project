@@ -26,3 +26,8 @@ class RouteTestCase(unittest.TestCase):
     def test_login_page_loads(self):
         response = self.client.get('/login')
         self.assertEqual(response.status_code, 200)
+
+    # Test that the profile page redirects to the login page when the user is not logged in
+    def test_profile_redirects_when_not_logged_in(self):
+        response = self.client.get('/profile')
+        self.assertEqual(response.status_code, 302)  # Should redirect to login page
