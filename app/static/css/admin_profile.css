@@ -233,3 +233,26 @@
         grid-template-columns: 1fr;
     }
 }
+
+.review-row,
+.admin-card,
+.large-card {
+    overflow: hidden;
+}
+
+.review-row h5,
+.review-row p,
+.review-row span,
+.admin-card h1,
+.admin-card h2,
+.admin-card h3,
+.admin-card h4,
+.admin-card h5 {
+    overflow-wrap: break-word;
+    word-break: break-word;
+}
+
+.admin-layout * {
+    overflow-wrap: break-word;
+    word-break: break-word;
+}
