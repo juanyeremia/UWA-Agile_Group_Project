@@ -12,19 +12,24 @@ if (loadMoreReviewsBtn) {
       })
       .then(function (data) {
         data.reviews.forEach(function (review) {
-          const reviewCard = `
-            <div class="card mb-3">
-              <div class="card-body">
-                <h5 class="card-title">${review.username}</h5>
-                <h6 class="card-subtitle mb-2 text-body-secondary">
-                  Rating: ${review.rating}/5
-                </h6>
-                <p class="card-text">${review.body}</p>
-              </div>
-            </div>
-          `;
+          const template = document.getElementById("review-template");
+          const clone = template.content.cloneNode(true);
 
-          reviewsList.insertAdjacentHTML("beforeend", reviewCard);
+          clone.querySelector(".review-username").textContent = review.username;
+          clone.querySelector(".review-rating").textContent =
+            `Rating: ${review.rating}/5`;
+          clone.querySelector(".review-body").textContent = review.body;
+
+          const flagContainer = clone.querySelector(".review-flag-container");
+
+          if (review.flagged) {
+            flagContainer.innerHTML =
+              '<button class="btn btn-sm btn-secondary" disabled>🚩 Flagged</button>';
+          } else {
+            flagContainer.innerHTML = `<button class="btn btn-sm btn-outline-danger flag-btn" data-id="${review.id}">🚩 Flag</button>`;
+          }
+
+          reviewsList.appendChild(clone);
         });
 
         loadMoreReviewsBtn.dataset.page = page + 1;
@@ -38,3 +43,36 @@ if (loadMoreReviewsBtn) {
       });
   });
 }
+
+// Add the flag to the reviews
+document.addEventListener("click", function (event) {
+  if (!event.target.classList.contains("flag-btn")) {
+    return;
+  }
+
+  const button = event.target;
+  const reviewId = button.dataset.id;
+
+  if (!IS_AUTHENTICATED) {
+    window.location.href = LOGIN_URL;
+    return;
+  }
+
+  fetch(`/flag_review/${reviewId}`, {
+    method: "POST",
+  })
+    .then(function (response) {
+      return response.json();
+    })
+    .then(function (data) {
+      if (data.success) {
+        button.outerHTML =
+          '<button class="btn btn-sm btn-secondary" disabled>🚩 Flagged</button>';
+      } else {
+        alert("Failed to flag review.");
+      }
+    })
+    .catch(function () {
+      alert("Something went wrong. Please try again.");
+    });
+});
