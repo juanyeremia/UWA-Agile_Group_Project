@@ -3,6 +3,7 @@ import multiprocessing
 import os
 import tempfile
 
+
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
@@ -11,6 +12,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from app import create_app, db
 from app.models import User
 from config import TestConfig
+
 
 
 LOCAL_HOST = "http://127.0.0.1:5000"
@@ -38,13 +40,14 @@ class TestAuthentication(unittest.TestCase):
         self.app_context = self.testApp.app_context()
         self.app_context.push()
         db.create_all()
-        # Create a test user to use for sign-up tests.
+        # Create a test user to use for login tests.
         self.test_user = User(
             username='testuser',
             email='test@example.com',
             role='user'
         )
-        
+        self.test_user.set_password('Qwerpassword!1')
+        db.session.add(self.test_user)
         db.session.commit()
 
         # Selenium needs a live HTTP server, so the app runs in a separate process.
@@ -55,7 +58,7 @@ class TestAuthentication(unittest.TestCase):
         self.server_process.start()
 
         # Set up Chrome options for headless testing
-        options = webdriver.ChromeOptions() 
+        options = webdriver.ChromeOptions()
         options.add_argument("--headless=new")
         options.add_argument("--window-size=1400,1200")
 
@@ -78,29 +81,21 @@ class TestAuthentication(unittest.TestCase):
         if os.path.exists(self.database_path):
             os.remove(self.database_path)
 
-    def test_user_can_sign_up(self):
 
+    def test_user_can_log_in(self):
         test_password = 'Qwerpassword!1'
-        self.driver.get(f"{LOCAL_HOST}/sign_up")
+
+        self.driver.get(f"{LOCAL_HOST}/login")
 
         # Fill and submit the same form a browser user would use.
-        self.wait.until(EC.visibility_of_element_located((By.ID, "username"))).send_keys(self.test_user.username)
-        self.driver.find_element(By.ID, "email").send_keys(self.test_user.email)
+        self.wait.until(EC.visibility_of_element_located((By.ID, "email"))).send_keys(self.test_user.email)
         self.driver.find_element(By.ID, "password").send_keys(test_password)
-        self.driver.find_element(By.ID, "confirm_password").send_keys(test_password)
-        self.driver.find_element(By.CSS_SELECTOR, "#signUpForm input[type='submit']").click()
-        self.wait.until(EC.url_contains("/login"))
+        self.driver.find_element(By.CSS_SELECTOR, "#loginForm input[type='submit']").click()
 
-        # Refresh the parent-process session before reading data written by the app process.
-        db.session.remove()
-        created_user = User.query.filter_by(email=self.test_user.email).first()
-
-        # Verify the user was created in the database and has the expected attributes.
-        self.assertIsNotNone(created_user)
-        self.assertEqual(created_user.username, self.test_user.username)
-        self.assertTrue(created_user.check_password(test_password))
-        self.assertIn("Log In", self.driver.title)
-        self.assertIn("/login", self.driver.current_url)
+        # Verify the user is redirected to the home page after logging in.
+        self.wait.until(EC.presence_of_element_located((By.LINK_TEXT, "My Profile")))
+        self.assertIn("Home", self.driver.title)
+        self.assertIn("/", self.driver.current_url)
 
 
 if __name__ == "__main__":
