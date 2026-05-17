@@ -180,6 +180,17 @@ async function loadRecentReviews() {
             ? `${TMDB_IMAGE_BASE}${movieData.poster_path}`
             : ``;                                                                                           // If no image, leave empty
 
+            // Build 'flag' button
+            let flagBtn = '';
+            if (IS_AUTHENTICATED) {          // Check if user is authenticated
+                if (review.flagged) {              // If review is flagged
+                    flagBtn = `<button class="btn btn-sm btn-secondary" disabled>🚩 Flagged</button>`;
+                } else {
+                    flagBtn = `<button class="btn btn-sm btn-outline-danger flag-btn" data-id="${review.id}" data-flagged="false">🚩 Flag</button>`;
+                }
+             }
+            
+
              $('#recent-reviews-container').append(`
                 <div class="review-item">
                     <img src="${poster}" class="review-poster" alt="${movieData.title}">
@@ -190,6 +201,7 @@ async function loadRecentReviews() {
                             <p class="review-rating">${review.rating}/5</p>
                         </div>
                         <p class="review-text">${review.body}</p>
+                        ${flagBtn}
                     </div>
                 </div>    
             `);
@@ -201,4 +213,18 @@ $(document).ready(function() {
     loadNowPlayingMovies();
     loadHighestRatedMovies();
     loadRecentReviews();
-});
+
+    // Handle flag button click event
+    $(document).on('click', '.flag-btn', function() {
+        const reviewId = $(this).data('id');
+        const btn = $ (this);
+
+        $.post(`/flag_review/${reviewId}`)          // Send POST request to flag the review
+            .done(function() {
+                btn.replaceWith(`<button class="btn btn-sm btn-secondary" disabled>🚩 Flagged</button>`);
+                })
+                .fail(function() {
+                    alert('Something went wrong. Please try again.');
+                });
+        });
+    });
