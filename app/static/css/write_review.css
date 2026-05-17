@@ -66,3 +66,23 @@
 .write-review-form .form-check-input {
   margin-top: 0;
 }
+
+/* Yellow submit button */
+.write-review-form .btn-primary {
+    background-color: #f5c518;
+    border-color: #f5c518;
+    color: #000000;
+    font-weight: 600;
+}
+
+.write-review-form .btn-primary:hover {
+    background-color: #e6b800;
+    border-color: #e6b800;
+    color: #000000;
+}
+
+/* Yellow focus on textarea */
+.write-review-form .form-control:focus {
+    border-color: #f5c518;
+    box-shadow: 0 0 0 0.25rem rgba(245, 197, 24, 0.25);
+}

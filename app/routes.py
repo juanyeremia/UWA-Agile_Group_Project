@@ -565,9 +565,16 @@ def write_review(movie_id):
        headers=headers
    )
    movie = response.json()
+   
+   local_rating = db.session.query(func.avg(Review.rating)).filter(Review.movie_id == movie_id).scalar()   
+   local_rating = round(local_rating, 1) if local_rating else None
+   local_review_count = Review.query.filter_by(movie_id=movie_id).count()
 
-
-   return render_template('write_review.html', movie_id=movie_id, movie=movie) # Render the review submission form for GET requests
+   return render_template('write_review.html', 
+                        movie_id=movie_id,
+                        movie=movie,
+                        local_rating=local_rating,
+                        local_review_count=local_review_count) # Render the review submission form for GET requests
 
 #=================================================
 # Flagging a review for admin review
