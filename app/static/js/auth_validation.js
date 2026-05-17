@@ -137,9 +137,10 @@ if (emailInput) {
 if (passwordInput) {
     passwordInput.addEventListener('blur', function() {
         const password = passwordInput.value.trim();
+        const isSignUpPage = Boolean(document.getElementById('signUpForm'));
         if (!password) {
             setError('passwordError', 'Password is required.');
-        } else if (!isValidPassword(password)) {
+        } else if (isSignUpPage && !isValidPassword(password)) {
             setError('passwordError', 'Password must be at least 6 characters long and include uppercase, lowercase, number, and special character.');
         } else {
             clearError('passwordError');
