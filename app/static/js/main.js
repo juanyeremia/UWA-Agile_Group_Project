@@ -193,7 +193,9 @@ async function loadRecentReviews() {
 
              $('#recent-reviews-container').append(`
                 <div class="review-item">
-                    <img src="${poster}" class="review-poster" alt="${movieData.title}">
+                    <a href="/movie/${review.movie_id}">
+                        <img src="${poster}" class="review-poster" alt="${movieData.title}">
+                    </a>
                     <div class="review-content">
                         <div class="review-header">
                             <p class="reviewer-name">${review.username}</p>
