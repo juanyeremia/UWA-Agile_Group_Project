@@ -48,17 +48,23 @@
 }
 
 .edit-btn {
+    display: inline-block;
     background: #f5c518;
-    color: #111;
-    padding: 12px 28px;
-    border-radius: 25px;
+    color: #000;
+    padding: 12px 26px;
+    border-radius: 12px;
     text-decoration: none;
     font-weight: 700;
+    font-size: 15px;
+    border: none;
+    transition: 0.3s ease;
+    box-shadow: 0 4px 12px rgba(245, 197, 24, 0.25);
 }
 
 .edit-btn:hover {
-    background: #e0b313;
-    color: #111;
+    background: #f5c518;
+    transform: translateY(-2px);
+    color: black;
 }
 
 .small-stats {
