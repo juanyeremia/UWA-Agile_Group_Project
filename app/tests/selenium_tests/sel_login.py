@@ -1,0 +1,102 @@
+import unittest
+import multiprocessing
+import os
+import tempfile
+
+
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
+
+from app import create_app, db
+from app.models import User
+from config import TestConfig
+
+
+
+LOCAL_HOST = "http://127.0.0.1:5000"
+
+
+class SeleniumTestConfig(TestConfig):
+    SQLALCHEMY_DATABASE_URI = None
+
+
+def run_test_server(database_path):
+    # The Flask app in the child process must point at the same temp DB file.
+    SeleniumTestConfig.SQLALCHEMY_DATABASE_URI = f"sqlite:///{database_path}"
+    app = create_app(SeleniumTestConfig)
+    app.run(host="127.0.0.1", port=5000, debug=False, use_reloader=False)
+
+
+class TestAuthentication(unittest.TestCase):
+    def setUp(self):
+        # Use a file-backed test DB so both the test process and Flask process can share it.
+        file_descriptor, self.database_path = tempfile.mkstemp(suffix=".db")
+        os.close(file_descriptor)
+
+        SeleniumTestConfig.SQLALCHEMY_DATABASE_URI = f"sqlite:///{self.database_path}"
+        self.testApp = create_app(SeleniumTestConfig)
+        self.app_context = self.testApp.app_context()
+        self.app_context.push()
+        db.create_all()
+        # Create a test user to use for login tests.
+        self.test_user = User(
+            username='testuser',
+            email='test@example.com',
+            role='user'
+        )
+        self.test_user.set_password('Qwerpassword!1')
+        db.session.add(self.test_user)
+        db.session.commit()
+
+        # Selenium needs a live HTTP server, so the app runs in a separate process.
+        self.server_process = multiprocessing.Process(
+            target=run_test_server,
+            args=(self.database_path,)
+        )
+        self.server_process.start()
+
+        # Set up Chrome options for headless testing
+        options = webdriver.ChromeOptions()
+        options.add_argument("--headless=new")
+        options.add_argument("--window-size=1400,1200")
+
+        self.driver = webdriver.Chrome(options=options)
+        self.wait = WebDriverWait(self.driver, 10)
+        self.driver.get(LOCAL_HOST)
+
+
+    def tearDown(self):
+        self.driver.quit()
+        self.server_process.terminate()
+        self.server_process.join() 
+
+        # Clean up the shared temp DB after each test run.
+        db.session.remove()
+        db.drop_all()
+        db.engine.dispose()
+        self.app_context.pop()
+
+        if os.path.exists(self.database_path):
+            os.remove(self.database_path)
+
+
+    def test_user_can_log_in(self):
+        test_password = 'Qwerpassword!1'
+
+        self.driver.get(f"{LOCAL_HOST}/login")
+
+        # Fill and submit the same form a browser user would use.
+        self.wait.until(EC.visibility_of_element_located((By.ID, "email"))).send_keys(self.test_user.email)
+        self.driver.find_element(By.ID, "password").send_keys(test_password)
+        self.driver.find_element(By.CSS_SELECTOR, "#loginForm input[type='submit']").click()
+
+        # Verify the user is redirected to the home page after logging in.
+        self.wait.until(EC.presence_of_element_located((By.LINK_TEXT, "My Profile")))
+        self.assertIn("Home", self.driver.title)
+        self.assertIn("/", self.driver.current_url)
+
+
+if __name__ == "__main__":
+    unittest.main()
