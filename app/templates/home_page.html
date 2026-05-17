@@ -32,6 +32,11 @@
       type="image/png"
       href="{{ url_for('static', filename='images/favicon.png') }}"
     />
+
+    <script>
+      const IS_AUTHENTICATED = {{ 'true' if current_user.is_authenticated else 'false' }};
+    </script>
+
     <title>Home Page</title>
   </head>
 
