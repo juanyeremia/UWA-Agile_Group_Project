@@ -128,10 +128,12 @@ def api_movie_reviews(movie_id):
 
     return jsonify({
         "reviews": [
-            {
+            {   
+                "id": review.id,
                 "username": review.author.username,
                 "rating": review.rating,
-                "body": review.body
+                "body": review.body,
+                "flagged": review.flagged
             }
             for review in reviews
         ],
@@ -651,7 +653,7 @@ def search():
 
 
 #=================================================
-# Add an AJAX route
+# Add an AJAX route for searching movies
 #=================================================
 @main.route('/api/search')
 def api_search():

@@ -212,6 +212,19 @@
                 Rating: {{ review.rating }}/5
               </h6>
               <p class="card-text">{{ review.body }}</p>
+
+              {% if review.flagged %}
+              <button class="btn btn-sm btn-secondary" disabled>
+                🚩 Flagged
+              </button>
+              {% else %}
+              <button
+                class="btn btn-sm btn-outline-danger flag-btn"
+                data-id="{{ review.id }}"
+              >
+                🚩 Flag
+              </button>
+              {% endif %}
             </div>
           </div>
           {% endfor %} {% else %}
@@ -220,6 +233,22 @@
           </p>
           {% endif %}
         </div>
+
+        <template id="review-template">
+          <div class="card mb-3">
+            <div class="card-body">
+              <h5 class="card-title review-username"></h5>
+
+              <h6
+                class="card-subtitle mb-2 text-body-secondary review-rating"
+              ></h6>
+
+              <p class="card-text review-body"></p>
+
+              <div class="review-flag-container"></div>
+            </div>
+          </div>
+        </template>
 
         {% if movie.review_count > 5 %}
         <div class="text-center mt-3">
@@ -241,6 +270,10 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script>
+      const IS_AUTHENTICATED = {{ 'true' if current_user.is_authenticated else 'false' }};
+      const LOGIN_URL = "{{ url_for('main.login') }}";
+    </script>
     <script src="{{ url_for('static', filename='js/movie_reviews.js') }}"></script>
   </body>
 </html>
