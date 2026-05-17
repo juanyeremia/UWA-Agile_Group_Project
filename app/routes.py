@@ -73,7 +73,8 @@ def movie_detail(movie_id):
    return render_template(
        'individual_movie.html',
        movie=movie,
-       reviews=reviews
+       reviews=reviews,
+       movie_id=movie_id
    )
 
 
@@ -198,6 +199,25 @@ def admin():
     flagged_reviews = Review.query.filter_by(flagged=True).all()
     total_users = User.query.count()
 
+    movie_titles = {}
+
+    for review in flagged_reviews:
+
+        url = f"https://api.themoviedb.org/3/movie/{review.movie_id}"
+
+        headers = {
+            "Authorization": f"Bearer {os.getenv('TMDB_ACCESS_TOKEN')}"
+        }
+
+        response = requests.get(url, headers=headers)
+
+        data = response.json()
+
+        movie_titles[review.movie_id] = data.get(
+            "title",
+            f"Movie ID: {review.movie_id}"
+        )
+
     recent_actions = [
         "Deleted a flagged review",
         "Checked reported content",
@@ -210,7 +230,8 @@ def admin():
         flagged_reviews=flagged_reviews,
         flagged_count=len(flagged_reviews),
         total_users=total_users,
-        recent_actions=recent_actions
+        recent_actions=recent_actions,
+        movie_titles=movie_titles
     )
 
 
