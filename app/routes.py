@@ -213,8 +213,9 @@ def admin():
         recent_actions=recent_actions
     )
 
-
-
+#=================================================
+# Delete a review
+#=================================================
 @main.route('/delete_review/<int:review_id>', methods=['POST'])
 @login_required
 def delete_review(review_id):
@@ -228,7 +229,9 @@ def delete_review(review_id):
 
     return jsonify({"success": True})
 
-
+#=================================================
+# Unflag a review
+#=================================================
 @main.route('/unflag_review/<int:review_id>', methods=['POST'])
 @login_required
 def unflag_review(review_id):
@@ -462,7 +465,8 @@ def recent_reviews():
             'movie_id': r.movie_id,
             'rating': r.rating,
             'body': r.body,
-            'username': r.author.username           # connects Review and User throught the 'author' relationship
+            'username': r.author.username,           # connects Review and User throught the 'author' relationship
+            'flagged': r.flagged,
         }
         for r in results
     ]
@@ -516,41 +520,7 @@ def flag_review(review_id):
    review.flagged = True
    review.flagged_reason = request.form.get('reason', 'Inappropriate content') # Get the reason for flagging from the form data, with a default reason if none provided
    db.session.commit() 
-
-   flash ('Review flagged for admin review. Thank you for your feedback!', 'info') 
-   return redirect(url_for('main.movie_detail', movie_id=review.movie_id))
-
-#=================================================
-# Delete a review
-#=================================================
-@main.route('/delete_review/<int:review_id>', methods=['POST'])
-@login_required
-def delete_review(review_id):
-   if current_user.role != 'admin':
-      return redirect(url_for('main.profile')) # Only allow admins to delete reviews
-   
-   # Delete the review from the database
-   review = Review.query.get_or_404(review_id)
-   db.session.delete(review)
-   db.session.commit()
-   flash('Review deleted successfully.', 'success')
-   return redirect(url_for('main.admin'))
-
-#=================================================
-# Unflag a review
-#=================================================
-@main.route('/unflag_review/<int:review_id>', methods=['POST'])
-@login_required
-def unflag_review(review_id):
-    if current_user.role != 'admin':
-      return redirect(url_for('main.home')) # Only allow admins to unflag reviews
-   
-    review = Review.query.get_or_404(review_id)
-    review.flagged = False
-    review.flagged_reason = None
-    db.session.commit()
-    flash('Review unflagged.', 'success')
-    return redirect(url_for('main.admin'))
+   return jsonify({'success':True}) # Return a JSON response indicating the review was flagged successfully
 
 #=================================================
 # Redirect to the search page
