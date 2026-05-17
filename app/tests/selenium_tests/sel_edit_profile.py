@@ -115,13 +115,22 @@ class TestAuthentication(unittest.TestCase):
         self.wait.until(EC.url_contains("/profile"))
         self.assertIn("Profile", self.driver.title)
         self.assertIn("/profile", self.driver.current_url)
-        self.wait.until(EC.presence_of_element_located((By.NAME, "username")))
-        displayed_username = self.driver.find_element(By.NAME, "username").get_attribute("value")
-        displayed_email = self.driver.find_element(By.NAME, "email").get_attribute("value")
-        displayed_bio = self.driver.find_element(By.NAME, "bio").get_attribute("value")
+        #self.wait.until(EC.presence_of_element_located((By.NAME, "username")))
+        
+        # Prepate to verify the updated profile information is displayed on the page and in the database.
+        displayed_username = self.driver.find_element(By.CSS_SELECTOR, ".profile-middle h1").text
+        displayed_email = self.driver.find_element(By.CSS_SELECTOR, ".profile-middle .email").text
+        displayed_bio = self.driver.find_element(By.CSS_SELECTOR, ".profile-middle .bio").text
+        db.session.remove()  
+        updated_user = User.query.filter_by(id=self.test_user.id).first()       
+        
+        # Tests to verify the updated profile information is displayed on the page and in the database.
         self.assertEqual(displayed_username, new_username)
         self.assertEqual(displayed_email, new_email)
         self.assertEqual(displayed_bio, new_bio)
+        self.assertEqual(updated_user.username, new_username)
+        self.assertEqual(updated_user.email, new_email)
+        self.assertEqual(updated_user.bio, new_bio)
 
 
 if __name__ == "__main__":
