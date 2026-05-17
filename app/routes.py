@@ -469,7 +469,6 @@ def recent_reviews():
 
     return jsonify(reviews)
 
-
 #=================================================
 # Set up route for submitting a new review
 #=================================================
@@ -507,9 +506,51 @@ def write_review(movie_id):
 
    return render_template('write_review.html', movie_id=movie_id, movie=movie) # Render the review submission form for GET requests
 
+#=================================================
+# Flagging a review for admin review
+#=================================================
+@main.route('/flag_review/<int:review_id>', methods=['POST'])
+@login_required
+def flag_review(review_id):
+   review = Review.query.get_or_404(review_id)
+   review.flagged = True
+   review.flagged_reason = request.form.get('reason', 'Inappropriate content') # Get the reason for flagging from the form data, with a default reason if none provided
+   db.session.commit() 
 
+   flash ('Review flagged for admin review. Thank you for your feedback!', 'info') 
+   return redirect(url_for('main.movie_detail', movie_id=review.movie_id))
 
+#=================================================
+# Delete a review
+#=================================================
+@main.route('/delete_review/<int:review_id>', methods=['POST'])
+@login_required
+def delete_review(review_id):
+   if current_user.role != 'admin':
+      return redirect(url_for('main.profile')) # Only allow admins to delete reviews
+   
+   # Delete the review from the database
+   review = Review.query.get_or_404(review_id)
+   db.session.delete(review)
+   db.session.commit()
+   flash('Review deleted successfully.', 'success')
+   return redirect(url_for('main.admin'))
 
+#=================================================
+# Unflag a review
+#=================================================
+@main.route('/unflag_review/<int:review_id>', methods=['POST'])
+@login_required
+def unflag_review(review_id):
+    if current_user.role != 'admin':
+      return redirect(url_for('main.home')) # Only allow admins to unflag reviews
+   
+    review = Review.query.get_or_404(review_id)
+    review.flagged = False
+    review.flagged_reason = None
+    db.session.commit()
+    flash('Review unflagged.', 'success')
+    return redirect(url_for('main.admin'))
 
 #=================================================
 # Redirect to the search page
@@ -577,4 +618,3 @@ def search():
        movies=movies,
        query=query
    )
-
