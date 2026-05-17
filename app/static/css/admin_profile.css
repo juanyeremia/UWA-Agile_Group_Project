@@ -256,3 +256,15 @@
     overflow-wrap: break-word;
     word-break: break-word;
 }
+
+.admin-buttons button {
+    white-space: nowrap;
+    word-break: normal;
+    overflow-wrap: normal;
+}
+
+.admin-buttons {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
