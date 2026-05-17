@@ -293,3 +293,14 @@
     align-items: center;
     align-self: center;
 }
+
+.profile-middle {
+    min-width: 0;
+}
+
+.profile-middle h1 {
+    max-width: 100%;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    line-height: 1.1;
+}
