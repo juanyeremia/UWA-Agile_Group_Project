@@ -28,3 +28,27 @@
 .movie-rating {
   color: #f5c518;
 }
+
+/* Review Cards */
+
+#reviews-list .card {
+  background-color: #222;
+  border: 1px solid #333;
+  border-radius: 10px;
+}
+
+#reviews-list .card-title {
+  color: #ffffff;
+}
+
+#reviews-list .card-subtitle {
+  color: #cccccc !important;
+}
+
+#reviews-list .card-text {
+  color: #ffffff;
+}
+
+.review-rating {
+  color: #f5c518;
+}

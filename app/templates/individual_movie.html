@@ -57,12 +57,12 @@
               ★ {{ movie.rating }} / 5 ({{ movie.review_count }} reviews)
             </span>
           </p>
-          <p><strong>Release Date:</strong> {{ movie.release_date }}</p>
+          <p><strong>Release Date:</strong> {{ movie.release_info }}</p>
           <p><strong>Director:</strong> {{ movie.director }}</p>
 
           <section class="mt-4">
             <h2>Introduction</h2>
-            <p>{{ movie.description }}</p>
+            <p>{{ movie.details }}</p>
           </section>
         </div>
       </div>
@@ -99,20 +99,6 @@
         <li class="nav-item" role="presentation">
           <button
             class="nav-link"
-            id="pills-details-tab"
-            data-bs-toggle="pill"
-            data-bs-target="#pills-details"
-            type="button"
-            role="tab"
-            aria-selected="false"
-          >
-            Details
-          </button>
-        </li>
-
-        <li class="nav-item" role="presentation">
-          <button
-            class="nav-link"
             id="pills-genre-tab"
             data-bs-toggle="pill"
             data-bs-target="#pills-genre"
@@ -121,20 +107,6 @@
             aria-selected="false"
           >
             Genre
-          </button>
-        </li>
-
-        <li class="nav-item" role="presentation">
-          <button
-            class="nav-link"
-            id="pills-release-tab"
-            data-bs-toggle="pill"
-            data-bs-target="#pills-release"
-            type="button"
-            role="tab"
-            aria-selected="false"
-          >
-            Release
           </button>
         </li>
       </ul>
@@ -162,32 +134,12 @@
 
         <div
           class="tab-pane fade"
-          id="pills-details"
-          role="tabpanel"
-          aria-labelledby="pills-details-tab"
-          tabindex="0"
-        >
-          <p>{{ movie.details }}</p>
-        </div>
-
-        <div
-          class="tab-pane fade"
           id="pills-genre"
           role="tabpanel"
           aria-labelledby="pills-genre-tab"
           tabindex="0"
         >
-          <p>{{ movie.genre }}</p>
-        </div>
-
-        <div
-          class="tab-pane fade"
-          id="pills-release"
-          role="tabpanel"
-          aria-labelledby="pills-release-tab"
-          tabindex="0"
-        >
-          <p>{{ movie.release_info }}</p>
+          <p>{{ movie.genres }}</p>
         </div>
       </div>
 
@@ -208,9 +160,14 @@
           <div class="card mb-3">
             <div class="card-body">
               <h5 class="card-title">{{ review.author.username }}</h5>
-              <h6 class="card-subtitle mb-2 text-body-secondary">
-                Rating: {{ review.rating }}/5
-              </h6>
+
+              <p class="card-subtitle mb-2 review-rating">
+                <strong>Rating:</strong>
+                <span class="movie-rating">
+                  ★ {{ movie.rating }} / 5 ({{ movie.review_count }} reviews)
+                </span>
+              </p>
+
               <p class="card-text">{{ review.body }}</p>
 
               {% if review.flagged %}
@@ -239,9 +196,7 @@
             <div class="card-body">
               <h5 class="card-title review-username"></h5>
 
-              <h6
-                class="card-subtitle mb-2 text-body-secondary review-rating"
-              ></h6>
+              <h6 class="card-subtitle mb-2 review-rating"></h6>
 
               <p class="card-text review-body"></p>
 
