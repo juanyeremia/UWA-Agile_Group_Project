@@ -7,6 +7,7 @@ from app.models import User
 #=================================================
 # Define forms
 #=================================================
+# Define the sign-up form with username, email, password, and confirm password fields
 class SignUpForm(FlaskForm):
     username = StringField(
         'Username', 
@@ -36,6 +37,7 @@ class SignUpForm(FlaskForm):
         if user:
             raise ValidationError('Email is already existing.')
 
+# Define the login form with email, password, and remember me fields
 class LoginForm(FlaskForm):
     email = StringField(
         'Email', 

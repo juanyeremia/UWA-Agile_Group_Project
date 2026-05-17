@@ -20,7 +20,9 @@ import uuid
 #=================================================
 
 
+#=================================================
 # Home page route
+#=================================================
 @main.route('/')
 def home():
  return render_template('home_page.html')
@@ -161,7 +163,9 @@ def api_movie_reviews(movie_id):
     })
 
 
-
+#=================================================
+# Sign up route
+#=================================================
 @main.route('/sign_up', methods=['GET', 'POST'])
 def sign_up():
    form = SignUpForm()
@@ -181,7 +185,9 @@ def sign_up():
        flash('Error creating account. Please check your input and try again.', 'danger')
    return render_template('sign_up.html', form=form)
 
-
+#=================================================
+# Login route
+#=================================================
 @main.route('/login', methods=['GET', 'POST'])
 def login():
    form = LoginForm()
@@ -197,25 +203,31 @@ def login():
            return redirect(url_for('main.home'))
    return render_template('login.html', form=form)
 
-
-
-
+#=================================================
+# Logout route
+#=================================================
 @main.route('/logout')
 def logout():
    logout_user()  # Log the user out using Flask-Login
    return redirect(url_for('main.home'))
 
-
+#=================================================
+# Terms and Conditions route
+#=================================================
 @main.route('/terms')
 def terms():
  return render_template('terms.html')
 
-
+#=================================================
+# Privacy Policy route
+#=================================================
 @main.route('/privacy')
 def privacy():
  return render_template('privacy.html')
 
-
+#=================================================
+# Profile route
+#=================================================
 @main.route('/profile')
 @login_required
 def profile():
@@ -236,7 +248,9 @@ def profile():
 
 
 
-
+#=================================================
+# Edit profile route
+#=================================================
 @main.route('/edit_profile', methods=['GET', 'POST'])
 @login_required
 def edit_profile():
