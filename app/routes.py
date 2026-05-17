@@ -232,19 +232,37 @@ def privacy():
 @login_required
 def profile():
 
+    user_reviews = Review.query.filter_by(
+        user_id=current_user.id
+    ).order_by(
+        Review.id.desc()
+    ).all()
 
-   user_reviews = Review.query.filter_by(
-       user_id=current_user.id
-   ).order_by(Review.id.desc()
-   ).all()
+    movie_titles = {}
 
+    for review in user_reviews:
 
-   return render_template(
-       'user_profile.html',
-       user=current_user,
-       reviews=user_reviews,
-       review_count=len(user_reviews)
-   )
+        response = requests.get(
+            f"https://api.themoviedb.org/3/movie/{review.movie_id}",
+            headers={
+                "Authorization": f"Bearer {current_app.config['TMDB_ACCESS_TOKEN']}"
+            }
+        )
+
+        data = response.json()
+
+        movie_titles[review.movie_id] = data.get(
+            "title",
+            f"Movie ID: {review.movie_id}"
+        )
+
+    return render_template(
+        'user_profile.html',
+        user=current_user,
+        reviews=user_reviews,
+        review_count=len(user_reviews),
+        movie_titles=movie_titles
+    )
 
 
 
