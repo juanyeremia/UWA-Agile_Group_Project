@@ -74,7 +74,7 @@
                 <div class="review-top">
 
                     <div>
-                        <h4>🎬 Movie ID: {{ review.movie_id }}</h4>
+                        <h4>🎬 {{ movie_titles.get(review.movie_id, 'Movie ID: ' ~ review.movie_id) }}</h4>
 
                         <p class="review-text">
                             {{ review.body }}

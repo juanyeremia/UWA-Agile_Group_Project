@@ -294,13 +294,28 @@
     align-self: center;
 }
 
-.profile-middle {
-    min-width: 0;
-}
-
-.profile-middle h1 {
-    max-width: 100%;
+h1,
+h2,
+h3,
+h4,
+h5,
+p,
+span {
     overflow-wrap: break-word;
     word-break: break-word;
-    line-height: 1.1;
+}
+
+.simple-profile-card {
+    overflow: hidden;
+}
+
+.profile-middle {
+    min-width: 0;
+    max-width: 100%;
+}
+
+.profile-middle h1,
+.profile-middle p {
+    overflow-wrap: break-word;
+    word-break: break-word;
 }
