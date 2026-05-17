@@ -50,7 +50,7 @@
 
                 <div class="review-row" id="review-{{ review.id }}">
                     <div>
-                        <h5>Movie ID: {{ review.movie_id }}</h5>
+                        <h5>{{ movie_titles.get(review.movie_id, 'Movie ID: ' ~ review.movie_id) }}</h5>
                         <p>{{ review.body }}</p>
                         <span>@{{ review.author.username }}</span> {% if review.flag_reason %}
                         <p class="text-warning mt-2">
