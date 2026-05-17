@@ -620,12 +620,24 @@ def write_review(movie_id):
 
 
        # Write review to the database
+       try:
+           rating = int(float(rating))
+
+           if rating < 1 or rating > 5:
+                flash('Rating must be between 1 and 5.', 'danger')
+                return redirect(url_for('main.write_review', movie_id=movie_id))
+        
+       except ValueError:
+            flash('Rating must be a number.', 'danger')
+            return redirect(url_for('main.write_review', movie_id=movie_id))
+
        review = Review(
-           movie_id=movie_id,
-           body=body,
-           rating=int(rating),
-           user_id=current_user.id  # Associate the review with the currently logged-in user
-       )
+            movie_id=movie_id,
+            body=body,
+            rating=rating,
+            user_id=current_user.id
+        )
+        
        db.session.add(review) # Add the new review to the database session
        db.session.commit() # Commit the session to save the review to the database
        return redirect(url_for('main.movie_detail', movie_id=movie_id)) # Redirect back to the movie detail page after submitting the review

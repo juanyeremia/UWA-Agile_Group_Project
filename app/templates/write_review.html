@@ -38,57 +38,79 @@
 
     <!-- Write Review Content -->
     <main class="container-lg write-review-container d-flex gap-4">
-        <!-- Movie Details -->
-        <div class="write-review-movie-details">
-            <img src="https://image.tmdb.org/t/p/w500{{ movie.poster_path }}" 
-                alt="{{ movie.title }}"
-                class="write-review-poster">
-            <div class="write-review-movie-info">
-                <h2 class="write-review-movie-title">{{ movie.title }}</h2>
-                <p class="write-review-movie-year">{{ movie.release_date[:4]  }}</p>
-                <p class="write-review-movie-genre">
-                    {% for genre in movie.genres %}
-                        {{ genre.name }}{% if not loop.last %}, {% endif %}
-                    {% endfor %}
-                </p>
-                {% if local_rating %}
-                    <p class="write-review-movie-rating">⭐ {{ local_rating }}/5 ({{ local_review_count }} reviews)</p>
-                {% else %}
-                    <p class="write-review-movie-rating">No reviews yet</p>
-                {% endif %}                
-            </div>
+      <!-- Movie Details -->
+      <div class="write-review-movie-details">
+        <img
+          src="https://image.tmdb.org/t/p/w500{{ movie.poster_path }}"
+          alt="{{ movie.title }}"
+          class="write-review-poster"
+        />
+        <div class="write-review-movie-info">
+          <h2 class="write-review-movie-title">{{ movie.title }}</h2>
+          <p class="write-review-movie-year">{{ movie.release_date[:4] }}</p>
+          <p class="write-review-movie-genre">
+            {% for genre in movie.genres %} {{ genre.name }}{% if not loop.last
+            %}, {% endif %} {% endfor %}
+          </p>
+          {% if local_rating %}
+          <p class="write-review-movie-rating">
+            ⭐ {{ local_rating }}/5 ({{ local_review_count }} reviews)
+          </p>
+          {% else %}
+          <p class="write-review-movie-rating">No reviews yet</p>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Review Form -->
+      <form
+        action="{{ url_for('main.write_review', movie_id=movie_id) }}"
+        method="POST"
+        class="write-review-form d-flex flex-column gap-3"
+      >
+        <!-- Rating -->
+        <label for="rating" class="review-label">Rating</label>
+        <div class="d-flex align-items-center gap-2">
+          <input
+            type="number"
+            name="rating"
+            min="1"
+            max="5"
+            step="1"
+            placeholder="1 - 5"
+            required="required"
+            class="form-control rating-input"
+            oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+            oninvalid="
+              this.setCustomValidity(
+                'Please enter a whole number between 1 and 5',
+              )
+            "
+            oninput="this.setCustomValidity('')"
+          />
+          <span>⭐</span>
         </div>
 
-         <!-- Review Form -->
-        <form action="{{ url_for('main.write_review', movie_id=movie_id) }}" method="POST" class="write-review-form d-flex flex-column gap-3">
+        <!-- Review Content -->
+        <label for="body" class="review-label">Review</label>
+        <textarea
+          name="body"
+          rows="8"
+          placeholder="Write your review here..."
+          required
+          class="form-control"
+        ></textarea>
 
-            <!-- Rating -->
-            <label for="rating" class="review-label">Rating</label>
-            <div class="d-flex align-items-center gap-2">
-                <input type="number" name="rating" min="1" max="5" placeholder="1 - 5" required="required" class="form-control rating-input">
-                <span>⭐</span>
-            </div>
-
-            <!-- Review Content -->
-            <label for="body" class="review-label">Review</label>
-            <textarea
-                name="body"
-                rows="8"
-                placeholder="Write your review here..."
-                required
-                class="form-control"
-            ></textarea>
-
-            <!-- Button -->
-            <div class="d-flex gap-3 mt-4">
-            <button type="submit" class="btn btn-primary">Submit Review</button>
-            <a
-                href="{{ url_for('main.movie_detail', movie_id=movie_id) }}"
-                class="btn btn-secondary"
-                >Cancel</a
-            >
-            </div>
-        </form>
+        <!-- Button -->
+        <div class="d-flex gap-3 mt-4">
+          <button type="submit" class="btn btn-primary">Submit Review</button>
+          <a
+            href="{{ url_for('main.movie_detail', movie_id=movie_id) }}"
+            class="btn btn-secondary"
+            >Cancel</a
+          >
+        </div>
+      </form>
     </main>
 
     <!-- Footer injection -->
