@@ -48,9 +48,25 @@
   color: var(--text-dark);
 }
 
-/* .temp-border {
-  border: 1px solid red;
-} */
+/* Responsive design for hero section */
+@media (max-width: 768px) {
+    .hero-section {
+        height: auto;
+        min-height: 300px;
+    }
+
+    .hero-title {
+        font-size: 1.6rem;
+    }
+
+    .hero-subtitle {
+        font-size: 0.9rem;
+    }
+
+    .hero-content {
+        padding: 24px;
+    }
+}
 
 .section-title {
   color: #f5c518;
