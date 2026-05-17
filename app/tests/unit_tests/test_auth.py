@@ -23,7 +23,7 @@ class AuthTestCase(unittest.TestCase):
         db.session.remove()
         db.drop_all()
         self.app_context.pop()
-
+    # Ensure that the password hashing and checking works correctly
     def test_password_hashing(self):
         user = db.session.get(User, 1)  # Get the test user
         user.set_password('testpassword')  # Set a password for the user
