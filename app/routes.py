@@ -521,6 +521,22 @@ def flag_review(review_id):
    return redirect(url_for('main.movie_detail', movie_id=review.movie_id))
 
 #=================================================
+# Delete a review
+#=================================================
+@main.route('/delete_review/<int:review_id>', methods=['POST'])
+@login_required
+def delete_review(review_id):
+   if current_user.role != 'admin':
+      return redirect(url_for('main.profile')) # Only allow admins to delete reviews
+   
+   # Delete the review from the database
+   review = Review.query.get_or_404(review_id)
+   db.session.delete(review)
+   db.session.commit()
+   flash('Review deleted successfully.', 'success')
+   return redirect(url_for('main.admin'))
+
+#=================================================
 # Redirect to the search page
 #=================================================
 @main.route('/search')
