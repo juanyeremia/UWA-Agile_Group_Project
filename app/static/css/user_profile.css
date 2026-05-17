@@ -270,3 +270,20 @@
     border-radius: 12px;
     font-size: 14px;
 }
+
+.admin-btn {
+    display: inline-block;
+    background: #f5c518;
+    color: black;
+    padding: 10px 20px;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.profile-right {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    align-self: center;
+}

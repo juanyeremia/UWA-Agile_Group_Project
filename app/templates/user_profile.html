@@ -20,46 +20,35 @@
 
     <div class="container profile-page">
 
-        <!-- Profile Card -->
         <div class="simple-profile-card">
 
             <div class="profile-left">
-
                 <img src="{{ url_for('static', filename='profile_images/' + user.profile_image) }}" alt="Profile Image" class="profile-avatar">
-
             </div>
 
             <div class="profile-middle">
-
                 <h1>{{ user.username }}</h1>
 
-                <p class="username">
-                    @{{ user.username }}
-                </p>
+                <p class="username">@{{ user.username }}</p>
 
-                <p class="email">
-                    {{ user.email }}
-                </p>
+                <p class="email">{{ user.email }}</p>
 
                 <p class="bio">
-
                     {% if user.bio %} {{ user.bio }} {% else %} Movie lover and review writer. This profile shows submitted movie reviews. {% endif %}
-
                 </p>
-
             </div>
 
             <div class="profile-right">
-
                 <a href="{{ url_for('main.edit_profile') }}" class="edit-btn">
                     Edit Profile
-                </a>
-
+                </a> {% if current_user.role == 'admin' %}
+                <a href="{{ url_for('main.admin') }}" class="edit-btn">
+                    Admin Panel
+                </a> {% endif %}
             </div>
 
         </div>
 
-        <!-- Small Stats -->
         <div class="small-stats">
 
             <div>
@@ -74,9 +63,6 @@
 
         </div>
 
-
-        <!-- Submitted Reviews -->
-        <!-- Submitted Reviews -->
         <div class="reviews-section">
 
             <h2>Submitted Reviews</h2>
@@ -88,15 +74,11 @@
                 <div class="review-top">
 
                     <div>
-
-                        <h4>
-                            🎬 Movie ID: {{ review.movie_id }}
-                        </h4>
+                        <h4>🎬 Movie ID: {{ review.movie_id }}</h4>
 
                         <p class="review-text">
                             {{ review.body }}
                         </p>
-
                     </div>
 
                     <div class="rating-badge">
@@ -106,11 +88,9 @@
                 </div>
 
                 {% if review.flagged %}
-
                 <div class="review-flag">
                     ⚠ Flagged: {{ review.flag_reason }}
                 </div>
-
                 {% endif %}
 
             </div>
@@ -125,8 +105,6 @@
 
         </div>
 
-
-        <!-- Profile Highlights -->
         <div class="profile-highlights">
 
             <h2>Profile Highlights</h2>
@@ -153,13 +131,14 @@
 
             </div>
         </div>
+
     </div>
-    <!-- Footer injection -->
+
     {% include "footer.html" %}
-    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
 </body>
 
 </html>
