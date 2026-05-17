@@ -20,12 +20,9 @@ The main stakeholders for this weeb app will be:
 - As a registered user, I want to write a review so that I can share my opinion with others
 - As a registered user, I want to rate a movie out of 5 so that I can express my opinion quickly
 - As a registered user, I want to be able to log out so that my account stays secure
-- As a registered user, I want a favourites list so that I can save my favourite movies
-- As a registered user, I want to create customised movie lists so that I can share the movies I have selected with others
 
 
 ### **Admin**
 
 - As an admin, I want to delete inappropriate reviews so that the platform stays respectful
-- As an admin, I want to manage user accounts by adding, editing, banning, or deleting them so that the platform can handle normal and unusual account situations
 - As an admin, I want to assign roles (e.g., admin, user) so that permissions are controlled properly
