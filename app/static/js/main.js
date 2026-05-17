@@ -197,12 +197,19 @@ async function loadRecentReviews() {
                         <img src="${poster}" class="review-poster" alt="${movieData.title}">
                     </a>
                     <div class="review-content">
-                        <div class="review-header">
-                            <p class="reviewer-name">${review.username}</p>
-                            <p class="review-movie">${movieData.title}</p>
-                            <p class="review-rating">${review.rating}/5</p>
-                        </div>
-                        <p class="review-text">${review.body}</p>
+                        <p class="review-movie">${movieData.title}</p>
+                        <p class="username-field">
+                            <span class="review-label">Review by</span>
+                            <span class="reviewer-name">${review.username}</span>
+                        </p>
+                        <p class="rating-field">
+                            <span class="review-label">Rating</span>
+                            <span class="review-rating">${review.rating}/5 ★</span>
+                        </p>
+                        <p class="review-field">
+                            <p class="review-label">Review</p>
+                            <p class="review-text">${review.body}</p>
+                        </p>
                         ${flagBtn}
                     </div>
                 </div>    

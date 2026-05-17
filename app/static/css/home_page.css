@@ -120,6 +120,37 @@
   font-size: 0.8rem;
 }
 
-/* #highest-rated-movies-container, #recent-reviews-container{
-  color: white;
-} */
+.review-label {
+    color: #666666;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-right: 6px;
+}
+
+.username-field .rating-field {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.review-field {
+    margin-bottom: 4px;
+    display: flex;
+    align-items: top;
+    gap: 6px;
+}
+
+.review-text {
+  overflow-wrap: break-word;
+  word-break: break-word;
+  flex: 1;
+  min-width: 0;
+}
+
+.review-movie {
+  color: #f5c518;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
