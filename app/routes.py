@@ -77,18 +77,38 @@ def movie_detail(movie_id):
         local_avg_rating = 0
         local_review_count = 0
 
+    
+   cast = [
+        person.get("name")
+        for person in credits_data.get("cast", [])[:5]
+    ]
+   
+   crew = [
+       person.get("name")
+       for person in credits_data.get("crew", [])[:5]
+   ]
 
+   genres = [
+       genre.get("name")
+       for genre in data.get("genres", [])
+   ]
+
+   details = data.get("overview", "No details available.")
+
+   release_info = data.get("release_date", "No release data available.")
 
    movie = {
        "id": data.get("id"),
        "title": data.get("title"),
        "poster_url": f"https://image.tmdb.org/t/p/w500{data.get('poster_path')}",
-       "release_date": data.get("release_date"),
-       "description": data.get("overview"),
        "rating": local_avg_rating,
        "review_count": local_review_count,
-       "genres": data.get("genres"),
-       "director": director
+       "director": director,
+       "cast": ", ".join(cast),
+       "crew": ", ".join(crew),
+       "genres": ", ".join(genres),
+       "details": details,
+       "release_info": release_info
    }
 
 
