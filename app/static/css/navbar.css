@@ -51,3 +51,34 @@ nav {
     padding: 4px 10px;
   }
 }
+
+/* Mobile Searchbar */
+.mobile-search-bar {
+    background-color: #1a1a1a;
+    border-bottom: 1px solid #333;
+    position: sticky;
+    top: 56px;  /* roughly navbar height */
+    z-index: 999;
+}
+
+.mobile-search-bar .form-control {
+    background-color: #2a2a2a;
+    border-color: #444;
+    color: #ffffff;
+}
+
+.mobile-search-bar .form-control::placeholder {
+    color: #888888;
+}
+
+.mobile-search-bar .form-control:focus {
+    background-color: #2a2a2a;
+    border-color: #f5c518;
+    color: #ffffff;
+    box-shadow: none;
+}
+
+.mobile-search-bar .btn-outline-secondary {
+    color: #aaaaaa;
+    border-color: #555;
+}
