@@ -1,8 +1,10 @@
-/* .temp-border {
-    border: 1px solid red;
-} */
+:root {
+    --navbar-height: 70px;
+}
+
 
 nav {
+  height: var(--navbar-height);
   background-color: #0f0f0f;
   border-bottom: 1px solid #2e2e2e;
   padding: 15px 0 !important;
@@ -35,6 +37,10 @@ nav {
   box-shadow: none;
 }
 
+.navbar .container-lg {
+    flex-wrap: nowrap;
+}
+
 /* Responsivness */
 
 @media (max-width: 768px) {
@@ -54,11 +60,11 @@ nav {
 
 /* Mobile Searchbar */
 .mobile-search-bar {
-    background-color: #1a1a1a;
-    border-bottom: 1px solid #333;
-    position: sticky;
-    top: 56px;  /* roughly navbar height */
-    z-index: 999;
+  background-color: #1a1a1a;
+  border-bottom: 1px solid #333;
+  position: sticky;
+  top: var(--navbar-height);
+  z-index: 999;
 }
 
 .mobile-search-bar .form-control {
@@ -82,3 +88,4 @@ nav {
     color: #aaaaaa;
     border-color: #555;
 }
+

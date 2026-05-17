@@ -5,7 +5,7 @@
         <a class="temp-border navbar-brand" href="{{ url_for('main.home') }}">🎬 MoviePulse</a>
 
         <!-- Destkop search bar -->
-        <form method="GET" action="{{ url_for('main.search') }}" class="temp-border d-flex flex-grow-1 mx-4">
+        <form method="GET" action="{{ url_for('main.search') }}" class="d-none d-lg-flex flex-grow-1 mx-4">
         <input type="search" name="query" class="temp-border form-control me-2" placeholder="Search movies..."/>
         <button class="temp-border btn btn-outline-secondary" type="submit">Search</button>
         </form>
@@ -27,11 +27,8 @@
     </div>
 </nav>
 
-<!-- Mobile search bar -->
-</nav>
-
 <!-- Mobile search — outside nav to avoid Bootstrap flex conflict -->
-<div class="d-md-none mobile-search-bar">
+<div class="d-lg-none mobile-search-bar">
   <form method="GET" action="{{ url_for('main.search') }}" class="d-flex px-3 py-2">
     <input type="search" name="query" class="form-control me-2" placeholder="Search movies..." />
     <button class="btn btn-outline-secondary" type="submit">Search</button>
