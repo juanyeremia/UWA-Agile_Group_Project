@@ -183,6 +183,7 @@ def sign_up():
        return redirect(url_for('main.login'))
    elif form.is_submitted():
        flash('Error creating account. Please check your input and try again.', 'danger')
+       form.password.errors.append('Please check your input and try again.')
    return render_template('sign_up.html', form=form)
 
 #=================================================
@@ -197,6 +198,7 @@ def login():
        password = form.password.data
        if user is None or not user.check_password(password):
            flash('Invalid email or password. Please try again.', 'danger')
+           form.password.errors.append('Invalid email or password. Please try again.')
            return render_template('login.html', form=form)
        else:
            login_user(user, remember=form.remember_me.data)  # Log the user in using Flask-Login
