@@ -1,51 +1,36 @@
 <nav class="temp-border navbar sticky-top">
-  <!-- Already contains flex -->
-  <div class="container-lg">
-    <!-- Brand -->
-    <a class="temp-border navbar-brand" href="{{ url_for('main.home') }}">
-      🎬 MoviePulse</a
-    >
+    <!-- Already contains flex -->
+    <div class="container-lg">
+        <!-- Brand -->
+        <a class="temp-border navbar-brand" href="{{ url_for('main.home') }}">🎬 MoviePulse</a>
 
-    <!-- Search -->
-    <form
-      method="GET"
-      action="{{ url_for('main.search') }}"
-      class="temp-border d-flex flex-grow-1 mx-4"
-    >
-      <input
-        type="search"
-        name="query"
-        class="temp-border form-control me-2"
-        placeholder="Search movies..."
-      />
-      <button class="temp-border btn btn-outline-secondary" type="submit">
-        Search
-      </button>
-    </form>
+        <!-- Destkop search bar -->
+        <form method="GET" action="{{ url_for('main.search') }}" class="d-none d-lg-flex flex-grow-1 mx-4">
+        <input type="search" name="query" class="temp-border form-control me-2" placeholder="Search movies..."/>
+        <button class="temp-border btn btn-outline-secondary" type="submit">Search</button>
+        </form>
 
-    <!-- Links -->
-    <div class="temp-border d-flex gap-2">
-      {% if current_user.is_authenticated %}
-      <a
-        href="{{ url_for('main.profile') }}"
-        class="temp-border btn btn-dark align-items-center"
-        >My Profile</a
-      >
-      <a
-        href="{{ url_for('main.logout') }}"
-        class="temp-border btn btn-outline-warning"
-        >Log Out</a
-      >
-      {% else %}
-      <a
-        href="{{ url_for('main.login') }}"
-        class="temp-border btn btn-outline-warning"
-        >Log In</a
-      >
-      <a href="{{ url_for('main.sign_up') }}" class="temp-border btn btn-warning"
-        >Sign Up</a
-      >
-      {% endif %}
+        <!-- Links -->
+        <div class="temp-border d-flex gap-2">
+        
+        {% if current_user.is_authenticated %}
+
+        <a href="{{ url_for('main.profile') }}" class="temp-border btn btn-dark align-items-center">My Profile</a>
+        <a href="{{ url_for('main.logout') }}" class="temp-border btn btn-outline-warning">Log Out</a>
+        
+        {% else %}
+        
+        <a href="{{ url_for('main.login') }}" class="temp-border btn btn-outline-warning">Log In</a>
+        <a href="{{ url_for('main.sign_up') }}" class="temp-border btn btn-warning">Sign Up</a>
+        {% endif %}
+        </div>
     </div>
-  </div>
 </nav>
+
+<!-- Mobile search — outside nav to avoid Bootstrap flex conflict -->
+<div class="d-lg-none mobile-search-bar">
+  <form method="GET" action="{{ url_for('main.search') }}" class="d-flex px-3 py-2">
+    <input type="search" name="query" class="form-control me-2" placeholder="Search movies..." />
+    <button class="btn btn-outline-secondary" type="submit">Search</button>
+  </form>
+</div>
