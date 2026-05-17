@@ -537,6 +537,22 @@ def delete_review(review_id):
    return redirect(url_for('main.admin'))
 
 #=================================================
+# Unflag a review
+#=================================================
+@main.route('/unflag_review/<int:review_id>', methods=['POST'])
+@login_required
+def unflag_review(review_id):
+    if current_user.role != 'admin':
+      return redirect(url_for('main.home')) # Only allow admins to unflag reviews
+   
+    review = Review.query.get_or_404(review_id)
+    review.flagged = False
+    review.flagged_reason = None
+    db.session.commit()
+    flash('Review unflagged.', 'success')
+    return redirect(url_for('main.admin'))
+
+#=================================================
 # Redirect to the search page
 #=================================================
 @main.route('/search')
