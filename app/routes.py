@@ -1,3 +1,5 @@
+from wsgiref import headers
+
 from flask import render_template, flash, redirect, session, url_for, request, jsonify, Blueprint, current_app
 from app.forms import SignUpForm, LoginForm
 import os
@@ -44,6 +46,38 @@ def movie_detail(movie_id):
 
    data = response.json()
 
+   credits_url = f"https://api.themoviedb.org/3/movie/{movie_id}/credits"
+   
+   credits_response = requests.get(
+   credits_url,
+   headers=headers
+   )
+
+   credits_data = credits_response.json()
+
+   director = "Unknown"
+
+   for person in credits_data.get("crew", []):
+        if person.get("job") == "Director":
+            director = person.get("name")
+            break
+
+   rating_result = db.session.query(
+      func.avg(Review.rating).label("avg_rating"),
+      func.count(Review.id).label("review_count")
+    ).filter(
+        Review.movie_id == movie_id
+    ).first()
+
+   if rating_result and rating_result.review_count > 0:
+        local_avg_rating = round(rating_result.avg_rating, 1)
+        local_review_count = rating_result.review_count
+
+   else:
+        local_avg_rating = 0
+        local_review_count = 0
+
+
 
    movie = {
        "id": data.get("id"),
@@ -51,23 +85,19 @@ def movie_detail(movie_id):
        "poster_url": f"https://image.tmdb.org/t/p/w500{data.get('poster_path')}",
        "release_date": data.get("release_date"),
        "description": data.get("overview"),
-       "rating": data.get("vote_average"),
-       "genres": data.get("genres")
+       "rating": local_avg_rating,
+       "review_count": local_review_count,
+       "genres": data.get("genres"),
+       "director": director
    }
 
 
-   reviews = [
-       {
-           "user": {"username": "Tammy"},
-           "rating": 5,
-           "content": "Amazing!"
-       },
-       {
-           "user": {"username": "Alex"},
-           "rating": 4,
-           "content": "Pretty good!"
-       }
-   ]
+   reviews = Review.query.filter_by(
+       movie_id=movie_id
+   ).order_by(
+       Review.id.desc()
+   ).limit(5).all()
+
 
 
    return render_template(
@@ -76,8 +106,37 @@ def movie_detail(movie_id):
        reviews=reviews
    )
 
+#=================================================
+# Individul movie page showing the reviews
+#=================================================
+@main.route('/api/movie/<int:movie_id>/reviews')
+def api_movie_reviews(movie_id):
+    page = request.args.get('page', 1, type=int)
+    per_page = 5
 
+    reviews = Review.query.filter_by(
+        movie_id=movie_id
+    ).order_by(
+        Review.id.desc()
+    ).offset(
+        (page - 1) * per_page
+    ).limit(
+        per_page
+    ).all()
 
+    total_reviews = Review.query.filter_by(movie_id=movie_id).count()
+
+    return jsonify({
+        "reviews": [
+            {
+                "username": review.author.username,
+                "rating": review.rating,
+                "body": review.body
+            }
+            for review in reviews
+        ],
+        "has_more": page * per_page < total_reviews
+    })
 
 
 
@@ -581,6 +640,7 @@ def search():
        data = response.json()
 
        movies = data.get("results", [])
+       movies = movies[:12]
 
        movie_ids =[movie["id"] for movie in movies]
 
@@ -618,3 +678,92 @@ def search():
        movies=movies,
        query=query
    )
+
+
+#=================================================
+# Add an AJAX route
+#=================================================
+@main.route('/api/search')
+def api_search():
+    query = request.args.get('query', '')
+    offset = request.args.get('offset', 0, type=int)
+
+    limit = 12
+
+    if not query:
+        return jsonify({
+            "movies": [],
+            "has_more": False
+        })
+
+    headers = {
+        "Authorization": f"Bearer {os.getenv('TMDB_ACCESS_TOKEN')}"
+    }
+
+    tmbd_page = (offset // 20) + 1
+    start_index = offset % 20
+
+    collected_movies = []
+
+    params = {
+        "query": query,
+        "page": tmbd_page
+    }
+
+    while len(collected_movies) < limit:
+
+        response = requests.get("https://api.themoviedb.org/3/search/movie", headers=headers, params=params)
+        data = response.json()
+
+        page_movies = data.get("results", [])
+
+        if not page_movies:
+            break
+
+        collected_movies.extend(page_movies[start_index:])
+
+        start_index = 0
+        tmbd_page += 1
+
+        if tmbd_page > data.get("total_pages", 1):
+            break
+
+    movies = collected_movies[:limit]
+
+    movie_ids = [movie["id"] for movie in movies]
+
+    ratings = {}
+
+    if movie_ids:
+        rating_results = db.session.query(
+            Review.movie_id,
+            func.avg(Review.rating).label("avg_rating"),
+            func.count(Review.id).label("review_count")
+        ).filter(
+            Review.movie_id.in_(movie_ids)
+        ).group_by(
+            Review.movie_id
+        ).all()
+
+        ratings = {
+            r.movie_id: {
+                "avg_rating": round(r.avg_rating, 1),
+                "review_count": r.review_count
+            }
+            for r in rating_results
+        }
+
+    for movie in movies:
+        local_rating = ratings.get(movie["id"], {
+            "avg_rating": 0,
+            "review_count": "No"
+        })
+
+        movie["local_avg_rating"] = local_rating["avg_rating"]
+        movie["local_review_count"] = local_rating["review_count"]
+
+    return jsonify({
+        "movies": movies,
+        "has_more": len(movies) == limit
+    })
+
